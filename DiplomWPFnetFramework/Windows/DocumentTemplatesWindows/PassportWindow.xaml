@@ -1,0 +1,137 @@
+﻿<Window x:Class="DiplomWPFnetFramework.Windows.DocumentTemplatesWindows.PassportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiplomWPFnetFramework"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Title="Документ - Паспорт" Height="900" Width="1100" MinHeight="700" MinWidth="500">
+    <Window.Resources>
+        <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="35,5,0,0"/>
+        </Style>
+        <Style x:Key="TextBoxPropertiesType1" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+        <Style x:Key="TextBoxPropertiesType2" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+        <Style TargetType="xctk:MaskedTextBox">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+        <Style x:Key="BorderProperties" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Width" Value="460"/>
+            <Setter Property="Height" Value="357"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
+        <ResourceDictionary x:Key="CornerRadiusSetter">
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="10"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <DockPanel>
+        <DockPanel.Background>
+            <ImageBrush ImageSource="pack://application:,,,/Resources/MainWindowBackgroundGradient.png"/>
+        </DockPanel.Background>
+        <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
+            <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" MouseLeftButtonUp="BackWindowButtonImage_MouseLeftButtonUp" Cursor="Hand">
+                <Grid.Background>
+                    <ImageBrush ImageSource="C:\Users\sasha\source\repos\Kursovaya_VPKS\Kursovaya_VPKS\Resources\BackArrowButtonImage.png"/>
+                </Grid.Background>
+            </Grid>
+            <TextBlock x:Name="PassportNameOutTextBlock" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" TextDecorations="Underline" MouseLeftButtonUp="PassportNameOutTextBlock_MouseLeftButtonUp"/>
+        </Grid>
+        <Grid DockPanel.Dock="Top">
+            <StackPanel Width="550" HorizontalAlignment="Left">
+                <Grid>
+                    <Border Height="220" Width="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="25,25,0,0" Background="White" MouseLeftButtonUp="OwnersPhoto_MouseLeftButtonUp" Cursor="Hand">
+                        <Image x:Name="OwnersPhotoHolder" Stretch="Uniform"/>
+                    </Border>
+                    <StackPanel HorizontalAlignment="Right" Width="300" Margin="0,25,0,0">
+                        <TextBlock Text="Серия и номер" Style="{StaticResource ResourceKey=TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <xctk:MaskedTextBox Mask="0000 000000" x:Name="SerialAndNumberTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType1}" Resources="{StaticResource CornerRadiusSetter}"/>
+                        <TextBlock Text="Код подразделения" Style="{StaticResource ResourceKey=TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <xctk:MaskedTextBox Mask="000-000" x:Name="DivisionCodeTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType1}" Resources="{StaticResource CornerRadiusSetter}"/>
+                        <TextBlock Text="Дата выдачи" Style="{StaticResource ResourceKey=TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                        <DatePicker x:Name="DateOfIssueDatePicker" VerticalContentAlignment="Center" Resources="{StaticResource CornerRadiusSetter}"/>
+                    </StackPanel>
+                </Grid>
+                <StackPanel Margin="25,0,0,0">
+                    <TextBlock Text="Кем выдан" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
+                    <TextBox x:Name="IssuedByWhomTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" Resources="{StaticResource CornerRadiusSetter}"/>
+                    <TextBlock Text="ФИО" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
+                    <TextBox x:Name="FIOTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" Resources="{StaticResource CornerRadiusSetter}"/>
+                    <Grid>
+                        <TextBlock Text="Дата рождения" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
+                        <DatePicker x:Name="DateOfBirthDatePicker" Resources="{StaticResource CornerRadiusSetter}" Margin="0,30,0,0" Width="250" HorizontalAlignment="Left"/>
+                        <TextBlock Text="Пол" Style="{StaticResource ResourceKey=TextBlockMainProperties}" HorizontalAlignment="Left" Margin="270,38,0,0"/>
+                        <RadioButton x:Name="MaleChoiseRadioButton" Content="М" Margin="0,0,130,5"/>
+                        <RadioButton x:Name="FemaleChoiseRadioButton" Content="Ж" Margin="0,0,70,5"/>
+                    </Grid>
+                    <TextBlock Text="Место рождения" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
+                    <TextBox x:Name="PlaceOfBirthTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" Resources="{StaticResource CornerRadiusSetter}"/>
+                    <TextBlock Text="Место жительства" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
+                    <TextBox x:Name="PlaceOfResidenceTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" Resources="{StaticResource CornerRadiusSetter}"/>
+                </StackPanel>
+            </StackPanel>
+            <Border Style="{StaticResource ResourceKey=BorderProperties}" Margin="0,25,25,0" MouseLeftButtonUp="PassportPhoto1_MouseLeftButtonUp" Cursor="Hand">
+                <Image x:Name="PassportPhoto1Holder" Stretch="Uniform"/>
+            </Border>
+            <Border Style="{StaticResource ResourceKey=BorderProperties}" Margin="0,400,25,0" MouseLeftButtonUp="PassportPhoto2_MouseLeftButtonUp" Cursor="Hand">
+                <Image x:Name="PassportPhoto2Holder" Stretch="Uniform"/>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>

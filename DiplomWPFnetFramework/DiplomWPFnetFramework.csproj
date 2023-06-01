@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{64B1D1EE-CD22-4B76-8816-A43EC68D7994}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>DiplomWPFnetFramework</RootNamespace>
+    <AssemblyName>DiplomWPFnetFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=4.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.5.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=4.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=4.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=4.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=4.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.4.5.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Classes\CreatingObjects.cs" />
+    <Compile Include="Classes\SystemContext.cs" />
+    <Compile Include="DataBase\CreditCard.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\INN.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Items.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Passport.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Photo.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Polis.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\SNILS.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Template.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TemplateDocument.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TemplateDocumentData.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TemplateObject.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TestModel1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestModel1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TestModel1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\TestModel1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestModel1.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\Users.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\CreditCardPhotoPage.xaml.cs">
+      <DependentUpon>CreditCardPhotoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FolderContentPage.xaml.cs">
+      <DependentUpon>FolderContentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DocumentTemplatesWindows\CreditCardWindow.xaml.cs">
+      <DependentUpon>CreditCardWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DocumentTemplatesWindows\InnWindow.xaml.cs">
+      <DependentUpon>InnWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DocumentTemplatesWindows\PassportWindow.xaml.cs">
+      <DependentUpon>PassportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DocumentTemplatesWindows\PhotoWindow.xaml.cs">
+      <DependentUpon>PhotoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DocumentTemplatesWindows\PolisWindow.xaml.cs">
+      <DependentUpon>PolisWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\DocumentTemplatesWindows\SnilsWindow.xaml.cs">
+      <DependentUpon>SnilsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainInteractionsWindows\DocumentViewingWindow.xaml.cs">
+      <DependentUpon>DocumentViewingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainInteractionsWindows\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainInteractionsWindows\RegisterWindow.xaml.cs">
+      <DependentUpon>RegisterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainInteractionsWindows\SettingsAndPatternWindow.xaml.cs">
+      <DependentUpon>SettingsAndPatternWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Pages\CreditCardPhotoPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\FolderContentPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DocumentTemplatesWindows\CreditCardWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DocumentTemplatesWindows\InnWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DocumentTemplatesWindows\PassportWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DocumentTemplatesWindows\PhotoWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DocumentTemplatesWindows\PolisWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\DocumentTemplatesWindows\SnilsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MainInteractionsWindows\DocumentViewingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MainInteractionsWindows\LoginWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MainInteractionsWindows\RegisterWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MainInteractionsWindows\SettingsAndPatternWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EntityDeploy Include="DataBase\TestModel1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TestModel1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataBase\TestModel1.edmx.diagram">
+      <DependentUpon>TestModel1.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\BackArrowButtonImage.png" />
+    <Resource Include="Resources\DocumentPlugImage.png" />
+    <Resource Include="Resources\MainWindowBackgroundGradient.png" />
+    <Resource Include="Resources\MainWindowLogoImage.png" />
+    <Resource Include="Resources\OpenSettingsPageButtonImage.png" />
+    <Resource Include="Resources\SortButtonImage.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DataBase\CreateDB\Скрипт создания БД.sql" />
+    <Resource Include="DataBase\CreateDB\Скрипт создания БД.txt" />
+    <Content Include="DataBase\TestModel1.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TestModel1.edmx</DependentUpon>
+      <LastGenOutput>TestModel1.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataBase\TestModel1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TestModel1.edmx</DependentUpon>
+      <LastGenOutput>TestModel1.cs</LastGenOutput>
+    </Content>
+    <Resource Include="Resources\CreditCardPlugImage.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
