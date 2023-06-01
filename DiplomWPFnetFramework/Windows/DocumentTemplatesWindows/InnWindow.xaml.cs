@@ -71,7 +71,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 if (SystemContext.isChange == false)
                     inn.Id = SystemContext.NewItem.Id;
                 else
-                    inn.Id = (from p in db.SNILS where p.Id == SystemContext.Item.Id select p).FirstOrDefault<SNILS>().Id;
+                    inn.Id = (from p in db.INN where p.Id == SystemContext.Item.Id select p).FirstOrDefault<INN>().Id;
 
                 inn.Number = INNNumberTextBox.Text;
                 inn.FIO = FIOTextBox.Text;

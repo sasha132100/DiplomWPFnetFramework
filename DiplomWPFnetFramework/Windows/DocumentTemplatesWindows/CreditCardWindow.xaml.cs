@@ -55,7 +55,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 if (SystemContext.isChange == false)
                     creditCard.Id = SystemContext.NewItem.Id;
                 else
-                    creditCard.Id = (from p in db.Passport where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Passport>().Id;
+                    creditCard.Id = (from p in db.CreditCard where p.Id == SystemContext.Item.Id select p).FirstOrDefault<CreditCard>().Id;
 
                 creditCard.Number = CardNumberTextBox.Text;
                 creditCard.FIO = FIOTextBox.Text;

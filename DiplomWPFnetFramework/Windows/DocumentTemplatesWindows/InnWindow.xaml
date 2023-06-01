@@ -99,7 +99,7 @@
                     <TextBlock Text="Место рождения" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
                     <TextBox x:Name="BirthPlaceTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType1}" Resources="{StaticResource CornerRadiusSetter}"/>
                     <TextBlock Text="ИНН" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
-                    <xctk:MaskedTextBox Mask="00000000" x:Name="INNNumberTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType1}" Resources="{StaticResource CornerRadiusSetter}"/>
+                    <xctk:MaskedTextBox Mask="000000000000" x:Name="INNNumberTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType1}" Resources="{StaticResource CornerRadiusSetter}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
