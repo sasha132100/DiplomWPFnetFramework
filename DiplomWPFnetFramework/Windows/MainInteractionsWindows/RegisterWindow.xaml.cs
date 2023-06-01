@@ -37,7 +37,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
                 var user = (from u in db.Users where u.ULogin == email select u).FirstOrDefault<Users>();
                 if (user != null)
                     return "Пользователь с таким логином уже существует!";
-                db.Users.Add(new Users() { ULogin = email, UPassword = password, Syncing = "No" });
+                db.Users.Add(new Users() { Email = email, ULogin = email, UPassword = password, Syncing = "No" });
                 db.SaveChanges();
             }
             return "Регистрация прошла успешно!";
