@@ -1,0 +1,20 @@
+﻿<Window x:Class="DiplomWPFnetFramework.Windows.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiplomWPFnetFramework.Windows"
+        mc:Ignorable="d"
+        Title="Window1" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <Button x:Name="BackWindow" Content="Назад" Height="30" Click="BackWindow_Click"/>
+            <Button x:Name="CreditCardWindowOpen" Content="Карта" Height="30" Click="CreditCardWindowOpen_Click"/>
+            <Button x:Name="INNWindowOpen" Content="ИНН" Height="30" Click="INNWindowOpen_Click"/>
+            <Button x:Name="PassportWindowOpen" Content="Паспорт" Height="30" Click="PassportWindowOpen_Click"/>
+            <Button x:Name="PhotoWindowOpen" Content="Фото" Height="30" Click="PhotoWindowOpen_Click"/>
+            <Button x:Name="PolisWindowOpen" Content="Полис" Height="30" Click="PolisWindowOpen_Click"/>
+            <Button x:Name="SnilsWindowOpen" Content="Снилс" Height="30" Click="SnilsWindowOpen_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

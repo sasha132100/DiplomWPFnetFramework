@@ -107,7 +107,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.UserId = SystemContext.User.Id;
                 db.Items.AddOrUpdate(item);
                 db.SaveChanges();
-                SystemContext.NewItem = (from i in db.Items where i.DateCreation == item.DateCreation select i).FirstOrDefault<Items>();
+                SystemContext.NewItem = item;
             }
         }
 

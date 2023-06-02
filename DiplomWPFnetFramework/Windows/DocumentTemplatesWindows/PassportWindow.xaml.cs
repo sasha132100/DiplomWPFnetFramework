@@ -122,7 +122,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 Items item = new Items();
                 item.Title = "NewTitle" + db.Items.OrderByDescending(items => items.Id).FirstOrDefault().Id.ToString();
-                item.IType = "Photo";
+                item.IType = "Passport";
                 item.IPriority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
@@ -130,7 +130,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.UserId = SystemContext.User.Id;
                 db.Items.AddOrUpdate(item);
                 db.SaveChanges();
-                SystemContext.NewItem = (from i in db.Items where i.DateCreation == item.DateCreation select i).FirstOrDefault<Items>();
+                SystemContext.NewItem = item;
             }
         }
 

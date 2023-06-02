@@ -188,10 +188,9 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void sortImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            SystemContext.isChange = false;
-            PassportWindow passportWindow = new PassportWindow();
+            Window1 window1 = new Window1();
             this.Close();
-            passportWindow.ShowDialog();
+            window1.ShowDialog();
         }
     }
 }
