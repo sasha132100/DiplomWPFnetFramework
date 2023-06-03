@@ -271,7 +271,9 @@
     <Resource Include="Resources\OpenSettingsPageButtonImage.png" />
     <Resource Include="Resources\SortButtonImage.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Windows\BufferWindows\" />
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
