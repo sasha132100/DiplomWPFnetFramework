@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using DiplomWPFnetFramework.DataBase;
 using DiplomWPFnetFramework.Classes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 {
@@ -15,7 +16,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         {
             InitializeComponent();
             EmailTextBox.Text = "User1";
-            PasswordTextBox.Password = "123321";
+            PasswordTextBox.Password = "qqqqwwww";
         }
 
         private string LoginMethod(string email, string password)
@@ -63,10 +64,14 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         private void GuestLogInTextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             SystemContext.isGuest = true;
-            /*DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
-            this.Close();
-            documentViewingWindow.ShowDialog();*/
-            MessageBox.Show("В разработке");
+            using (var db = new test123Entities1())
+            {
+                Users user = (from u in db.Users where u.Email == "Guest" select u).FirstOrDefault();
+                SystemContext.User = user;
+                DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
+                this.Close();
+                documentViewingWindow.ShowDialog();
+            }
         }
     }
 }

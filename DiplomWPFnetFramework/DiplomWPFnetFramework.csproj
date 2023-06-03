@@ -136,6 +136,9 @@
     <Compile Include="Pages\CreditCardPhotoPage.xaml.cs">
       <DependentUpon>CreditCardPhotoPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\DocumentViewingPage.xaml.cs">
+      <DependentUpon>DocumentViewingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\FolderContentPage.xaml.cs">
       <DependentUpon>FolderContentPage.xaml</DependentUpon>
     </Compile>
@@ -182,6 +185,10 @@
     <Page Include="Pages\CreditCardPhotoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\DocumentViewingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\FolderContentPage.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -15,6 +15,10 @@
             <Button x:Name="PhotoWindowOpen" Content="Фото" Height="30" Click="PhotoWindowOpen_Click"/>
             <Button x:Name="PolisWindowOpen" Content="Полис" Height="30" Click="PolisWindowOpen_Click"/>
             <Button x:Name="SnilsWindowOpen" Content="Снилс" Height="30" Click="SnilsWindowOpen_Click"/>
+            <Button x:Name="AddNewFolder" Content="Папка" Height="30" Click="AddNewFolder_Click"/>
+            <Button x:Name="ShowSystemTemplates" Content="Показать системные шаблоны" Height="30" Click="ShowSystemTemplates_Click"/>
+            <Button x:Name="ShowMyTemplates" Content="Показать мои шаблоны" Height="30" Click="ShowMyTemplates_Click"/>
+            <Button x:Name="ShowDowloadTemplates" Content="Показать скаченные шаблоны" Height="30" Click="ShowDowloadTemplates_Click"/>
         </StackPanel>
     </Grid>
 </Window>

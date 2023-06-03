@@ -15,5 +15,8 @@ namespace DiplomWPFnetFramework.Classes
         public static bool isChange { get; set; }
         public static Items NewItem { get; set; } = null;
         public static Photo Photo { get; set; } = null;
+        public static bool isFromFolder { get; set; }
+        public static bool isChangeTitleName { get; set; }
+        public static Items Folder { get; set; } = null;
     }
 }
