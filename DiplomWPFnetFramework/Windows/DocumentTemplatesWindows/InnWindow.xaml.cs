@@ -185,5 +185,10 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             ImageSetter(INNPhotoHolder);
         }
+
+        private void DocumentMoreInteractionsButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

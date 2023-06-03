@@ -139,6 +139,9 @@
     <Compile Include="Pages\FolderContentPage.xaml.cs">
       <DependentUpon>FolderContentPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\BufferWindows\addNewDocumentBufferWindow.xaml.cs">
+      <DependentUpon>addNewDocumentBufferWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DocumentTemplatesWindows\CreditCardWindow.xaml.cs">
       <DependentUpon>CreditCardWindow.xaml</DependentUpon>
     </Compile>
@@ -183,6 +186,10 @@
     <Page Include="Pages\FolderContentPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\BufferWindows\addNewDocumentBufferWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\DocumentTemplatesWindows\CreditCardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -271,14 +278,14 @@
     <Resource Include="Resources\OpenSettingsPageButtonImage.png" />
     <Resource Include="Resources\SortButtonImage.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Windows\BufferWindows\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataBase\CreateDB\Скрипт создания БД.sql" />
+    <Resource Include="Resources\DocumentMoreInteractionsImage.png" />
+    <Resource Include="Resources\addImage.png" />
     <Resource Include="DataBase\CreateDB\Скрипт создания БД.txt" />
     <Content Include="DataBase\TestModel1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

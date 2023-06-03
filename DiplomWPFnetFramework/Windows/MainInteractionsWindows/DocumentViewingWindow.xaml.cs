@@ -192,5 +192,12 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             this.Close();
             window1.ShowDialog();
         }
+
+        private void addNewDocumentButton_Click(object sender, RoutedEventArgs e)
+        {
+            Window1 window1 = new Window1();
+            this.Close();
+            window1.ShowDialog();
+        }
     }
 }

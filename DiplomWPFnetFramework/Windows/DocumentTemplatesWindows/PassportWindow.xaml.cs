@@ -234,5 +234,10 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             ImageSetter(PassportPhoto2Holder);
         }
+
+        private void DocumentMoreInteractionsButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

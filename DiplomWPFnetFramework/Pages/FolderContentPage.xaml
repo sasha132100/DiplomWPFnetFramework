@@ -5,10 +5,88 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="FolderContentPage">
-
-    <Grid>
-        
-    </Grid>
+      Title="Просмотр документов" d:Height="750" d:Width="1100">
+    <Page.Resources>
+        <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+        <Style x:Key="ButtonProperties" TargetType="Button">
+            <Setter Property="Background" Value="#2D346F"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <ResourceDictionary x:Key="CornerRadiusSetter">
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="120"/>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+    <DockPanel>
+        <DockPanel.Background>
+            <ImageBrush ImageSource="pack://application:,,,/Resources/MainWindowBackgroundGradient.png"/>
+        </DockPanel.Background>
+        <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
+            <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" MouseLeftButtonUp="OpenSettingPageButtonImage_MouseLeftButtonUp" Cursor="Hand">
+                <Grid.Background>
+                    <ImageBrush ImageSource="pack://application:,,,/Resources/OpenSettingsPageButtonImage.png"/>
+                </Grid.Background>
+            </Grid>
+            <TextBlock x:Name="EmailOutTextBlock" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Grid x:Name="sortImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" MouseLeftButtonUp="sortImage_MouseLeftButtonUp" Cursor="Hand">
+                <Grid.Background>
+                    <ImageBrush ImageSource="pack://application:,,,/Resources/SortButtonImage.png"/>
+                </Grid.Background>
+            </Grid>
+        </Grid>
+        <ScrollViewer Height="Auto" DockPanel.Dock="Top" Padding="0,18,0,0">
+            <Grid>
+                <WrapPanel x:Name="DocumentsViewGrid">
+                    <WrapPanel.Resources>
+                        <Style x:Key="ContentBorderStyle" TargetType="Border">
+                            <Setter Property="Width" Value="160"/>
+                            <Setter Property="Height" Value="200"/>
+                            <Setter Property="CornerRadius" Value="10"/>
+                            <Setter Property="Margin" Value="18,0,0,18"/>
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Style>
+                        <Style x:Key="BottomBorderProperties" TargetType="Border">
+                            <Setter Property="Width" Value="158"/>
+                            <Setter Property="Height" Value="48"/>
+                            <Setter Property="Margin" Value="0,0,0,0"/>
+                            <Setter Property="CornerRadius" Value="10"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Bottom"/>
+                            <Setter Property="Background" Value="#6D6F80"/>
+                            <Setter Property="Opacity" Value="0.8"/>
+                        </Style>
+                        <Style x:Key="DocumentTextBlockPropeties" TargetType="TextBlock">
+                            <Setter Property="FontFamily" Value="Arial"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Bottom"/>
+                            <Setter Property="Margin" Value="0,0,0,16"/>
+                        </Style>
+                        <ResourceDictionary x:Key="CornerRadiusSetter">
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </ResourceDictionary>
+                    </WrapPanel.Resources>
+                </WrapPanel>
+                <Button Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,60" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}">
+                    <Image Source="pack://application:,,,/Resources/addImage.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill"/>
+                </Button>
+                <Border Height="80" Background="Black" VerticalAlignment="Bottom" CornerRadius="10" Margin="0,0,0,-40"/>
+            </Grid>
+        </ScrollViewer>
+    </DockPanel>
 </Page>

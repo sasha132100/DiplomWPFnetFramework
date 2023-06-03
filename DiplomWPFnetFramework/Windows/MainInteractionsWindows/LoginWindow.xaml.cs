@@ -39,9 +39,9 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         private void LogInButton_Click(object sender, RoutedEventArgs e)
         {
             string result = LoginMethod(EmailTextBox.Text, PasswordTextBox.Password);
-            MessageBox.Show(result, "Приветствие", MessageBoxButton.OK, MessageBoxImage.Information); 
             if (result == $"Добро пожаловать, {EmailTextBox.Text}!")
             {
+                MessageBox.Show(result, "Приветствие", MessageBoxButton.OK, MessageBoxImage.Information);
                 SystemContext.isGuest = false;
                 DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
                 this.Close();

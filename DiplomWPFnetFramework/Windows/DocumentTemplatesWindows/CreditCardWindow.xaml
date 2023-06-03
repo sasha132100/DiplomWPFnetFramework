@@ -56,6 +56,11 @@
                 </Grid.Background>
             </Grid>
             <TextBlock x:Name="CreditCardOutTextBlock" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Grid Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources\DocumentMoreInteractionsImage.png"/>
+                </Grid.Background>
+            </Grid>
         </Grid>
         <Grid DockPanel.Dock="Top">
             <TextBlock x:Name="PhotoPageOpen" Text="Фотография" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,6,40,0" Cursor="Hand" MouseLeftButtonUp="PhotoPageOpen_MouseLeftButtonUp"/>

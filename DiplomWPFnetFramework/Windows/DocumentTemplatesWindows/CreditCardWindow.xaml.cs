@@ -139,5 +139,10 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
 
         }
+
+        private void DocumentMoreInteractionsButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

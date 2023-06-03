@@ -28,6 +28,11 @@
                 </Grid.Background>
             </Grid>
             <TextBlock x:Name="PhotoOutTextBlock" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Grid Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources\DocumentMoreInteractionsImage.png"/>
+                </Grid.Background>
+            </Grid>
         </Grid>
         <Grid DockPanel.Dock="Top">
             <Border x:Name="Photo" Background="#2D346F" Margin="30" CornerRadius="10" MouseLeftButtonUp="Photo_MouseLeftButtonUp">
