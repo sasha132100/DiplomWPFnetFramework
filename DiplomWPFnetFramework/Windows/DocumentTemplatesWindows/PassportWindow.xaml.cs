@@ -109,11 +109,21 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 PlaceOfBirthTextBox.Text != "" && PlaceOfResidenceTextBox.Text != "")
             {
                 if (MaleChoiseRadioButton.IsChecked == true || FemaleChoiseRadioButton.IsChecked == true)
-                    return "Заполнены";
-                return "Не заполнены";
+                    return "Добавить";
+                MessageBoxResult messageBoxResult = MessageBox.Show("Вы заполнили не все поля, уверены, что хотите выйти?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (messageBoxResult == MessageBoxResult.No)
+                    return "Не добавить";
+                else
+                    return "Добавить";
             }
             else
-                return "Не заполнены";
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("Вы заполнили не все поля, уверены, что хотите выйти?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (messageBoxResult == MessageBoxResult.No)
+                    return "Не добавить";
+                else
+                    return "Добавить";
+            }    
         }
 
         private void AddNewItem()
@@ -134,16 +144,15 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             }
         }
 
-        private string AddNewPassport()
+        private void AddNewPassport()
         {
-            if (CheckingTheFullness() != "Заполнены")
-                return "Не заполнены";
+            if (CheckingTheFullness() != "Добавить")
+                return;
             using (var db = new test123Entities1())
             {
                 AddNewItem();
                 db.Passport.Add(CreatingPassportObject());
                 db.SaveChanges();
-                return "Добавлен";
             }
         }
 
@@ -199,12 +208,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             if (SystemContext.isChange == false)
             {
-                if (AddNewPassport() == "Не заполнены")
-                {
-                    MessageBoxResult messageBoxResult = MessageBox.Show("Вы заполнили не все поля, уверены, что хотите выйти?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (messageBoxResult == MessageBoxResult.No)
-                        return;
-                }    
+                AddNewPassport();
             }
             else
             {
@@ -212,7 +216,6 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             }
             DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
             this.Close();
-            documentViewingWindow.ShowDialog();
         }
 
         private void PassportNameOutTextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

@@ -18,6 +18,8 @@ using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
 using System.IO;
 using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
+using DiplomWPFnetFramework.Windows.BufferWindows;
+using System.Data.Entity.Migrations;
 
 namespace DiplomWPFnetFramework.Pages
 {
@@ -36,6 +38,7 @@ namespace DiplomWPFnetFramework.Pages
 
         private void LoadContent()
         {
+            DocumentsViewGrid.Children.Clear();
             using (var db = new test123Entities1())
             {
                 List<Items> items = null;
@@ -68,6 +71,7 @@ namespace DiplomWPFnetFramework.Pages
             var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyle"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")) };
             var mainGrid = new Grid() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
             var bottomDarkeningBorder = new Border() { Style = (Style)DocumentsViewGrid.Resources["BottomBorderProperties"] };
+            var contextMenu = (ContextMenu)this.FindResource("MyContextMenu");
 
             ImageBrush imageBrush = new ImageBrush();
             Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
@@ -104,7 +108,9 @@ namespace DiplomWPFnetFramework.Pages
             itemName.Tag = item;
 
             borderPanel.MouseLeftButtonUp += ChangeItemButton_Click;
+            borderPanel.ContextMenu = contextMenu;
             bottomDarkeningBorder.MouseLeftButtonUp += ChangeTitleNameButton_Click;
+            itemName.MouseLeftButtonUp += ChangeTitleNameButton_Click;
 
             mainGrid.Children.Add(bottomDarkeningBorder);
             mainGrid.Children.Add(itemName);
@@ -123,37 +129,31 @@ namespace DiplomWPFnetFramework.Pages
                 {
                     case "Passport":
                         var passportWindow = new PassportWindow();
-                        parentWindow.Close();
                         passportWindow.ShowDialog();
                         break;
 
                     case "INN":
                         var innWindow = new InnWindow();
-                        parentWindow.Close();
                         innWindow.ShowDialog();
                         break;
 
                     case "SNILS":
                         var snilsWindow = new SnilsWindow();
-                        parentWindow.Close();
                         snilsWindow.ShowDialog();
                         break;
 
                     case "Polis":
                         var polisWindow = new PolisWindow();
-                        parentWindow.Close();
                         polisWindow.ShowDialog();
                         break;
 
                     case "Photo":
                         var photoWindow = new PhotoWindow();
-                        parentWindow.Close();
                         photoWindow.ShowDialog();
                         break;
 
                     case "CreditCard":
                         var creditCardWindow = new CreditCardWindow();
-                        parentWindow.Close();
                         creditCardWindow.ShowDialog();
                         break;
 
@@ -177,10 +177,13 @@ namespace DiplomWPFnetFramework.Pages
 
         private void ChangeTitleNameButton_Click(object sender, MouseButtonEventArgs e)
         {
-            //SystemContext.Item = (sender as Border).Tag as Items;
-            SystemContext.Item = (sender as TextBlock).Tag as Items;
+            if (sender is TextBlock)
+                SystemContext.Item = (sender as TextBlock).Tag as Items;
+            else
+                SystemContext.Item = (sender as Border).Tag as Items;
             SystemContext.isChangeTitleName = true;
-            MessageBox.Show("Привет");
+            ChangeItemTitleNameWindow changeItemTitleNameWindow = new ChangeItemTitleNameWindow();
+            changeItemTitleNameWindow.ShowDialog();
         }
 
         private void addNewElementsInFolderButton_Click(object sender, RoutedEventArgs e)
@@ -199,6 +202,48 @@ namespace DiplomWPFnetFramework.Pages
             Frame openDocumentViewingPageFrame = parentWindow.FindName("openPageFrame") as Frame;
             DocumentViewingPage folderContentPage = new DocumentViewingPage();
             openDocumentViewingPageFrame.Content = folderContentPage;
+        }
+
+        private void MenuItemLock_Click(object sender, RoutedEventArgs e)
+        {
+            Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
+            SystemContext.Item = border.Tag as Items;
+            Items item = new Items();
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                item.IPriority = 1;
+                db.Items.AddOrUpdate(item);
+                db.SaveChanges();
+            }
+        }
+
+        private void MenuItemHide_Click(object sender, RoutedEventArgs e)
+        {
+            Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
+            SystemContext.Item = border.Tag as Items;
+            Items item = new Items();
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                item.IsHidden = 1;
+                db.Items.AddOrUpdate(item);
+                db.SaveChanges();
+            }
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
+            SystemContext.Item = border.Tag as Items;
+            Items item = new Items();
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+            }
+            LoadContent();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         public LoginWindow()
         {
             InitializeComponent();
-            EmailTextBox.Text = "User1";
+            EmailTextBox.Text = "User1234.us@gmail.com";
             PasswordTextBox.Password = "qqqqwwww";
         }
 
@@ -32,7 +32,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
                 if (user.UPassword != password)
                     return "Неверный пароль!";
                 SystemContext.User = user;
-                login = user.Email;
+                login = user.ULogin;
             }
             return $"Добро пожаловать, {login}!";
         }
@@ -40,7 +40,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         private void LogInButton_Click(object sender, RoutedEventArgs e)
         {
             string result = LoginMethod(EmailTextBox.Text, PasswordTextBox.Password);
-            if (result == $"Добро пожаловать, {EmailTextBox.Text}!")
+            if (result == $"Добро пожаловать, {SystemContext.User.ULogin}!")
             {
                 MessageBox.Show(result, "Приветствие", MessageBoxButton.OK, MessageBoxImage.Information);
                 SystemContext.isGuest = false;

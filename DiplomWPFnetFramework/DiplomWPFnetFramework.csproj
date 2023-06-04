@@ -145,6 +145,9 @@
     <Compile Include="Windows\BufferWindows\addNewDocumentBufferWindow.xaml.cs">
       <DependentUpon>addNewDocumentBufferWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\BufferWindows\ChangeItemTitleNameWindow.xaml.cs">
+      <DependentUpon>ChangeItemTitleNameWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DocumentTemplatesWindows\CreditCardWindow.xaml.cs">
       <DependentUpon>CreditCardWindow.xaml</DependentUpon>
     </Compile>
@@ -195,6 +198,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\BufferWindows\addNewDocumentBufferWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\BufferWindows\ChangeItemTitleNameWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -291,9 +298,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataBase\CreateDB\Скрипт создания БД.sql" />
-    <Resource Include="Resources\DocumentMoreInteractionsImage.png" />
-    <Resource Include="Resources\addImage.png" />
-    <Resource Include="DataBase\CreateDB\Скрипт создания БД.txt" />
     <Content Include="DataBase\TestModel1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TestModel1.edmx</DependentUpon>
@@ -304,6 +308,23 @@
       <DependentUpon>TestModel1.edmx</DependentUpon>
       <LastGenOutput>TestModel1.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\HiddenFilesImage.png" />
+    <Resource Include="Resources\MyTemplatesImage.png" />
+    <Resource Include="Resources\ChangePasswordImage.png" />
+    <Resource Include="Resources\CloudSyncImage.png" />
+    <Resource Include="Resources\SettingsImage.png" />
+    <Resource Include="Resources\UserAvatarPlug.png" />
+    <Resource Include="Resources\DeleteImage.png" />
+    <Resource Include="Resources\HideImage.png" />
+    <Resource Include="Resources\LockImage.png" />
+    <Resource Include="Resources\AvatarPhotoImage.png" />
+    <Resource Include="Resources\AppLogo.ico" />
+    <Resource Include="Resources\selected_circle.png" />
+    <Resource Include="Resources\unselected_circle.png" />
+    <Resource Include="Resources\CheckMarkImage.png" />
+    <Resource Include="Resources\DocumentMoreInteractionsImage.png" />
+    <Resource Include="Resources\addImage.png" />
+    <Resource Include="DataBase\CreateDB\Скрипт создания БД.txt" />
     <Resource Include="Resources\CreditCardPlugImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

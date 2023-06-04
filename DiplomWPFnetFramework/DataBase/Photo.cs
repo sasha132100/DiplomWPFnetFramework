@@ -16,9 +16,8 @@ namespace DiplomWPFnetFramework.DataBase
     {
         public int Id { get; set; }
         public byte[] PPath { get; set; }
-        public int CollectionID { get; set; }
+        public Nullable<int> CollectionID { get; set; }
     
         public virtual Items Items { get; set; }
-        public virtual Items Items1 { get; set; }
     }
 }

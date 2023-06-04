@@ -1,6 +1,7 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
 using DiplomWPFnetFramework.Windows;
+using DiplomWPFnetFramework.Windows.BufferWindows;
 using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
 using System;
 using System.Collections.Generic;
@@ -37,24 +38,29 @@ namespace DiplomWPFnetFramework.Pages
         {
             using (var db = new test123Entities1())
             {
-                if (SystemContext.isFromFolder)
-                    addNewImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CreditCardPlugImage.png"));
+                DocumentsViewGrid.Children.Clear();
                 List<Items> items = null;
                 try
                 {
                     if (SystemContext.isFromFolder)
                     {
                         items = (from i in db.Items
-                                 where i.UserId == SystemContext.User.Id && i.FolderId != SystemContext.Item.Id && i.IType != "Folder" && i.IType != "Collection"
+                                 where i.UserId == SystemContext.User.Id && i.IType != "Folder" && i.IType != "Collection"
+                                 orderby i.Title
                                  select i).ToList<Items>();
                     }
                     else
                     {
                         items = (from i in db.Items
-                                 where i.UserId == SystemContext.User.Id
+                                 where i.UserId == SystemContext.User.Id && i.FolderId == null
+                                 orderby i.Title
                                  select i).ToList<Items>();
                     }
-                    
+                    if (SystemContext.isFromFolder)
+                    {
+                        addNewImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CheckMarkImage.png"));
+                        addNewImage.Stretch = Stretch.Uniform;
+                    }
                 }
                 catch
                 {
@@ -77,8 +83,9 @@ namespace DiplomWPFnetFramework.Pages
         private void AddNewDocument(Items item)
         {
             var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyle"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")) };
-            var mainGrid = new Grid() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
+            var mainGrid = new Grid() { Name = "mainGrid", Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
             var bottomDarkeningBorder = new Border() { Style = (Style)DocumentsViewGrid.Resources["BottomBorderProperties"] };
+            var contextMenu = (ContextMenu)this.FindResource("MyContextMenu");
 
             ImageBrush imageBrush = new ImageBrush();
             Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
@@ -111,12 +118,28 @@ namespace DiplomWPFnetFramework.Pages
             TextBlock itemName = new TextBlock() { Text = item.Title, Style = (Style)DocumentsViewGrid.Resources["DocumentTextBlockPropeties"] };
 
             borderPanel.Tag = item;
+            contextMenu.Tag = item;
             bottomDarkeningBorder.Tag = item;
             itemName.Tag = item;
 
             borderPanel.MouseLeftButtonUp += ChangeItemButton_Click;
+            borderPanel.ContextMenu = contextMenu;
             bottomDarkeningBorder.MouseLeftButtonUp += ChangeTitleNameButton_Click;
             itemName.MouseLeftButtonUp += ChangeTitleNameButton_Click;
+
+            if (SystemContext.isFromFolder)
+            {
+                Image unselectedImage = new Image() { Name = "unselectedImage", VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 5, 5, 0), Height = 25, Width = 25 };
+                Image selectedImage = new Image() { Name = "selectedImage", VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 5, 5, 0), Height = 25, Width = 25 };
+                unselectedImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/unselected_circle.png"));
+                selectedImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/selected_circle.png"));
+                mainGrid.Children.Add(unselectedImage);
+                mainGrid.Children.Add(selectedImage);
+                if (item.IsSelected == 1)
+                    unselectedImage.Visibility = Visibility.Hidden;
+                else
+                    selectedImage.Visibility = Visibility.Hidden;
+            }
 
             mainGrid.Children.Add(bottomDarkeningBorder);
             mainGrid.Children.Add(itemName);
@@ -128,9 +151,16 @@ namespace DiplomWPFnetFramework.Pages
         {
             using (var db = new test123Entities1())
             {
-                item.FolderId = SystemContext.Folder.Id;
-                item.IsSelected = 0;
-                db.Items.AddOrUpdate(item);
+                if (item.FolderId == null && item.IsSelected == 1)
+                {
+                    item.FolderId = SystemContext.Folder.Id;
+                    db.Items.AddOrUpdate(item);
+                }
+                else if (item.FolderId != null && item.IsSelected == 0)
+                {
+                    item.FolderId = null;
+                    db.Items.AddOrUpdate(item);
+                }
                 db.SaveChanges();
             }
         }
@@ -142,54 +172,66 @@ namespace DiplomWPFnetFramework.Pages
             parentWindow = Window.GetWindow(this);
             using (var db = new test123Entities1())
             {
-                SystemContext.Item = (sender as Border).Tag as Items;
+                
                 if (SystemContext.isFromFolder)
                 {
-                    Items item = new Items();
-                    item = SystemContext.Item;
-                    item.IsSelected = 1;
+                    SystemContext.SelectedItem = (sender as Border).Tag as Items;
+                    Items item;
+                    item = SystemContext.SelectedItem;
+                    Grid grid = (sender as Border).Child as Grid;
+                    Image selectedImage = grid.Children.OfType<Image>().FirstOrDefault(si => si.Name == "selectedImage");
+                    Image unselectedImage = grid.Children.OfType<Image>().FirstOrDefault(si => si.Name == "unselectedImage");
+
+                    if (item.IsSelected == 1)
+                    {
+                        selectedImage.Visibility = Visibility.Hidden;
+                        unselectedImage.Visibility = Visibility.Visible;
+                        item.IsSelected = 0;
+                    }
+                    else
+                    {
+                        selectedImage.Visibility = Visibility.Visible;
+                        unselectedImage.Visibility = Visibility.Hidden;
+                        item.IsSelected = 1;
+                    }
+
                     db.Items.AddOrUpdate(item);
                     db.SaveChanges();
                     return;
                 }
                 else
                 {
+                    SystemContext.Item = (sender as Border).Tag as Items;
                     SystemContext.isChange = true;
                     switch (SystemContext.Item?.IType)
                     {
                         case "Passport":
                             var passportWindow = new PassportWindow();
-                            parentWindow.Close();
                             passportWindow.ShowDialog();
                             break;
 
                         case "INN":
                             var innWindow = new InnWindow();
-                            parentWindow.Close();
                             innWindow.ShowDialog();
                             break;
 
                         case "SNILS":
                             var snilsWindow = new SnilsWindow();
-                            parentWindow.Close();
                             snilsWindow.ShowDialog();
                             break;
 
                         case "Polis":
                             var polisWindow = new PolisWindow();
-                            parentWindow.Close();
                             polisWindow.ShowDialog();
                             break;
 
                         case "Photo":
                             var photoWindow = new PhotoWindow();
-                            parentWindow.Close();
                             photoWindow.ShowDialog();
                             break;
 
                         case "CreditCard":
                             var creditCardWindow = new CreditCardWindow();
-                            parentWindow.Close();
                             creditCardWindow.ShowDialog();
                             break;
 
@@ -217,9 +259,13 @@ namespace DiplomWPFnetFramework.Pages
         {
             if (SystemContext.isFromFolder)
                 return;
-            SystemContext.Item = (sender as TextBlock).Tag as Items;
+            if (sender is TextBlock)
+                SystemContext.Item = (sender as TextBlock).Tag as Items;
+            else
+                SystemContext.Item = (sender as Border).Tag as Items;
             SystemContext.isChangeTitleName = true;
-            MessageBox.Show("Привет");
+            ChangeItemTitleNameWindow changeItemTitleNameWindow = new ChangeItemTitleNameWindow();
+            changeItemTitleNameWindow.ShowDialog();
         }
 
         private void addNewDocumentButton_Click(object sender, RoutedEventArgs e)
@@ -232,7 +278,7 @@ namespace DiplomWPFnetFramework.Pages
                     try
                     {
                         items = (from i in db.Items
-                                 where i.UserId == SystemContext.User.Id && i.IsSelected == 1
+                                 where i.UserId == SystemContext.User.Id
                                  select i).ToList<Items>();
                     }
                     catch
@@ -247,11 +293,68 @@ namespace DiplomWPFnetFramework.Pages
                 Frame openFolderPageFrame = parentWindow.FindName("openPageFrame") as Frame;
                 FolderContentPage folderContentPage = new FolderContentPage();
                 openFolderPageFrame.Content = folderContentPage;
+                SystemContext.isFromFolder = false;
+                return;
             }
             parentWindow = Window.GetWindow(this);
             Window1 window1 = new Window1();
-            parentWindow.Close();
             window1.ShowDialog();
+        }
+
+        private void MenuItemLock_Click(object sender, RoutedEventArgs e)
+        {
+            Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
+            SystemContext.Item = border.Tag as Items;
+            Items item = new Items();
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                item.IPriority = 1;
+                db.Items.AddOrUpdate(item);
+                db.SaveChanges();
+            }
+        }
+
+        private void MenuItemHide_Click(object sender, RoutedEventArgs e)
+        {
+            Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
+            SystemContext.Item = border.Tag as Items;
+            Items item = new Items();
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                item.IsHidden = 1;
+                db.Items.AddOrUpdate(item);
+                db.SaveChanges();
+            }
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
+            SystemContext.Item = border.Tag as Items;
+            Items item = new Items();
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                if (item.IType == "Folder")
+                {
+                    List<Items> itemsInFolder = (from i in db.Items
+                                                 where i.UserId == SystemContext.User.Id && i.FolderId == item.Id
+                                                 select i).ToList<Items>();
+                    foreach(var itemInFodler in itemsInFolder)
+                    {
+                        db.Entry(itemInFodler).State = System.Data.Entity.EntityState.Deleted;
+                    }
+                }
+                else if (item.IType == "Collection")
+                {
+
+                }
+                db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+            }
+            LoadContent();
         }
     }
 }

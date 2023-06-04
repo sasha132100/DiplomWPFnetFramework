@@ -23,11 +23,36 @@
             <Setter Property="Height" Value="60"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
         <ResourceDictionary x:Key="CornerRadiusSetter">
             <Style TargetType="Border">
                 <Setter Property="CornerRadius" Value="120"/>
             </Style>
         </ResourceDictionary>
+        <ContextMenu Background="White" x:Key="MyContextMenu">
+            <MenuItem Header="Закрепить" Click="MenuItemLock_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/LockImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скрыть" Click="MenuItemHide_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/HideImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Удалить" Click="MenuItemDelete_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/DeleteImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
     </Page.Resources>
     <ScrollViewer Height="Auto" DockPanel.Dock="Top" Padding="0,18,0,0">
         <Grid>
