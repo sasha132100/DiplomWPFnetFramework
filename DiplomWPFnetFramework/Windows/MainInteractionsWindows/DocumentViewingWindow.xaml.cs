@@ -13,6 +13,7 @@ using System.IO;
 using DiplomWPFnetFramework.Pages;
 using System.Data.Entity.Migrations;
 using DiplomWPFnetFramework.Windows.BufferWindows;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 
 namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 {

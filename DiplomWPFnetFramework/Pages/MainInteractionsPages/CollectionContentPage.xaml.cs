@@ -19,7 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DiplomWPFnetFramework.Pages
+namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 {
     /// <summary>
     /// Логика взаимодействия для CollectionContentPage.xaml
@@ -27,12 +27,13 @@ namespace DiplomWPFnetFramework.Pages
     public partial class CollectionContentPage : Page
     {
         Window parentWindow;
+        byte[] photoBytes = null;
 
         public CollectionContentPage()
         {
             InitializeComponent();
             LoadContent();
-            FolderNameTextBlock.Text = SystemContext.Item.Title;
+            CollectionNameTextBlock.Text = SystemContext.Item.Title;
         }
 
 
@@ -89,45 +90,71 @@ namespace DiplomWPFnetFramework.Pages
             DocumentsViewGrid.Children.Add(borderPanel);
         }
 
+        private void ImageSetter()
+        {
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+                photoBytes = File.ReadAllBytes(filePath);
+            }
+        }
+
+        private Photo CreatingPhotoObject()
+        {
+            using (var db = new test123Entities1())
+            {
+                Photo photo = new Photo();
+                photo.PPath = photoBytes;
+                photo.CollectionID = SystemContext.Item.Id;
+                return photo;
+            }
+        }
+
+        private string AddNewPhoto()
+        {
+            using (var db = new test123Entities1())
+            {
+                db.Photo.Add(CreatingPhotoObject());
+                db.SaveChanges();
+                LoadContent();
+                return "Добавлен";
+            }
+        }
+
         private void ChangeItemButton_Click(object sender, MouseButtonEventArgs e)
         {
             parentWindow = Window.GetWindow(this);
             using (var db = new test123Entities1())
             {
-                SystemContext.Item = (sender as Border).Tag as Items;
+                SystemContext.Photo = (sender as Border).Tag as Photo;
                 SystemContext.isChange = true;
                 var photoWindow = new PhotoWindow();
                 photoWindow.ShowDialog();
             }
         }
 
-        private void ChangeTitleNameButton_Click(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is TextBlock)
-                SystemContext.Item = (sender as TextBlock).Tag as Items;
-            else
-                SystemContext.Item = (sender as Border).Tag as Items;
-            SystemContext.isChangeTitleName = true;
-            ChangeItemTitleNameWindow changeItemTitleNameWindow = new ChangeItemTitleNameWindow();
-            changeItemTitleNameWindow.ShowDialog();
-        }
-
         private void addNewElementsInFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            SystemContext.isFromFolder = true;
-            parentWindow = Window.GetWindow(this);
-            Frame openDocumentViewingPageFrame = parentWindow.FindName("openPageFrame") as Frame;
-            DocumentViewingPage folderContentPage = new DocumentViewingPage();
-            openDocumentViewingPageFrame.Content = folderContentPage;
-
+            ImageSetter();
+            AddNewPhoto();
         }
 
         private void CloseFolderPage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             parentWindow = Window.GetWindow(this);
             Frame openDocumentViewingPageFrame = parentWindow.FindName("openPageFrame") as Frame;
-            DocumentViewingPage folderContentPage = new DocumentViewingPage();
-            openDocumentViewingPageFrame.Content = folderContentPage;
+            if (SystemContext.isFromFolder)
+            {
+                FolderContentPage folderContentPage = new FolderContentPage();
+                openDocumentViewingPageFrame.Content = folderContentPage;
+            }
+            else
+            {
+                DocumentViewingPage documentViewingPage = new DocumentViewingPage();
+                openDocumentViewingPageFrame.Content = documentViewingPage;
+            }
         }
 
         private void MenuItemLock_Click(object sender, RoutedEventArgs e)
@@ -161,12 +188,12 @@ namespace DiplomWPFnetFramework.Pages
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
-            SystemContext.Item = border.Tag as Items;
-            Items item = new Items();
-            item = SystemContext.Item;
+            SystemContext.Photo = border.Tag as Photo;
+            Photo photo;
+            photo = SystemContext.Photo;
             using (var db = new test123Entities1())
             {
-                db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                db.Entry(photo).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
             LoadContent();

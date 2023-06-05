@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DiplomWPFnetFramework.Pages
+namespace DiplomWPFnetFramework.Pages.DocumentPages
 {
     /// <summary>
     /// Логика взаимодействия для CreditCardPhotoPage.xaml

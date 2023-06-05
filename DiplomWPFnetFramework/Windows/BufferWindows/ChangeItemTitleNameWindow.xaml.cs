@@ -27,19 +27,12 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
         public ChangeItemTitleNameWindow()
         {
             InitializeComponent();
-            Closing += ClosingWindow;
             TitleNameTextBlock.Text = SystemContext.Item.Title;
         }
 
         private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            SystemContext.isChangeTitleName = false;
             this.Close();
-        }
-
-        private void ClosingWindow(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            SystemContext.isChangeTitleName = false;
         }
 
         private void confirmButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -56,6 +49,34 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                 }
                 MessageBox.Show("Название успешно изменено");
                 this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Введите данные!");
+            }
+        }
+
+        private void NewTitleNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
+                {
+                    Items item = new Items();
+                    using (var db = new test123Entities1())
+                    {
+                        item = SystemContext.Item;
+                        item.Title = NewTitleNameTextBox.Text;
+                        db.Items.AddOrUpdate(item);
+                        db.SaveChanges();
+                    }
+                    MessageBox.Show("Название успешно изменено");
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Введите данные!");
+                }
             }
         }
     }

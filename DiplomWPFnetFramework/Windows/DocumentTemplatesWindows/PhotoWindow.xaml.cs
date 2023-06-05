@@ -40,7 +40,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 return;
             using (var db = new test123Entities1())
             {
-                var photo = (from p in db.Photo where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Photo>();
+                var photo = SystemContext.Photo;
                 try
                 {
                     PhotoHolder.Source = ByteArrayToImage(photo.PPath);
@@ -48,7 +48,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 }
                 catch
                 {
-
+                    MessageBox.Show("Ошибка");
                 }
             }
 
@@ -80,14 +80,9 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 Photo photo = new Photo();
                 if (SystemContext.isChange == false)
-                {
-                    photo.Id = SystemContext.NewItem.Id;
                     photo.CollectionID = SystemContext.NewItem.Id;
-                }
                 else
-                {
-                    photo = (from p in db.Photo where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Photo>();
-                }
+                    photo = SystemContext.Photo;
                 photo.PPath = photoBytes;
                 return photo;
             }
@@ -99,7 +94,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 Items item = new Items();
                 item.Title = "NewTitle" + db.Items.OrderByDescending(items => items.Id).FirstOrDefault().Id.ToString();
-                item.IType = "Photo";
+                item.IType = "Collection";
                 item.IPriority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
@@ -143,16 +138,14 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 {
                     using (var db = new test123Entities1())
                     {
-                        var photo = (from p in db.Photo where SystemContext.Photo.Id == p.Id select p).FirstOrDefault<Photo>();
+                        var photo = SystemContext.Photo;
                         db.Entry(photo).State = System.Data.Entity.EntityState.Deleted;
                         db.SaveChanges();
                     }
                 }
                 else if (messageBoxResult == MessageBoxResult.Yes && SystemContext.isChange == false)
                 {
-                    DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
                     this.Close();
-                    documentViewingWindow.ShowDialog();
                 }
             }
             else
@@ -161,9 +154,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                     ChangePhoto();
                 else
                     AddNewPhoto();
-                DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
                 this.Close();
-                documentViewingWindow.ShowDialog();
             }
         }
 

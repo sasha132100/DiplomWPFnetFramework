@@ -21,7 +21,7 @@ using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
 using DiplomWPFnetFramework.Windows.BufferWindows;
 using System.Data.Entity.Migrations;
 
-namespace DiplomWPFnetFramework.Pages
+namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 {
     /// <summary>
     /// Логика взаимодействия для FolderContentPage.xaml
@@ -121,6 +121,11 @@ namespace DiplomWPFnetFramework.Pages
 
         private void ChangeItemButton_Click(object sender, MouseButtonEventArgs e)
         {
+            if (SystemContext.isChangeTitleName)
+            {
+                SystemContext.isChangeTitleName = false;
+                return;
+            }
             parentWindow = Window.GetWindow(this);
             using (var db = new test123Entities1())
             {
@@ -130,31 +135,37 @@ namespace DiplomWPFnetFramework.Pages
                 {
                     case "Passport":
                         var passportWindow = new PassportWindow();
+                        passportWindow.Closed += Window_Closed;
                         passportWindow.ShowDialog();
                         break;
 
                     case "INN":
                         var innWindow = new InnWindow();
+                        innWindow.Closed += Window_Closed;
                         innWindow.ShowDialog();
                         break;
 
                     case "SNILS":
                         var snilsWindow = new SnilsWindow();
+                        snilsWindow.Closed += Window_Closed;
                         snilsWindow.ShowDialog();
                         break;
 
                     case "Polis":
                         var polisWindow = new PolisWindow();
+                        polisWindow.Closed += Window_Closed;
                         polisWindow.ShowDialog();
                         break;
 
                     case "Photo":
                         var photoWindow = new PhotoWindow();
+                        photoWindow.Closed += Window_Closed;
                         photoWindow.ShowDialog();
                         break;
 
                     case "CreditCard":
                         var creditCardWindow = new CreditCardWindow();
+                        creditCardWindow.Closed += Window_Closed;
                         creditCardWindow.ShowDialog();
                         break;
 
@@ -184,6 +195,7 @@ namespace DiplomWPFnetFramework.Pages
                 SystemContext.Item = (sender as Border).Tag as Items;
             SystemContext.isChangeTitleName = true;
             ChangeItemTitleNameWindow changeItemTitleNameWindow = new ChangeItemTitleNameWindow();
+            changeItemTitleNameWindow.Closed += Window_Closed;
             changeItemTitleNameWindow.ShowDialog();
         }
 
@@ -244,6 +256,11 @@ namespace DiplomWPFnetFramework.Pages
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            LoadContent();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
             LoadContent();
         }
     }
