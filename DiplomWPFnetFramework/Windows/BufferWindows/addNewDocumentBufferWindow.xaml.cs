@@ -25,8 +25,17 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
         public addNewDocumentBufferWindow()
         {
             InitializeComponent();
-            SystemTemplatesShowPage systemTemplatesShowPage = new SystemTemplatesShowPage();
-            ChooseTemplatesTypePageFrame.Content = systemTemplatesShowPage;
+            if (SystemContext.isFromHiddenFiles)
+            {
+                AddNewHiddenFolderPage addNewHiddenFolderPage = new AddNewHiddenFolderPage();
+                ChooseTemplatesTypePageFrame.Content = addNewHiddenFolderPage;
+                DocumentMoreInteractionsImage.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                SystemTemplatesShowPage systemTemplatesShowPage = new SystemTemplatesShowPage();
+                ChooseTemplatesTypePageFrame.Content = systemTemplatesShowPage;
+            }
         }
 
         private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -36,7 +45,10 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
 
         private void DocumentMoreInteractionsButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
+            Grid grid = (Grid)sender;
+            var contextMenu = (ContextMenu)this.FindResource("TemplateTypeContextMenu");
+            contextMenu.PlacementTarget = grid;
+            contextMenu.IsOpen = true;
         }
 
         private void SystemTemplatesShow_Click(object sender, RoutedEventArgs e)

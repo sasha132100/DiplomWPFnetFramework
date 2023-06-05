@@ -16,6 +16,7 @@ using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
 using System.Data.Entity.Migrations;
 using System.IO;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
@@ -176,9 +177,17 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 ChangeINN();
             }
-            DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
             this.Close();
-            documentViewingWindow.ShowDialog();
         }
 
         private void INNPhoto_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

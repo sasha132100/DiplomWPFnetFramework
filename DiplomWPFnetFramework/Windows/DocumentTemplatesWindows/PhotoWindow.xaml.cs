@@ -1,5 +1,6 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
 using System;
 using System.Collections.Generic;
@@ -155,6 +156,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 else
                     AddNewPhoto();
                 this.Close();
+            }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
 
         private void PassportButton_Click(object sender, RoutedEventArgs e)
         {
+            SystemContext.isChange = false;
             PassportWindow passportWindow = new PassportWindow();
             parentWindow = Window.GetWindow(this);
             parentWindow.Close();
@@ -42,6 +44,7 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
 
         private void SNILSButton_Click(object sender, RoutedEventArgs e)
         {
+            SystemContext.isChange = false;
             SnilsWindow snilsWindow = new SnilsWindow();
             parentWindow = Window.GetWindow(this);
             parentWindow.Close();
@@ -50,6 +53,7 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
 
         private void INNButton_Click(object sender, RoutedEventArgs e)
         {
+            SystemContext.isChange = false;
             InnWindow innWindow = new InnWindow();
             parentWindow = Window.GetWindow(this);
             parentWindow.Close();
@@ -58,6 +62,7 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
 
         private void PolisButton_Click(object sender, RoutedEventArgs e)
         {
+            SystemContext.isChange = false;
             PolisWindow polisWindow = new PolisWindow();
             parentWindow = Window.GetWindow(this);
             parentWindow.Close();
@@ -80,16 +85,36 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
                 db.SaveChanges();
                 SystemContext.NewItem = item;
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
             parentWindow = Window.GetWindow(this);
             parentWindow.Close();
         }
 
         private void CreditCardButton_Click(object sender, RoutedEventArgs e)
         {
+            SystemContext.isChange = false;
             CreditCardWindow creditCardWindow = new CreditCardWindow();
             parentWindow = Window.GetWindow(this);
             parentWindow.Close();
             creditCardWindow.ShowDialog();
+        }
+
+        private void PhotoButton_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isChange = false;
+            PhotoWindow photoWindow = new PhotoWindow();
+            parentWindow = Window.GetWindow(this);
+            parentWindow.Close();
+            photoWindow.ShowDialog();
         }
     }
 }

@@ -46,7 +46,7 @@
         </Grid>
         <StackPanel>
             <TextBlock Text="Введите код" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Margin="0,5,0,0" FontSize="20" HorizontalAlignment="Center"/>
-            <Border CornerRadius="10" VerticalAlignment="Top" BorderThickness="1" Background="White" BorderBrush="#ABADB3" Width="480" Height="40">
+            <Border CornerRadius="10" VerticalAlignment="Top" BorderThickness="1" Background="White" BorderBrush="#ABADB3" Width="480" Height="40" KeyDown="CodeCheckTextBox_KeyDown">
                 <PasswordBox x:Name="CodeCheckTextBox" Style="{StaticResource PasswordBoxProperties}"/>
             </Border>
         </StackPanel>

@@ -37,6 +37,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 
         public void LoadContent()
         {
+            SystemContext.PageForLoadContent = this;
             using (var db = new test123Entities1())
             {
                 DocumentsViewGrid.Children.Clear();
@@ -45,16 +46,31 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 {
                     if (SystemContext.isFromFolder)
                     {
-                        items = (from i in db.Items
-                                 where i.UserId == SystemContext.User.Id && i.IType != "Folder"
-                                 orderby i.Title
-                                 select i).ToList<Items>();
+                        if (SystemContext.isFromHiddenFiles)
+                        {
+                            items = (from i in db.Items
+                                     where i.UserId == SystemContext.User.Id && i.IType != "Folder" && (i.FolderId == null || i.FolderId == SystemContext.Item.Id) && i.IsHidden == 1
+                                     orderby i.IPriority descending, i.DateCreation
+                                     select i).ToList<Items>();
+                            addNewImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CheckMarkImage.png"));
+                            addNewImage.Stretch = Stretch.Uniform;
+                        }
+                        else
+                        {
+                            items = (from i in db.Items
+                                     where i.UserId == SystemContext.User.Id && i.IType != "Folder" && (i.FolderId == null || i.FolderId == SystemContext.Item.Id)
+                                     orderby i.IPriority descending, i.DateCreation
+                                     select i).ToList<Items>();
+                            addNewImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CheckMarkImage.png"));
+                            addNewImage.Stretch = Stretch.Uniform;
+                        }
+                        
                     }
-                    else
+                    else if (SystemContext.isFromHiddenFiles)
                     {
                         items = (from i in db.Items
-                                 where i.UserId == SystemContext.User.Id && i.FolderId == null
-                                 orderby i.Title
+                                 where i.UserId == SystemContext.User.Id && i.FolderId == null && i.IsHidden == 1
+                                 orderby i.IPriority descending, i.DateCreation
                                  select i).ToList<Items>();
                         if (!SystemContext.isDocumentNeedToShow)
                             items.RemoveAll(d => d.IType == "Passport" || d.IType == "INN" || d.IType == "SNILS" || d.IType == "Polis");
@@ -65,10 +81,20 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                         if (!SystemContext.isFolderNeedToShow)
                             items.RemoveAll(f => f.IType == "Folder");
                     }
-                    if (SystemContext.isFromFolder)
+                    else
                     {
-                        addNewImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CheckMarkImage.png"));
-                        addNewImage.Stretch = Stretch.Uniform;
+                        items = (from i in db.Items
+                                 where i.UserId == SystemContext.User.Id && i.FolderId == null && i.IsHidden == 0
+                                 orderby i.IPriority descending, i.DateCreation
+                                 select i).ToList<Items>();
+                        if (!SystemContext.isDocumentNeedToShow)
+                            items.RemoveAll(d => d.IType == "Passport" || d.IType == "INN" || d.IType == "SNILS" || d.IType == "Polis");
+                        if (!SystemContext.isCreditCardNeedToShow)
+                            items.RemoveAll(cc => cc.IType == "CreditCard");
+                        if (!SystemContext.isCollectionNeedToShow)
+                            items.RemoveAll(c => c.IType == "Collection");
+                        if (!SystemContext.isFolderNeedToShow)
+                            items.RemoveAll(f => f.IType == "Folder");
                     }
                 }
                 catch
@@ -136,6 +162,12 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 borderPanel.ContextMenu = contextMenu;
             bottomDarkeningBorder.MouseLeftButtonUp += ChangeTitleNameButton_Click;
             itemName.MouseLeftButtonUp += ChangeTitleNameButton_Click;
+
+            Image LockImage = new Image() { Name = "LockImage", VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(5, 5, 0, 0), Height = 25, Width = 25 };
+            LockImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/LockImage.png"));
+            mainGrid.Children.Add(LockImage);
+            if (item.IPriority == 0)
+                LockImage.Visibility = Visibility.Hidden;
 
             if (SystemContext.isFromFolder)
             {
@@ -216,6 +248,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 {
                     SystemContext.Item = (sender as Border).Tag as Items;
                     SystemContext.isChange = true;
+                    SystemContext.PageForLoadContent = this;
                     switch (SystemContext.Item?.IType)
                     {
                         case "Passport":
@@ -318,6 +351,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 SystemContext.isFromFolder = false;
                 return;
             }
+            SystemContext.PageForLoadContent = this;
             addNewDocumentBufferWindow addNewDocumentBufferWindow = new addNewDocumentBufferWindow();
             addNewDocumentBufferWindow.ShowDialog();
         }
@@ -325,15 +359,27 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void MenuItemLock_Click(object sender, RoutedEventArgs e)
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
+            Grid grid = border.Child as Grid;
             SystemContext.Item = border.Tag as Items;
             Items item;
             item = SystemContext.Item;
+            Image LockImage = grid.Children.OfType<Image>().FirstOrDefault(li => li.Name == "LockImage");
             using (var db = new test123Entities1())
             {
-                item.IPriority = 1;
+                if (item.IPriority == 1)
+                {
+                    LockImage.Visibility = Visibility.Hidden;
+                    item.IPriority = 0;
+                }
+                else
+                {
+                    LockImage.Visibility = Visibility.Visible;
+                    item.IPriority = 1;
+                }
                 db.Items.AddOrUpdate(item);
                 db.SaveChanges();
             }
+            LoadContent();
         }
 
         private void MenuItemHide_Click(object sender, RoutedEventArgs e)
@@ -344,10 +390,38 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             item = SystemContext.Item;
             using (var db = new test123Entities1())
             {
-                item.IsHidden = 1;
+                if (SystemContext.isFromHiddenFiles)
+                {
+                    if (item.IType == "Folder")
+                    {
+                        List<Items> itemsInFolder = (from i in db.Items
+                                                     where i.UserId == SystemContext.User.Id && i.FolderId == item.Id
+                                                     select i).ToList<Items>();
+                        foreach (var itemInFodler in itemsInFolder)
+                        {
+                            itemInFodler.IsHidden = 0;
+                        }
+                    }
+                    item.IsHidden = 0;
+                }
+                else
+                {
+                    if (item.IType == "Folder")
+                    {
+                        List<Items> itemsInFolder = (from i in db.Items
+                                                     where i.UserId == SystemContext.User.Id && i.FolderId == item.Id
+                                                     select i).ToList<Items>();
+                        foreach (var itemInFodler in itemsInFolder)
+                        {
+                            itemInFodler.IsHidden = 1;
+                        }
+                    }
+                    item.IsHidden = 1;
+                }
                 db.Items.AddOrUpdate(item);
                 db.SaveChanges();
             }
+            LoadContent();
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)

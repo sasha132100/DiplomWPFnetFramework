@@ -120,9 +120,16 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         private void HiddenFilesButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             SystemContext.FromWhichWindowIsCalled = "DocumentViewingWindow";
-            EnteringAccessCodeWindow enteringAccessCodeWindow = new EnteringAccessCodeWindow();
-            enteringAccessCodeWindow.Owner = this;
-            enteringAccessCodeWindow.ShowDialog();
+            if (SystemContext.User.PinCode == null)
+            {
+                MessageBox.Show("Назначте код доступа в меню настроек -> Безопасность");
+            }
+            else
+            {
+                EnteringAccessCodeWindow enteringAccessCodeWindow = new EnteringAccessCodeWindow();
+                enteringAccessCodeWindow.Owner = this;
+                enteringAccessCodeWindow.ShowDialog();
+            }
         }
 
         private void MyTemplatesButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -156,27 +163,76 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         private void MenuItemShowOrHideDocuments_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isDocumentNeedToShow = !SystemContext.isDocumentNeedToShow;
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
         }
 
         private void MenuItemShowOrHideCreditCards_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isCreditCardNeedToShow = !SystemContext.isCreditCardNeedToShow;
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
         }
 
         private void MenuItemShowOrHideCollections_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isCollectionNeedToShow = !SystemContext.isCollectionNeedToShow;
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
         }
 
         private void MenuItemShowOrHideFolders_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isFolderNeedToShow = !SystemContext.isFolderNeedToShow;
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
         }
 
         private void MenuItemShowAll_Click(object sender, RoutedEventArgs e)
         {
-            SystemContextService.MakeAllElementsShowable();
-            var currentPage = openPageFrame.Content as Page;
+            SystemContextService.MakeAllElementsShowable(); 
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
         }
     }
 }

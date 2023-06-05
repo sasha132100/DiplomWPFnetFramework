@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using DiplomWPFnetFramework.DataBase;
 
 namespace DiplomWPFnetFramework.Classes
@@ -25,5 +26,7 @@ namespace DiplomWPFnetFramework.Classes
         public static bool isCollectionNeedToShow { get; set; } = true;
         public static bool isCreditCardNeedToShow { get; set; } = true;
         public static bool isDocumentNeedToShow { get; set; } = true;
+        public static Page PageForLoadContent { get; set; } = null;
+        public static bool isFromHiddenFiles { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
         {
             if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
             {
-                Items item = new Items();
+                Items item;
                 using (var db = new test123Entities1())
                 {
                     item = SystemContext.Item;
@@ -62,7 +62,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
             {
                 if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
                 {
-                    Items item = new Items();
+                    Items item;
                     using (var db = new test123Entities1())
                     {
                         item = SystemContext.Item;
@@ -75,7 +75,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                 }
                 else
                 {
-                    MessageBox.Show("Введите данные!");
+                    MessageBox.Show("Введите новое название!");
                 }
             }
         }

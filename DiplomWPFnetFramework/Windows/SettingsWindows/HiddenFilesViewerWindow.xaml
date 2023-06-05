@@ -14,20 +14,46 @@
             <Setter Property="Foreground" Value="#FCF3DC"/>
             <Setter Property="Margin" Value="0,0,0,0"/>
         </Style>
-        <Style x:Key="ButtonProperties" TargetType="Button">
-            <Setter Property="Background" Value="#442C6E"/>
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="White"/>
             <Setter Property="FontFamily" Value="Arial"/>
-            <Setter Property="FontSize" Value="22"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Width" Value="Auto"/>
-            <Setter Property="Height" Value="60"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <ResourceDictionary x:Key="CornerRadiusSetter">
             <Style TargetType="Border">
                 <Setter Property="CornerRadius" Value="120"/>
             </Style>
         </ResourceDictionary>
+        <ContextMenu Background="White" x:Key="SortContextMenu">
+            <MenuItem Header="Скрыть/показать документы" Click="MenuItemShowOrHideDocuments_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/DocumentImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скрыть/показать карты" Click="MenuItemShowOrHideCreditCards_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/CreditCardImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скрыть/показать коллекции" Click="MenuItemShowOrHideCollections_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/CollectionImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скрыть/показать папки" Click="MenuItemShowOrHideFolders_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/FolderImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Показать все" Click="MenuItemShowAll_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/ShowAllImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
     </Window.Resources>
     <DockPanel>
         <DockPanel.Background>
@@ -39,7 +65,7 @@
                     <ImageBrush ImageSource="pack://application:,,,/Resources/BackArrowButtonImage.png"/>
                 </Grid.Background>
             </Grid>
-            <TextBlock x:Name="LoginOutTextBlock" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Скрытые файлы" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Grid x:Name="sortImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" MouseLeftButtonUp="sortImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/SortButtonImage.png"/>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DiplomWPFnetFramework.Windows.BufferWindows"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Создание документа" Height="Auto" Width="520" MinHeight="195" MinWidth="520">
+        Title="Создание документа" Height="Auto" Width="520" MinHeight="85" MinWidth="520">
     <Window.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>
@@ -36,7 +36,7 @@
                 <Setter Property="CornerRadius" Value="10"/>
             </Style>
         </ResourceDictionary>
-        <ContextMenu Background="White" x:Key="SortContextMenu">
+        <ContextMenu Background="White" x:Key="TemplateTypeContextMenu">
             <MenuItem Header="Системные шаблоны" Click="SystemTemplatesShow_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/DocumentImage.png" Width="16" Height="16"/>
@@ -65,7 +65,7 @@
                 </Grid.Background>
             </Grid>
             <TextBlock Text="Создание документа" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Grid Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid x:Name="DocumentMoreInteractionsImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Resources\DocumentMoreInteractionsImage.png"/>
                 </Grid.Background>

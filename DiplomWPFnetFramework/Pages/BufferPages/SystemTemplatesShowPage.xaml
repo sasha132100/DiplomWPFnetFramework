@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages.BufferPages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="520">
+      d:DesignHeight="495" d:DesignWidth="520">
     <Page.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>
@@ -29,11 +29,13 @@
         </ResourceDictionary>
     </Page.Resources>
     <StackPanel>
-        <Button x:Name="PassportButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Паспорт" Margin="15,10,15,0" Cursor="Hand" Click="PassportButton_Click"/>
+        <TextBlock Text="Системные шаблоны" Style="{StaticResource TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        <Button x:Name="PassportButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Паспорт" Margin="15,5,15,0" Cursor="Hand" Click="PassportButton_Click"/>
         <Button x:Name="SNILSButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Снилс" Margin="15,5,15,0" Cursor="Hand" Click="SNILSButton_Click"/>
         <Button x:Name="INNButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="ИНН" Margin="15,5,15,0" Cursor="Hand" Click="INNButton_Click"/>
         <Button x:Name="PolisButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Полис" Margin="15,5,15,0" Cursor="Hand" Click="PolisButton_Click"/>
         <Button x:Name="FolderButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Папка" Margin="15,5,15,0" Cursor="Hand" Click="FolderButton_Click"/>
         <Button x:Name="CreditCardButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Карта" Margin="15,5,15,0" Cursor="Hand" Click="CreditCardButton_Click"/>
+        <Button x:Name="PhotoButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Фото" Margin="15,5,15,0" Cursor="Hand" Click="PhotoButton_Click"/>
     </StackPanel>
 </Page>

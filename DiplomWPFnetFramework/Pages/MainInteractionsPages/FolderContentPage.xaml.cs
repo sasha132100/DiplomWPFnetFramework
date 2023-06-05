@@ -39,17 +39,31 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 
         public void LoadContent()
         {
+            SystemContext.PageForLoadContent = this;
             DocumentsViewGrid.Children.Clear();
             using (var db = new test123Entities1())
             {
                 List<Items> items = null;
                 try
                 {
-                    items = (from i in db.Items
-                             where i.UserId == SystemContext.User.Id && i.FolderId == SystemContext.Item.Id
-                             select i).ToList<Items>();
+                    if (SystemContext.isFromHiddenFiles)
+                    {
+                        items = (from i in db.Items
+                                 where i.UserId == SystemContext.User.Id && i.IsHidden == 1 && i.FolderId == SystemContext.Folder.Id
+                                 orderby i.IPriority descending, i.DateCreation
+                                 select i).ToList<Items>();
+                    }
+                    else
+                    {
+                        items = (from i in db.Items
+                                 where i.UserId == SystemContext.User.Id && i.IsHidden == 0 && i.FolderId == SystemContext.Folder.Id
+                                 orderby i.IPriority descending, i.DateCreation
+                                 select i).ToList<Items>();
+                    }
                     if (!SystemContext.isDocumentNeedToShow)
+                    {
                         items.RemoveAll(d => d.IType == "Passport" || d.IType == "INN" || d.IType == "SNILS" || d.IType == "Polis");
+                    }
                     if (!SystemContext.isCreditCardNeedToShow)
                         items.RemoveAll(cc => cc.IType == "CreditCard");
                     if (!SystemContext.isCollectionNeedToShow)
@@ -121,6 +135,12 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             bottomDarkeningBorder.MouseLeftButtonUp += ChangeTitleNameButton_Click;
             itemName.MouseLeftButtonUp += ChangeTitleNameButton_Click;
 
+            Image LockImage = new Image() { Name = "LockImage", VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(5, 5, 0, 0), Height = 25, Width = 25 };
+            LockImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/LockImage.png"));
+            mainGrid.Children.Add(LockImage);
+            if (item.IPriority == 0)
+                LockImage.Visibility = Visibility.Hidden;
+
             mainGrid.Children.Add(bottomDarkeningBorder);
             mainGrid.Children.Add(itemName);
             borderPanel.Child = mainGrid;
@@ -139,6 +159,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             {
                 SystemContext.Item = (sender as Border).Tag as Items;
                 SystemContext.isChange = true;
+                SystemContext.PageForLoadContent = this;
                 switch (SystemContext.Item?.IType)
                 {
                     case "Passport":
@@ -202,6 +223,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             else
                 SystemContext.Item = (sender as Border).Tag as Items;
             SystemContext.isChangeTitleName = true;
+            SystemContext.PageForLoadContent = this;
             ChangeItemTitleNameWindow changeItemTitleNameWindow = new ChangeItemTitleNameWindow();
             changeItemTitleNameWindow.Closed += Window_Closed;
             changeItemTitleNameWindow.ShowDialog();
@@ -228,15 +250,27 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void MenuItemLock_Click(object sender, RoutedEventArgs e)
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
+            Grid grid = border.Child as Grid;
             SystemContext.Item = border.Tag as Items;
-            Items item = new Items();
+            Items item;
             item = SystemContext.Item;
+            Image LockImage = grid.Children.OfType<Image>().FirstOrDefault(li => li.Name == "LockImage");
             using (var db = new test123Entities1())
             {
-                item.IPriority = 1;
+                if (item.IPriority == 1)
+                {
+                    LockImage.Visibility = Visibility.Hidden;
+                    item.IPriority = 0;
+                }
+                else
+                {
+                    LockImage.Visibility = Visibility.Visible;
+                    item.IPriority = 1;
+                }
                 db.Items.AddOrUpdate(item);
                 db.SaveChanges();
             }
+            LoadContent();
         }
 
         private void MenuItemHide_Click(object sender, RoutedEventArgs e)
@@ -247,10 +281,18 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             item = SystemContext.Item;
             using (var db = new test123Entities1())
             {
-                item.IsHidden = 1;
+                if (SystemContext.isFromHiddenFiles)
+                {
+                    item.IsHidden = 0;
+                }
+                else
+                {
+                    item.IsHidden = 1;
+                }
                 db.Items.AddOrUpdate(item);
                 db.SaveChanges();
             }
+            LoadContent();
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
