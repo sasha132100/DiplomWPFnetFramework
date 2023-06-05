@@ -26,8 +26,8 @@ namespace DiplomWPFnetFramework.DataBase
         public System.DateTime TDate { get; set; }
         public Nullable<int> UserId { get; set; }
     
-        public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateDocument> TemplateDocument { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

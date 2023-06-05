@@ -8,9 +8,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DiplomWPFnetFramework.DataBase;
 using DiplomWPFnetFramework.Classes;
-using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
+using DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows;
 using System.IO;
 using DiplomWPFnetFramework.Pages;
+using System.Data.Entity.Migrations;
+using DiplomWPFnetFramework.Windows.BufferWindows;
 
 namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 {
@@ -54,12 +56,19 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
                 AvatarPhotoImage.Width = 150;
                 AvatarPhotoImage.Height = 150;
                 AvatarPhotoImage.Stretch = Stretch.Fill;
+                Users user = new Users();
+                user = SystemContext.User;
+                using (var db = new test123Entities1())
+                {
+                    user.Photo = avatarsPhotoBytes;
+                    db.Users.AddOrUpdate(user);
+                    db.SaveChanges();
+                }
             }
         }
 
         private void OpenSettingPageButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            SystemContext.isFromFolder = false;
             if (SettingsGrid.Width == 0)
             {
                 UserEmailTextBlock.Text = "";
@@ -103,6 +112,42 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         private void AvatarPhotoBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ImageSetter(AvatarPhotoImage);
+        }
+
+        private void HiddenFilesButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SystemContext.FromWhichWindowIsCalled = "DocumentViewingWindow";
+            EnteringAccessCodeWindow enteringAccessCodeWindow = new EnteringAccessCodeWindow();
+            enteringAccessCodeWindow.Owner = this;
+            enteringAccessCodeWindow.ShowDialog();
+        }
+
+        private void MyTemplatesButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SystemContext.WindowType = "MyTemplates";
+            SettingsAndPatternWindow settingsAndPatternWindow = new SettingsAndPatternWindow();
+            this.Close();
+            settingsAndPatternWindow.ShowDialog();
+        }
+
+        private void SynchronizationButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SynchronizationWindow synchronizationWindow = new SynchronizationWindow();
+            synchronizationWindow.ShowDialog();
+        }
+
+        private void AccountSettingsButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            AccountSettingsWindow accountSettingsWindow = new AccountSettingsWindow();
+            accountSettingsWindow.ShowDialog();
+        }
+
+        private void SettingsButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SystemContext.WindowType = "Settings";
+            SettingsAndPatternWindow settingsAndPatternWindow = new SettingsAndPatternWindow();
+            this.Close();
+            settingsAndPatternWindow.ShowDialog();
         }
     }
 }

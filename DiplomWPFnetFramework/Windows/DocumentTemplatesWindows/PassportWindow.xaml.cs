@@ -214,7 +214,6 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 ChangePassport();
             }
-            DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
             this.Close();
         }
 

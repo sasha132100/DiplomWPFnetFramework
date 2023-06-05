@@ -19,5 +19,7 @@ namespace DiplomWPFnetFramework.Classes
         public static bool isChangeTitleName { get; set; }
         public static Items Folder { get; set; } = null;
         public static Items SelectedItem { get; set; } = null;
+        public static string WindowType { get; set; } = "";
+        public static string FromWhichWindowIsCalled { get; set; } = "";
     }
 }

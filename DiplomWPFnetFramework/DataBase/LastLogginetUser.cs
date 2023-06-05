@@ -12,12 +12,11 @@ namespace DiplomWPFnetFramework.DataBase
     using System;
     using System.Collections.Generic;
     
-    public partial class Photo
+    public partial class LastLogginetUser
     {
         public int Id { get; set; }
-        public byte[] PPath { get; set; }
-        public int CollectionID { get; set; }
-    
-        public virtual Items Items { get; set; }
+        public string UserLogin { get; set; }
+        public string UserEmail { get; set; }
+        public string UserPassword { get; set; }
     }
 }

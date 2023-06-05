@@ -91,6 +91,9 @@
     <Compile Include="DataBase\Items.cs">
       <DependentUpon>TestModel1.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataBase\LastLogginetUser.cs">
+      <DependentUpon>TestModel1.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataBase\Passport.cs">
       <DependentUpon>TestModel1.tt</DependentUpon>
     </Compile>
@@ -133,6 +136,9 @@
     <Compile Include="DataBase\Users.cs">
       <DependentUpon>TestModel1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Pages\CollectionContentPage.xaml.cs">
+      <DependentUpon>CollectionContentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\CreditCardPhotoPage.xaml.cs">
       <DependentUpon>CreditCardPhotoPage.xaml</DependentUpon>
     </Compile>
@@ -142,11 +148,26 @@
     <Compile Include="Pages\FolderContentPage.xaml.cs">
       <DependentUpon>FolderContentPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SettingsPages\MainSettingsPage.xaml.cs">
+      <DependentUpon>MainSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPages\MyTemplatesPage.xaml.cs">
+      <DependentUpon>MyTemplatesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPages\PublicTemplatesPage.xaml.cs">
+      <DependentUpon>PublicTemplatesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPages\SecurityPage.xaml.cs">
+      <DependentUpon>SecurityPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\BufferWindows\addNewDocumentBufferWindow.xaml.cs">
       <DependentUpon>addNewDocumentBufferWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\BufferWindows\ChangeItemTitleNameWindow.xaml.cs">
       <DependentUpon>ChangeItemTitleNameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\BufferWindows\EnteringAccessCodeWindow.xaml.cs">
+      <DependentUpon>EnteringAccessCodeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\DocumentTemplatesWindows\CreditCardWindow.xaml.cs">
       <DependentUpon>CreditCardWindow.xaml</DependentUpon>
@@ -175,16 +196,29 @@
     <Compile Include="Windows\MainInteractionsWindows\RegisterWindow.xaml.cs">
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\MainInteractionsWindows\SettingsAndPatternWindow.xaml.cs">
+    <Compile Include="Windows\MainInteractionsWindows\SettingsWindows\AccountSettingsWindow.xaml.cs">
+      <DependentUpon>AccountSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainInteractionsWindows\SettingsWindows\HiddenFilesViewerWindow.xaml.cs">
+      <DependentUpon>HiddenFilesViewerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\MainInteractionsWindows\SettingsWindows\SettingsAndPatternWindow.xaml.cs">
       <DependentUpon>SettingsAndPatternWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Windows\MainInteractionsWindows\SettingsWindows\SynchronizationWindow.xaml.cs">
+      <DependentUpon>SynchronizationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\CollectionContentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\CreditCardPhotoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -197,11 +231,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\SettingsPages\MainSettingsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SettingsPages\MyTemplatesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SettingsPages\PublicTemplatesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SettingsPages\SecurityPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\BufferWindows\addNewDocumentBufferWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\BufferWindows\ChangeItemTitleNameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\BufferWindows\EnteringAccessCodeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -241,9 +295,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\MainInteractionsWindows\SettingsAndPatternWindow.xaml">
+    <Page Include="Windows\MainInteractionsWindows\SettingsWindows\AccountSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainInteractionsWindows\SettingsWindows\HiddenFilesViewerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\MainInteractionsWindows\SettingsWindows\SettingsAndPatternWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\MainInteractionsWindows\SettingsWindows\SynchronizationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Window1.xaml">
       <SubType>Designer</SubType>
@@ -308,6 +374,9 @@
       <DependentUpon>TestModel1.edmx</DependentUpon>
       <LastGenOutput>TestModel1.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\RefreshImage.png" />
+    <Resource Include="Resources\UploadOnServerCloudImage.png" />
+    <Resource Include="Resources\DownloadFromServerCloudImage.png" />
     <Resource Include="Resources\HiddenFilesImage.png" />
     <Resource Include="Resources\MyTemplatesImage.png" />
     <Resource Include="Resources\ChangePasswordImage.png" />

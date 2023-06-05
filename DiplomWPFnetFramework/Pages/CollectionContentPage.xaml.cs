@@ -1,7 +1,11 @@
-﻿using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
-using DiplomWPFnetFramework.Windows;
+﻿using DiplomWPFnetFramework.Classes;
+using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Windows.BufferWindows;
+using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,48 +18,43 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DiplomWPFnetFramework.Classes;
-using DiplomWPFnetFramework.DataBase;
-using System.IO;
-using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
-using DiplomWPFnetFramework.Windows.BufferWindows;
-using System.Data.Entity.Migrations;
 
 namespace DiplomWPFnetFramework.Pages
 {
     /// <summary>
-    /// Логика взаимодействия для FolderContentPage.xaml
+    /// Логика взаимодействия для CollectionContentPage.xaml
     /// </summary>
-    public partial class FolderContentPage : Page
+    public partial class CollectionContentPage : Page
     {
         Window parentWindow;
 
-        public FolderContentPage()
+        public CollectionContentPage()
         {
             InitializeComponent();
             LoadContent();
             FolderNameTextBlock.Text = SystemContext.Item.Title;
         }
 
+
         private void LoadContent()
         {
             DocumentsViewGrid.Children.Clear();
             using (var db = new test123Entities1())
             {
-                List<Items> items = null;
+                List<Photo> photoes = null;
                 try
                 {
-                    items = (from i in db.Items
-                             where i.UserId == SystemContext.User.Id && i.FolderId == SystemContext.Item.Id
-                             select i).ToList<Items>();
+                    photoes = (from p in db.Photo
+                               where p.CollectionID == SystemContext.Item.Id
+                               select p).ToList<Photo>();
                 }
                 catch
                 {
                     MessageBox.Show("Ошибка при загрузке документов");
                     return;
                 }
-                foreach (var item in items)
-                    AddNewDocument(item);
+                foreach (var photo in photoes)
+                    AddNewDocument(photo);
             }
         }
 
@@ -67,54 +66,25 @@ namespace DiplomWPFnetFramework.Pages
             }
         }
 
-        private void AddNewDocument(Items item)
+        private void AddNewDocument(Photo photo)
         {
             var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyle"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")) };
             var mainGrid = new Grid() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
-            var bottomDarkeningBorder = new Border() { Style = (Style)DocumentsViewGrid.Resources["BottomBorderProperties"] };
             var contextMenu = (ContextMenu)this.FindResource("MyContextMenu");
 
             ImageBrush imageBrush = new ImageBrush();
             Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
-            if (item.IImage != null && item.IImage.ToString() != "")
-                image.Source = ByteArrayToImage(item.IImage);
-            else
-            {
-                switch (item.IType)
-                {
-                    case "CreditCard":
-                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CreditCardPlugImage.png"));
-                        break;
+            image.Source = ByteArrayToImage(photo.PPath);
 
-                    case "Folder":
-                        break;
-
-                    case "Collection":
-                        break;
-
-                    default:
-                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/DocumentPlugImage.png"));
-                        break;
-                }
-            }
             imageBrush.ImageSource = image.Source;
             imageBrush.Stretch = Stretch.UniformToFill;
             mainGrid.Background = imageBrush;
 
-            bottomDarkeningBorder.VerticalAlignment = VerticalAlignment.Bottom;
-            TextBlock itemName = new TextBlock() { Text = item.Title, Style = (Style)DocumentsViewGrid.Resources["DocumentTextBlockPropeties"] };
-
-            borderPanel.Tag = item;
-            bottomDarkeningBorder.Tag = item;
-            itemName.Tag = item;
+            borderPanel.Tag = photo;
 
             borderPanel.MouseLeftButtonUp += ChangeItemButton_Click;
             borderPanel.ContextMenu = contextMenu;
-            bottomDarkeningBorder.MouseLeftButtonUp += ChangeTitleNameButton_Click;
-            itemName.MouseLeftButtonUp += ChangeTitleNameButton_Click;
 
-            mainGrid.Children.Add(bottomDarkeningBorder);
-            mainGrid.Children.Add(itemName);
             borderPanel.Child = mainGrid;
             DocumentsViewGrid.Children.Add(borderPanel);
         }
@@ -126,53 +96,8 @@ namespace DiplomWPFnetFramework.Pages
             {
                 SystemContext.Item = (sender as Border).Tag as Items;
                 SystemContext.isChange = true;
-                switch (SystemContext.Item?.IType)
-                {
-                    case "Passport":
-                        var passportWindow = new PassportWindow();
-                        passportWindow.ShowDialog();
-                        break;
-
-                    case "INN":
-                        var innWindow = new InnWindow();
-                        innWindow.ShowDialog();
-                        break;
-
-                    case "SNILS":
-                        var snilsWindow = new SnilsWindow();
-                        snilsWindow.ShowDialog();
-                        break;
-
-                    case "Polis":
-                        var polisWindow = new PolisWindow();
-                        polisWindow.ShowDialog();
-                        break;
-
-                    case "Photo":
-                        var photoWindow = new PhotoWindow();
-                        photoWindow.ShowDialog();
-                        break;
-
-                    case "CreditCard":
-                        var creditCardWindow = new CreditCardWindow();
-                        creditCardWindow.ShowDialog();
-                        break;
-
-                    case "Folder":
-                        SystemContext.Folder = SystemContext.Item;
-                        Frame openFolderPageFrame = parentWindow.FindName("openPageFrame") as Frame;
-                        FolderContentPage folderContentPage = new FolderContentPage();
-                        openFolderPageFrame.Content = folderContentPage;
-                        break;
-
-                    case "Collection":
-                        MessageBox.Show("Открытие коллекции пока не реализовано");
-                        break;
-
-                    default:
-                        MessageBox.Show("Ошибка при открытии документа");
-                        break;
-                }
+                var photoWindow = new PhotoWindow();
+                photoWindow.ShowDialog();
             }
         }
 

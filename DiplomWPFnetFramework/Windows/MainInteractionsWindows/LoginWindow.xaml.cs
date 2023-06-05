@@ -44,6 +44,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             {
                 MessageBox.Show(result, "Приветствие", MessageBoxButton.OK, MessageBoxImage.Information);
                 SystemContext.isGuest = false;
+                SystemContext.isFromFolder = false;
                 DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
                 this.Close();
                 documentViewingWindow.ShowDialog();

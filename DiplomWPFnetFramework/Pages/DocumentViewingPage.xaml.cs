@@ -28,6 +28,7 @@ namespace DiplomWPFnetFramework.Pages
     public partial class DocumentViewingPage : Page
     {
         Window parentWindow = null;
+
         public DocumentViewingPage()
         {
             InitializeComponent();
@@ -123,7 +124,8 @@ namespace DiplomWPFnetFramework.Pages
             itemName.Tag = item;
 
             borderPanel.MouseLeftButtonUp += ChangeItemButton_Click;
-            borderPanel.ContextMenu = contextMenu;
+            if (SystemContext.isFromFolder == false)
+                borderPanel.ContextMenu = contextMenu;
             bottomDarkeningBorder.MouseLeftButtonUp += ChangeTitleNameButton_Click;
             itemName.MouseLeftButtonUp += ChangeTitleNameButton_Click;
 
@@ -319,7 +321,7 @@ namespace DiplomWPFnetFramework.Pages
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
             SystemContext.Item = border.Tag as Items;
-            Items item = new Items();
+            Items item;
             item = SystemContext.Item;
             using (var db = new test123Entities1())
             {

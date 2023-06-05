@@ -33,46 +33,55 @@
         <DockPanel.Background>
             <ImageBrush ImageSource="pack://application:,,,/Resources/MainWindowBackgroundGradient.png"/>
         </DockPanel.Background>
-        <Grid x:Name="SettingsGrid" Width="0">
-            <TextBlock x:Name="TitleTextBlock" Text="My docs" FontFamily="Roboto" FontSize="40" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" FontWeight="Bold">
-                <TextBlock.Effect>
-                    <DropShadowEffect Opacity="0.6" ShadowDepth="8"/>
-                </TextBlock.Effect>
-            </TextBlock>
-            <Border x:Name="AvatarPhotoBorder" Width="150" Background="White" Height="150" CornerRadius="120" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,120,0,0" Cursor="Hand" MouseLeftButtonUp="AvatarPhotoBorder_MouseLeftButtonUp">
-                <Image x:Name="AvatarPhotoImage" Stretch="Fill" Width="150" Height="150"/>
-            </Border>
-            <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,145,30,0">
-                <StackPanel>
-                    <TextBlock x:Name="UserEmailTextBlock" TextWrapping="Wrap" Width="200" Style="{StaticResource TextBlockMainProperties}" Height="70" Foreground="#442C6E"/>
-                    <TextBlock x:Name="ChangeAccountTextBlock" Text="Сменить аккаунт" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" MouseLeftButtonUp="ChangeAccountTextBlock_MouseLeftButtonUp"/>
-                </StackPanel>
+        <Border x:Name="SettingsGrid" Width="0" BorderThickness="1" BorderBrush="#2D346F">
+            <Grid>
+                <Grid>
+                    <TextBlock x:Name="TitleTextBlock" Text="My docs" FontFamily="Roboto" FontSize="40" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" FontWeight="Bold">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Opacity="0.6" ShadowDepth="8"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Border x:Name="AvatarPhotoBorder" Width="150" Background="White" Height="150" CornerRadius="120" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,120,0,0" Cursor="Hand" MouseLeftButtonUp="AvatarPhotoBorder_MouseLeftButtonUp">
+                        <Image x:Name="AvatarPhotoImage" Stretch="Fill" Width="150" Height="150"/>
+                    </Border>
+                    <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,145,30,0">
+                        <StackPanel>
+                            <TextBlock x:Name="UserEmailTextBlock" TextWrapping="Wrap" Width="200" Style="{StaticResource TextBlockMainProperties}" Height="70" Foreground="#442C6E"/>
+                            <TextBlock x:Name="ChangeAccountTextBlock" Text="Сменить аккаунт" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" MouseLeftButtonUp="ChangeAccountTextBlock_MouseLeftButtonUp"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel>
+                            <Grid Margin="-10,100,0,0">
+                                <Image x:Name="AccountSettingsImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/ChangePasswordImage.png" Stretch="None" MouseLeftButtonUp="AccountSettingsButtonClick_MouseLeftButtonUp"/>
+                                <TextBlock x:Name="AccountSettingsTextBlock" Text="Настройки аккаунта" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" MouseLeftButtonUp="AccountSettingsButtonClick_MouseLeftButtonUp"/>
+                            </Grid>
+                            <Grid Margin="-10,10,0,0">
+                                <Image x:Name="SynchronizationImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/CloudSyncImage.png" Stretch="None" MouseLeftButtonUp="SynchronizationButtonClick_MouseLeftButtonUp"/>
+                                <TextBlock x:Name="SynchronizationTextBlock" Text="Синхронизация" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" MouseLeftButtonUp="SynchronizationButtonClick_MouseLeftButtonUp"/>
+                            </Grid>
+                            <Grid Margin="-10,10,0,0">
+                                <Image x:Name="MyTemplatesImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/MyTemplatesImage.png" Stretch="None" MouseLeftButtonUp="MyTemplatesButtonClick_MouseLeftButtonUp"/>
+                                <TextBlock x:Name="MyTemplatesTextBlock" Text="Мои шаблоны" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" MouseLeftButtonUp="MyTemplatesButtonClick_MouseLeftButtonUp"/>
+                            </Grid>
+                            <Grid Margin="-10,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="116*"/>
+                                    <ColumnDefinition Width="37*"/>
+                                    <ColumnDefinition Width="153*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image x:Name="HiddenFilesImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/HiddenFilesImage.png" Stretch="None" MouseLeftButtonUp="HiddenFilesButtonClick_MouseLeftButtonUp"/>
+                                <TextBlock x:Name="HiddenFilesTextBlock" Text="Скрытые файлы" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" Grid.ColumnSpan="3" MouseLeftButtonUp="HiddenFilesButtonClick_MouseLeftButtonUp"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,10">
+                        <Image x:Name="SettingsImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/SettingsImage.png" Stretch="None" MouseLeftButtonUp="SettingsButtonClick_MouseLeftButtonUp"/>
+                        <TextBlock x:Name="SettingsTextBlock" Text="Настройки" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,10" MouseLeftButtonUp="SettingsButtonClick_MouseLeftButtonUp"/>
+                    </Grid>
+                </Grid>
             </Grid>
-            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                <StackPanel>
-                    <Grid Margin="-10,100,0,0">
-                        <Image x:Name="AccountSettingsImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/ChangePasswordImage.png" Stretch="None"/>
-                        <TextBlock x:Name="AccountSettingsTextBlock" Text="Настройки аккаунта" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0"/>
-                    </Grid>
-                    <Grid Margin="-10,10,0,0">
-                        <Image x:Name="SynchronizationImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/CloudSyncImage.png" Stretch="None"/>
-                        <TextBlock x:Name="SynchronizationTextBlock" Text="Синхронизация" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0"/>
-                    </Grid>
-                    <Grid Margin="-10,10,0,0">
-                        <Image x:Name="MyTemplatesImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/MyTemplatesImage.png" Stretch="None"/>
-                        <TextBlock x:Name="MyTemplatesTextBlock" Text="Мои шаблоны" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0"/>
-                    </Grid>
-                    <Grid Margin="-10,10,0,0">
-                        <Image x:Name="HiddenFilesImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/HiddenFilesImage.png" Stretch="None"/>
-                        <TextBlock x:Name="HiddenFilesTextBlock" Text="Скрытые файлы" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0"/>
-                    </Grid>
-                </StackPanel>
-            </Grid>
-            <Grid VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,10">
-                <Image x:Name="SettingsImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/SettingsImage.png" Stretch="None"/>
-                <TextBlock x:Name="SettingsTextBlock" Text="Настройки" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0"/>
-            </Grid>
-        </Grid>
+        </Border>
         <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
             <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" MouseLeftButtonUp="OpenSettingPageButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
