@@ -21,5 +21,9 @@ namespace DiplomWPFnetFramework.Classes
         public static Items SelectedItem { get; set; } = null;
         public static string WindowType { get; set; } = "";
         public static string FromWhichWindowIsCalled { get; set; } = "";
+        public static bool isFolderNeedToShow { get; set; } = true;
+        public static bool isCollectionNeedToShow { get; set; } = true;
+        public static bool isCreditCardNeedToShow { get; set; } = true;
+        public static bool isDocumentNeedToShow { get; set; } = true;
     }
 }

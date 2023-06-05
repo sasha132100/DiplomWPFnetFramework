@@ -99,8 +99,10 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void sortImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Window1 window1 = new Window1();
-            window1.ShowDialog();
+            Grid grid = (Grid)sender;
+            var contextMenu = (ContextMenu)this.FindResource("SortContextMenu");
+            contextMenu.PlacementTarget = grid;
+            contextMenu.IsOpen = true;
         }
 
         private void ChangeAccountTextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -149,6 +151,32 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             SettingsAndPatternWindow settingsAndPatternWindow = new SettingsAndPatternWindow();
             this.Close();
             settingsAndPatternWindow.ShowDialog();
+        }
+
+        private void MenuItemShowOrHideDocuments_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isDocumentNeedToShow = !SystemContext.isDocumentNeedToShow;
+        }
+
+        private void MenuItemShowOrHideCreditCards_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isCreditCardNeedToShow = !SystemContext.isCreditCardNeedToShow;
+        }
+
+        private void MenuItemShowOrHideCollections_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isCollectionNeedToShow = !SystemContext.isCollectionNeedToShow;
+        }
+
+        private void MenuItemShowOrHideFolders_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isFolderNeedToShow = !SystemContext.isFolderNeedToShow;
+        }
+
+        private void MenuItemShowAll_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContextService.MakeAllElementsShowable();
+            var currentPage = openPageFrame.Content as Page;
         }
     }
 }

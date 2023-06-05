@@ -81,7 +81,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\CreatingObjects.cs" />
+    <Compile Include="Classes\DataEncryption.cs" />
+    <Compile Include="Classes\EncryptedRequest.cs" />
+    <Compile Include="Classes\EncryptedResponse.cs" />
     <Compile Include="Classes\SystemContext.cs" />
+    <Compile Include="Classes\SystemContextService.cs" />
     <Compile Include="DataBase\CreditCard.cs">
       <DependentUpon>TestModel1.tt</DependentUpon>
     </Compile>
@@ -136,6 +140,15 @@
     <Compile Include="DataBase\Users.cs">
       <DependentUpon>TestModel1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Pages\BufferPages\DownloadTemplatesShowPage.xaml.cs">
+      <DependentUpon>DownloadTemplatesShowPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BufferPages\MyTemplatesShowPage.xaml.cs">
+      <DependentUpon>MyTemplatesShowPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BufferPages\SystemTemplatesShowPage.xaml.cs">
+      <DependentUpon>SystemTemplatesShowPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\MainInteractionsPages\CollectionContentPage.xaml.cs">
       <DependentUpon>CollectionContentPage.xaml</DependentUpon>
     </Compile>
@@ -148,16 +161,16 @@
     <Compile Include="Pages\MainInteractionsPages\FolderContentPage.xaml.cs">
       <DependentUpon>FolderContentPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\MainInteractionsPages\SettingsPages\MainSettingsPage.xaml.cs">
+    <Compile Include="Pages\SettingsPages\MainSettingsPage.xaml.cs">
       <DependentUpon>MainSettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\MainInteractionsPages\SettingsPages\MyTemplatesPage.xaml.cs">
+    <Compile Include="Pages\SettingsPages\MyTemplatesPage.xaml.cs">
       <DependentUpon>MyTemplatesPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\MainInteractionsPages\SettingsPages\PublicTemplatesPage.xaml.cs">
+    <Compile Include="Pages\SettingsPages\PublicTemplatesPage.xaml.cs">
       <DependentUpon>PublicTemplatesPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\MainInteractionsPages\SettingsPages\SecurityPage.xaml.cs">
+    <Compile Include="Pages\SettingsPages\SecurityPage.xaml.cs">
       <DependentUpon>SecurityPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\BufferWindows\addNewDocumentBufferWindow.xaml.cs">
@@ -196,25 +209,37 @@
     <Compile Include="Windows\MainInteractionsWindows\RegisterWindow.xaml.cs">
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\MainInteractionsWindows\SettingsWindows\AccountSettingsWindow.xaml.cs">
+    <Compile Include="Windows\SettingsWindows\AccountSettingsWindow.xaml.cs">
       <DependentUpon>AccountSettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\MainInteractionsWindows\SettingsWindows\HiddenFilesViewerWindow.xaml.cs">
+    <Compile Include="Windows\SettingsWindows\HiddenFilesViewerWindow.xaml.cs">
       <DependentUpon>HiddenFilesViewerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\MainInteractionsWindows\SettingsWindows\SettingsAndPatternWindow.xaml.cs">
+    <Compile Include="Windows\SettingsWindows\SettingsAndPatternWindow.xaml.cs">
       <DependentUpon>SettingsAndPatternWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Windows\MainInteractionsWindows\SettingsWindows\SynchronizationWindow.xaml.cs">
+    <Compile Include="Windows\SettingsWindows\SynchronizationWindow.xaml.cs">
       <DependentUpon>SynchronizationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
+    <Page Include="Pages\BufferPages\DownloadTemplatesShowPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\BufferPages\MyTemplatesShowPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\BufferPages\SystemTemplatesShowPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\MainInteractionsPages\CollectionContentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -231,19 +256,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\MainInteractionsPages\SettingsPages\MainSettingsPage.xaml">
+    <Page Include="Pages\SettingsPages\MainSettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\MainInteractionsPages\SettingsPages\MyTemplatesPage.xaml">
+    <Page Include="Pages\SettingsPages\MyTemplatesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\MainInteractionsPages\SettingsPages\PublicTemplatesPage.xaml">
+    <Page Include="Pages\SettingsPages\PublicTemplatesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\MainInteractionsPages\SettingsPages\SecurityPage.xaml">
+    <Page Include="Pages\SettingsPages\SecurityPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -295,19 +320,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\MainInteractionsWindows\SettingsWindows\AccountSettingsWindow.xaml">
+    <Page Include="Windows\SettingsWindows\AccountSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\MainInteractionsWindows\SettingsWindows\HiddenFilesViewerWindow.xaml">
+    <Page Include="Windows\SettingsWindows\HiddenFilesViewerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\MainInteractionsWindows\SettingsWindows\SettingsAndPatternWindow.xaml">
+    <Page Include="Windows\SettingsWindows\SettingsAndPatternWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\MainInteractionsWindows\SettingsWindows\SynchronizationWindow.xaml">
+    <Page Include="Windows\SettingsWindows\SynchronizationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -374,6 +399,11 @@
       <DependentUpon>TestModel1.edmx</DependentUpon>
       <LastGenOutput>TestModel1.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\CollectionImage.png" />
+    <Resource Include="Resources\CreditCardImage.png" />
+    <Resource Include="Resources\DocumentImage.png" />
+    <Resource Include="Resources\FolderImage.png" />
+    <Resource Include="Resources\ShowAllImage.png" />
     <Resource Include="Resources\RefreshImage.png" />
     <Resource Include="Resources\UploadOnServerCloudImage.png" />
     <Resource Include="Resources\DownloadFromServerCloudImage.png" />

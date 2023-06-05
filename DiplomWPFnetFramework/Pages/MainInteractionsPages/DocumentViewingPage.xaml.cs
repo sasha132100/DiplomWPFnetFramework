@@ -35,7 +35,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             LoadContent();
         }
 
-        private void LoadContent()
+        public void LoadContent()
         {
             using (var db = new test123Entities1())
             {
@@ -46,7 +46,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                     if (SystemContext.isFromFolder)
                     {
                         items = (from i in db.Items
-                                 where i.UserId == SystemContext.User.Id && i.IType != "Folder" && i.IType != "Collection"
+                                 where i.UserId == SystemContext.User.Id && i.IType != "Folder"
                                  orderby i.Title
                                  select i).ToList<Items>();
                     }
@@ -56,6 +56,14 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                                  where i.UserId == SystemContext.User.Id && i.FolderId == null
                                  orderby i.Title
                                  select i).ToList<Items>();
+                        if (!SystemContext.isDocumentNeedToShow)
+                            items.RemoveAll(d => d.IType == "Passport" || d.IType == "INN" || d.IType == "SNILS" || d.IType == "Polis");
+                        if (!SystemContext.isCreditCardNeedToShow)
+                            items.RemoveAll(cc => cc.IType == "CreditCard");
+                        if (!SystemContext.isCollectionNeedToShow)
+                            items.RemoveAll(c => c.IType == "Collection");
+                        if (!SystemContext.isFolderNeedToShow)
+                            items.RemoveAll(f => f.IType == "Folder");
                     }
                     if (SystemContext.isFromFolder)
                     {
@@ -310,16 +318,15 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 SystemContext.isFromFolder = false;
                 return;
             }
-            parentWindow = Window.GetWindow(this);
-            Window1 window1 = new Window1();
-            window1.ShowDialog();
+            addNewDocumentBufferWindow addNewDocumentBufferWindow = new addNewDocumentBufferWindow();
+            addNewDocumentBufferWindow.ShowDialog();
         }
 
         private void MenuItemLock_Click(object sender, RoutedEventArgs e)
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
             SystemContext.Item = border.Tag as Items;
-            Items item = new Items();
+            Items item;
             item = SystemContext.Item;
             using (var db = new test123Entities1())
             {

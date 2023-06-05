@@ -37,7 +37,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             FolderNameTextBlock.Text = SystemContext.Item.Title;
         }
 
-        private void LoadContent()
+        public void LoadContent()
         {
             DocumentsViewGrid.Children.Clear();
             using (var db = new test123Entities1())
@@ -48,6 +48,14 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                     items = (from i in db.Items
                              where i.UserId == SystemContext.User.Id && i.FolderId == SystemContext.Item.Id
                              select i).ToList<Items>();
+                    if (!SystemContext.isDocumentNeedToShow)
+                        items.RemoveAll(d => d.IType == "Passport" || d.IType == "INN" || d.IType == "SNILS" || d.IType == "Polis");
+                    if (!SystemContext.isCreditCardNeedToShow)
+                        items.RemoveAll(cc => cc.IType == "CreditCard");
+                    if (!SystemContext.isCollectionNeedToShow)
+                        items.RemoveAll(c => c.IType == "Collection");
+                    if (!SystemContext.isFolderNeedToShow)
+                        items.RemoveAll(f => f.IType == "Folder");
                 }
                 catch
                 {

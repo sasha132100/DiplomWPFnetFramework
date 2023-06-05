@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DiplomWPFnetFramework.Classes;
+using DiplomWPFnetFramework.Pages.BufferPages;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +25,36 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
         public addNewDocumentBufferWindow()
         {
             InitializeComponent();
+            SystemTemplatesShowPage systemTemplatesShowPage = new SystemTemplatesShowPage();
+            ChooseTemplatesTypePageFrame.Content = systemTemplatesShowPage;
+        }
+
+        private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void DocumentMoreInteractionsButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void SystemTemplatesShow_Click(object sender, RoutedEventArgs e)
+        {
+            SystemTemplatesShowPage systemTemplatesShowPage = new SystemTemplatesShowPage();
+            ChooseTemplatesTypePageFrame.Content = systemTemplatesShowPage;
+        }
+
+        private void MyTemplatesShow_Click(object sender, RoutedEventArgs e)
+        {
+            MyTemplatesShowPage myTemplatesShowPage = new MyTemplatesShowPage();
+            ChooseTemplatesTypePageFrame.Content = myTemplatesShowPage;
+        }
+
+        private void DownloadTemplatesShow_Click(object sender, RoutedEventArgs e)
+        {
+            DownloadTemplatesShowPage downloadTemplatesShowPage = new DownloadTemplatesShowPage();
+            ChooseTemplatesTypePageFrame.Content = downloadTemplatesShowPage;
         }
     }
 }
