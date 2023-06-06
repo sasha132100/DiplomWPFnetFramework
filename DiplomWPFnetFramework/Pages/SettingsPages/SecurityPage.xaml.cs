@@ -10,18 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DiplomWPFnetFramework.DataBase;
-using DiplomWPFnetFramework.Classes;
 
-namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
+namespace DiplomWPFnetFramework.Pages.SettingsPages
 {
     /// <summary>
-    /// Логика взаимодействия для SettingsAndPatternWindow.xaml
+    /// Логика взаимодействия для SecurityPage.xaml
     /// </summary>
-    public partial class SettingsAndPatternWindow : Window
+    public partial class SecurityPage : Page
     {
-        public SettingsAndPatternWindow()
+        public SecurityPage()
         {
             InitializeComponent();
         }

@@ -70,7 +70,7 @@
             </TextBlock.Effect>
         </TextBlock>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Width="400" Height="Auto" Margin="0,-30,0,0">
-            <TextBlock Style="{StaticResource TextBlockMainProperties}" Text="Email"/>
+            <TextBlock Style="{StaticResource TextBlockMainProperties}" Text="Почта"/>
             <TextBox x:Name="EmailTextBox" Style="{StaticResource TextBoxProperties}" Resources="{StaticResource CornerRadiusSetter}"/>
             <TextBlock Style="{StaticResource TextBlockMainProperties}" Text="Пароль" Margin="0,5,0,0"/>
             <Border CornerRadius="10" BorderThickness="1" Background="White" BorderBrush="#ABADB3" Margin="0,0,0,0">

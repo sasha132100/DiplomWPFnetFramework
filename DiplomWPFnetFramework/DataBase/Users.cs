@@ -27,6 +27,7 @@ namespace DiplomWPFnetFramework.DataBase
         public string ULogin { get; set; }
         public string Syncing { get; set; }
         public byte[] Photo { get; set; }
+        public string PinCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Items> Items { get; set; }

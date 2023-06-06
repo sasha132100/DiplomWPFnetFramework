@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище test123Model1" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище test123Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="CreditCard">
           <Key>
             <PropertyRef Name="Id" />
@@ -44,6 +44,15 @@
           <Property Name="FolderId" Type="int" />
           <Property Name="UserId" Type="int" />
         </EntityType>
+        <EntityType Name="LastLogginetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserLogin" Type="nvarchar" MaxLength="255" />
+          <Property Name="UserEmail" Type="nvarchar" MaxLength="255" />
+          <Property Name="UserPassword" Type="nvarchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="Passport">
           <Key>
             <PropertyRef Name="Id" />
@@ -66,7 +75,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PPath" Type="image" Nullable="false" />
           <Property Name="CollectionID" Type="int" Nullable="false" />
         </EntityType>
@@ -142,9 +151,12 @@
           <Property Name="ULogin" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Syncing" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="Photo" Type="image" />
+          <Property Name="PinCode" Type="nvarchar" MaxLength="100" />
         </EntityType>
-        <Association Name="FK__CreditCard__Id__73BA3083">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__CreditCard__Id__6383C8BA">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -155,8 +167,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__INN__Id__74AE54BC">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__INN__Id__6477ECF3">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="INN" Type="Self.INN" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -167,20 +181,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Items__UserId__75A278F5">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Items" Type="Self.Items" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Items">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Passport__Id__76969D2E">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__Passport__Id__656C112C">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Passport" Type="Self.Passport" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -191,32 +195,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Photo__Collectio__778AC167">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
-          <End Role="Photo" Type="Self.Photo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Items">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Photo">
-              <PropertyRef Name="CollectionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Photo__Id__787EE5A0">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
-          <End Role="Photo" Type="Self.Photo" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Items">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Photo">
-              <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Polis__Id__797309D9">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__Polis__Id__6754599E">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Polis" Type="Self.Polis" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -227,8 +209,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SNILS__Id__7A672E12">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__SNILS__Id__68487DD7">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SNILS" Type="Self.SNILS" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -239,20 +223,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Template__UserId__7B5B524B">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Template" Type="Self.Template" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Template">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TemplateD__Templ__7C4F7684">
-          <End Role="Template" Type="Self.Template" Multiplicity="1" />
+        <Association Name="FK__TemplateD__Templ__693CA210">
+          <End Role="Template" Type="Self.Template" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateDocument" Type="Self.TemplateDocument" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Template">
@@ -263,8 +237,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TemplateD__Templ__7D439ABD">
-          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="1" />
+        <Association Name="FK__TemplateD__Templ__6A30C649">
+          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateDocumentData" Type="Self.TemplateDocumentData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TemplateObject">
@@ -275,8 +251,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TemplateD__Templ__7E37BEF6">
-          <End Role="TemplateDocument" Type="Self.TemplateDocument" Multiplicity="1" />
+        <Association Name="FK__TemplateD__Templ__6B24EA82">
+          <End Role="TemplateDocument" Type="Self.TemplateDocument" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateDocumentData" Type="Self.TemplateDocumentData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TemplateDocument">
@@ -287,22 +265,53 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TemplateO__Templ__7F2BE32F">
-          <End Role="Template" Type="Self.Template" Multiplicity="1" />
-          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="*" />
+        <Association Name="FK_Items_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Items" Type="Self.Items" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Template">
+            <Principal Role="Users">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="TemplateObject">
-              <PropertyRef Name="TemplateId" />
+            <Dependent Role="Items">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Хранилище test123Model1Container">
+        <Association Name="FK_Photo_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Photo" Type="Self.Photo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Photo">
+              <PropertyRef Name="CollectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Template_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Template" Type="Self.Template" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Template">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище test123ModelContainer">
           <EntitySet Name="CreditCard" EntityType="Self.CreditCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="INN" EntityType="Self.INN" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LastLogginetUser" EntityType="Self.LastLogginetUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Passport" EntityType="Self.Passport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Photo" EntityType="Self.Photo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polis" EntityType="Self.Polis" Schema="dbo" store:Type="Tables" />
@@ -312,64 +321,55 @@
           <EntitySet Name="TemplateDocumentData" EntityType="Self.TemplateDocumentData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateObject" EntityType="Self.TemplateObject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__CreditCard__Id__73BA3083" Association="Self.FK__CreditCard__Id__73BA3083">
+          <AssociationSet Name="FK__CreditCard__Id__6383C8BA" Association="Self.FK__CreditCard__Id__6383C8BA">
             <End Role="Items" EntitySet="Items" />
             <End Role="CreditCard" EntitySet="CreditCard" />
           </AssociationSet>
-          <AssociationSet Name="FK__INN__Id__74AE54BC" Association="Self.FK__INN__Id__74AE54BC">
+          <AssociationSet Name="FK__INN__Id__6477ECF3" Association="Self.FK__INN__Id__6477ECF3">
             <End Role="Items" EntitySet="Items" />
             <End Role="INN" EntitySet="INN" />
           </AssociationSet>
-          <AssociationSet Name="FK__Items__UserId__75A278F5" Association="Self.FK__Items__UserId__75A278F5">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Items" EntitySet="Items" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Passport__Id__76969D2E" Association="Self.FK__Passport__Id__76969D2E">
+          <AssociationSet Name="FK__Passport__Id__656C112C" Association="Self.FK__Passport__Id__656C112C">
             <End Role="Items" EntitySet="Items" />
             <End Role="Passport" EntitySet="Passport" />
           </AssociationSet>
-          <AssociationSet Name="FK__Photo__Collectio__778AC167" Association="Self.FK__Photo__Collectio__778AC167">
-            <End Role="Items" EntitySet="Items" />
-            <End Role="Photo" EntitySet="Photo" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Photo__Id__787EE5A0" Association="Self.FK__Photo__Id__787EE5A0">
-            <End Role="Items" EntitySet="Items" />
-            <End Role="Photo" EntitySet="Photo" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Polis__Id__797309D9" Association="Self.FK__Polis__Id__797309D9">
+          <AssociationSet Name="FK__Polis__Id__6754599E" Association="Self.FK__Polis__Id__6754599E">
             <End Role="Items" EntitySet="Items" />
             <End Role="Polis" EntitySet="Polis" />
           </AssociationSet>
-          <AssociationSet Name="FK__SNILS__Id__7A672E12" Association="Self.FK__SNILS__Id__7A672E12">
+          <AssociationSet Name="FK__SNILS__Id__68487DD7" Association="Self.FK__SNILS__Id__68487DD7">
             <End Role="Items" EntitySet="Items" />
             <End Role="SNILS" EntitySet="SNILS" />
           </AssociationSet>
-          <AssociationSet Name="FK__Template__UserId__7B5B524B" Association="Self.FK__Template__UserId__7B5B524B">
+          <AssociationSet Name="FK__TemplateD__Templ__693CA210" Association="Self.FK__TemplateD__Templ__693CA210">
+            <End Role="Template" EntitySet="Template" />
+            <End Role="TemplateDocument" EntitySet="TemplateDocument" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TemplateD__Templ__6A30C649" Association="Self.FK__TemplateD__Templ__6A30C649">
+            <End Role="TemplateObject" EntitySet="TemplateObject" />
+            <End Role="TemplateDocumentData" EntitySet="TemplateDocumentData" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TemplateD__Templ__6B24EA82" Association="Self.FK__TemplateD__Templ__6B24EA82">
+            <End Role="TemplateDocument" EntitySet="TemplateDocument" />
+            <End Role="TemplateDocumentData" EntitySet="TemplateDocumentData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_Users" Association="Self.FK_Items_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Photo_Items" Association="Self.FK_Photo_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="Photo" EntitySet="Photo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Template_Users" Association="Self.FK_Template_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Template" EntitySet="Template" />
           </AssociationSet>
-          <AssociationSet Name="FK__TemplateD__Templ__7C4F7684" Association="Self.FK__TemplateD__Templ__7C4F7684">
-            <End Role="Template" EntitySet="Template" />
-            <End Role="TemplateDocument" EntitySet="TemplateDocument" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TemplateD__Templ__7D439ABD" Association="Self.FK__TemplateD__Templ__7D439ABD">
-            <End Role="TemplateObject" EntitySet="TemplateObject" />
-            <End Role="TemplateDocumentData" EntitySet="TemplateDocumentData" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TemplateD__Templ__7E37BEF6" Association="Self.FK__TemplateD__Templ__7E37BEF6">
-            <End Role="TemplateDocument" EntitySet="TemplateDocument" />
-            <End Role="TemplateDocumentData" EntitySet="TemplateDocumentData" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TemplateO__Templ__7F2BE32F" Association="Self.FK__TemplateO__Templ__7F2BE32F">
-            <End Role="Template" EntitySet="Template" />
-            <End Role="TemplateObject" EntitySet="TemplateObject" />
-          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="test123Model1" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="test123Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="CreditCard">
           <Key>
             <PropertyRef Name="Id" />
@@ -380,7 +380,7 @@
           <Property Name="ExpiryDate" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="CVV" Type="Int32" />
           <Property Name="PhotoPage1" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="Items" Relationship="Self.FK__CreditCard__Id__73BA3083" FromRole="CreditCard" ToRole="Items" />
+          <NavigationProperty Name="Items" Relationship="Self.FK__CreditCard__Id__619B8048" FromRole="CreditCard" ToRole="Items" />
         </EntityType>
         <EntityType Name="INN">
           <Key>
@@ -394,7 +394,7 @@
           <Property Name="BirthPlace" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="RegistrationDate" Type="DateTime" Precision="3" />
           <Property Name="PhotoPage1" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="Items" Relationship="Self.FK__INN__Id__74AE54BC" FromRole="INN" ToRole="Items" />
+          <NavigationProperty Name="Items" Relationship="Self.FK__INN__Id__628FA481" FromRole="INN" ToRole="Items" />
         </EntityType>
         <EntityType Name="Items">
           <Key>
@@ -410,14 +410,22 @@
           <Property Name="DateCreation" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="FolderId" Type="Int32" />
           <Property Name="UserId" Type="Int32" />
-          <NavigationProperty Name="CreditCard" Relationship="Self.FK__CreditCard__Id__73BA3083" FromRole="Items" ToRole="CreditCard" />
-          <NavigationProperty Name="INN" Relationship="Self.FK__INN__Id__74AE54BC" FromRole="Items" ToRole="INN" />
-          <NavigationProperty Name="Users" Relationship="Self.FK__Items__UserId__75A278F5" FromRole="Items" ToRole="Users" />
-          <NavigationProperty Name="Passport" Relationship="Self.FK__Passport__Id__76969D2E" FromRole="Items" ToRole="Passport" />
-          <NavigationProperty Name="Photo" Relationship="Self.FK__Photo__Collectio__778AC167" FromRole="Items" ToRole="Photo" />
-          <NavigationProperty Name="Photo1" Relationship="Self.FK__Photo__Id__787EE5A0" FromRole="Items" ToRole="Photo" />
-          <NavigationProperty Name="Polis" Relationship="Self.FK__Polis__Id__797309D9" FromRole="Items" ToRole="Polis" />
-          <NavigationProperty Name="SNILS" Relationship="Self.FK__SNILS__Id__7A672E12" FromRole="Items" ToRole="SNILS" />
+          <NavigationProperty Name="CreditCard" Relationship="Self.FK__CreditCard__Id__619B8048" FromRole="Items" ToRole="CreditCard" />
+          <NavigationProperty Name="INN" Relationship="Self.FK__INN__Id__628FA481" FromRole="Items" ToRole="INN" />
+          <NavigationProperty Name="Passport" Relationship="Self.FK__Passport__Id__6477ECF3" FromRole="Items" ToRole="Passport" />
+          <NavigationProperty Name="Polis" Relationship="Self.FK__Polis__Id__66603565" FromRole="Items" ToRole="Polis" />
+          <NavigationProperty Name="SNILS" Relationship="Self.FK__SNILS__Id__6754599E" FromRole="Items" ToRole="SNILS" />
+          <NavigationProperty Name="Photo" Relationship="test123Model.FK_Photo_Items" FromRole="Items" ToRole="Photo" />
+          <NavigationProperty Name="Users" Relationship="test123Model.FK_Items_Users" FromRole="Items" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="LastLogginetUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserLogin" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UserEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="UserPassword" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Passport">
           <Key>
@@ -436,17 +444,16 @@
           <Property Name="FacePhoto" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="PhotoPage1" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="PhotoPage2" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="Items" Relationship="Self.FK__Passport__Id__76969D2E" FromRole="Passport" ToRole="Items" />
+          <NavigationProperty Name="Items" Relationship="Self.FK__Passport__Id__6477ECF3" FromRole="Passport" ToRole="Items" />
         </EntityType>
         <EntityType Name="Photo">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PPath" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="CollectionID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Items" Relationship="Self.FK__Photo__Collectio__778AC167" FromRole="Photo" ToRole="Items" />
-          <NavigationProperty Name="Items1" Relationship="Self.FK__Photo__Id__787EE5A0" FromRole="Photo" ToRole="Items" />
+          <NavigationProperty Name="Items" Relationship="test123Model.FK_Photo_Items" FromRole="Photo" ToRole="Items" />
         </EntityType>
         <EntityType Name="Polis">
           <Key>
@@ -460,7 +467,7 @@
           <Property Name="PhotoPage1" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="PhotoPage2" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="ValidUntil" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="Items" Relationship="Self.FK__Polis__Id__797309D9" FromRole="Polis" ToRole="Items" />
+          <NavigationProperty Name="Items" Relationship="Self.FK__Polis__Id__66603565" FromRole="Polis" ToRole="Items" />
         </EntityType>
         <EntityType Name="SNILS">
           <Key>
@@ -474,7 +481,7 @@
           <Property Name="BirthPlace" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="RegistrationDate" Type="DateTime" Precision="3" />
           <Property Name="PhotoPage1" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="Items" Relationship="Self.FK__SNILS__Id__7A672E12" FromRole="SNILS" ToRole="Items" />
+          <NavigationProperty Name="Items" Relationship="Self.FK__SNILS__Id__6754599E" FromRole="SNILS" ToRole="Items" />
         </EntityType>
         <EntityType Name="Template">
           <Key>
@@ -485,9 +492,8 @@
           <Property Name="TStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UserId" Type="Int32" />
-          <NavigationProperty Name="Users" Relationship="Self.FK__Template__UserId__7B5B524B" FromRole="Template" ToRole="Users" />
-          <NavigationProperty Name="TemplateDocument" Relationship="Self.FK__TemplateD__Templ__7C4F7684" FromRole="Template" ToRole="TemplateDocument" />
-          <NavigationProperty Name="TemplateObject" Relationship="Self.FK__TemplateO__Templ__7F2BE32F" FromRole="Template" ToRole="TemplateObject" />
+          <NavigationProperty Name="TemplateDocument" Relationship="Self.FK__TemplateD__Templ__693CA210" FromRole="Template" ToRole="TemplateDocument" />
+          <NavigationProperty Name="Users" Relationship="test123Model.FK_Template_Users" FromRole="Template" ToRole="Users" />
         </EntityType>
         <EntityType Name="TemplateDocument">
           <Key>
@@ -495,8 +501,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TemplateId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Template" Relationship="Self.FK__TemplateD__Templ__7C4F7684" FromRole="TemplateDocument" ToRole="Template" />
-          <NavigationProperty Name="TemplateDocumentData" Relationship="Self.FK__TemplateD__Templ__7E37BEF6" FromRole="TemplateDocument" ToRole="TemplateDocumentData" />
+          <NavigationProperty Name="Template" Relationship="Self.FK__TemplateD__Templ__693CA210" FromRole="TemplateDocument" ToRole="Template" />
+          <NavigationProperty Name="TemplateDocumentData" Relationship="Self.FK__TemplateD__Templ__6B24EA82" FromRole="TemplateDocument" ToRole="TemplateDocumentData" />
         </EntityType>
         <EntityType Name="TemplateDocumentData">
           <Key>
@@ -506,8 +512,8 @@
           <Property Name="TDDValue" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="TemplateObjectId" Type="Int32" Nullable="false" />
           <Property Name="TemplateDocumentId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="TemplateDocument" Relationship="Self.FK__TemplateD__Templ__7E37BEF6" FromRole="TemplateDocumentData" ToRole="TemplateDocument" />
-          <NavigationProperty Name="TemplateObject" Relationship="Self.FK__TemplateD__Templ__7D439ABD" FromRole="TemplateDocumentData" ToRole="TemplateObject" />
+          <NavigationProperty Name="TemplateDocument" Relationship="Self.FK__TemplateD__Templ__6B24EA82" FromRole="TemplateDocumentData" ToRole="TemplateDocument" />
+          <NavigationProperty Name="TemplateObject" Relationship="Self.FK__TemplateD__Templ__6A30C649" FromRole="TemplateDocumentData" ToRole="TemplateObject" />
         </EntityType>
         <EntityType Name="TemplateObject">
           <Key>
@@ -518,8 +524,7 @@
           <Property Name="TOType" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="TemplateId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Template" Relationship="Self.FK__TemplateO__Templ__7F2BE32F" FromRole="TemplateObject" ToRole="Template" />
-          <NavigationProperty Name="TemplateDocumentData" Relationship="Self.FK__TemplateD__Templ__7D439ABD" FromRole="TemplateObject" ToRole="TemplateDocumentData" />
+          <NavigationProperty Name="TemplateDocumentData" Relationship="Self.FK__TemplateD__Templ__6A30C649" FromRole="TemplateObject" ToRole="TemplateDocumentData" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -531,11 +536,14 @@
           <Property Name="ULogin" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Syncing" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Photo" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <NavigationProperty Name="Items" Relationship="Self.FK__Items__UserId__75A278F5" FromRole="Users" ToRole="Items" />
-          <NavigationProperty Name="Template" Relationship="Self.FK__Template__UserId__7B5B524B" FromRole="Users" ToRole="Template" />
+          <Property Name="PinCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Items" Relationship="test123Model.FK_Items_Users" FromRole="Users" ToRole="Items" />
+          <NavigationProperty Name="Template" Relationship="test123Model.FK_Template_Users" FromRole="Users" ToRole="Template" />
         </EntityType>
-        <Association Name="FK__CreditCard__Id__73BA3083">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__CreditCard__Id__619B8048">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -546,8 +554,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__INN__Id__74AE54BC">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__INN__Id__628FA481">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="INN" Type="Self.INN" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -558,20 +568,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Items__UserId__75A278F5">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Items" Type="Self.Items" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Items">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Passport__Id__76969D2E">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__Passport__Id__6477ECF3">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Passport" Type="Self.Passport" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -582,32 +582,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Photo__Collectio__778AC167">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
-          <End Role="Photo" Type="Self.Photo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Items">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Photo">
-              <PropertyRef Name="CollectionID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Photo__Id__787EE5A0">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
-          <End Role="Photo" Type="Self.Photo" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Items">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Photo">
-              <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__Polis__Id__797309D9">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__Polis__Id__66603565">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Polis" Type="Self.Polis" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -618,8 +596,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__SNILS__Id__7A672E12">
-          <End Role="Items" Type="Self.Items" Multiplicity="1" />
+        <Association Name="FK__SNILS__Id__6754599E">
+          <End Role="Items" Type="Self.Items" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="SNILS" Type="Self.SNILS" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Items">
@@ -630,20 +610,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Template__UserId__7B5B524B">
-          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-          <End Role="Template" Type="Self.Template" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Template">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TemplateD__Templ__7C4F7684">
-          <End Role="Template" Type="Self.Template" Multiplicity="1" />
+        <Association Name="FK__TemplateD__Templ__693CA210">
+          <End Role="Template" Type="Self.Template" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateDocument" Type="Self.TemplateDocument" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Template">
@@ -654,20 +624,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TemplateO__Templ__7F2BE32F">
-          <End Role="Template" Type="Self.Template" Multiplicity="1" />
-          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Template">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TemplateObject">
-              <PropertyRef Name="TemplateId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TemplateD__Templ__7E37BEF6">
-          <End Role="TemplateDocument" Type="Self.TemplateDocument" Multiplicity="1" />
+        <Association Name="FK__TemplateD__Templ__6B24EA82">
+          <End Role="TemplateDocument" Type="Self.TemplateDocument" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateDocumentData" Type="Self.TemplateDocumentData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TemplateDocument">
@@ -678,8 +638,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TemplateD__Templ__7D439ABD">
-          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="1" />
+        <Association Name="FK__TemplateD__Templ__6A30C649">
+          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="TemplateDocumentData" Type="Self.TemplateDocumentData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TemplateObject">
@@ -694,6 +656,7 @@
           <EntitySet Name="CreditCard" EntityType="Self.CreditCard" />
           <EntitySet Name="INN" EntityType="Self.INN" />
           <EntitySet Name="Items" EntityType="Self.Items" />
+          <EntitySet Name="LastLogginetUser" EntityType="Self.LastLogginetUser" />
           <EntitySet Name="Passport" EntityType="Self.Passport" />
           <EntitySet Name="Photo" EntityType="Self.Photo" />
           <EntitySet Name="Polis" EntityType="Self.Polis" />
@@ -703,67 +666,99 @@
           <EntitySet Name="TemplateDocumentData" EntityType="Self.TemplateDocumentData" />
           <EntitySet Name="TemplateObject" EntityType="Self.TemplateObject" />
           <EntitySet Name="Users" EntityType="Self.Users" />
-          <AssociationSet Name="FK__CreditCard__Id__73BA3083" Association="Self.FK__CreditCard__Id__73BA3083">
+          <AssociationSet Name="FK__CreditCard__Id__619B8048" Association="Self.FK__CreditCard__Id__619B8048">
             <End Role="Items" EntitySet="Items" />
             <End Role="CreditCard" EntitySet="CreditCard" />
           </AssociationSet>
-          <AssociationSet Name="FK__INN__Id__74AE54BC" Association="Self.FK__INN__Id__74AE54BC">
+          <AssociationSet Name="FK__INN__Id__628FA481" Association="Self.FK__INN__Id__628FA481">
             <End Role="Items" EntitySet="Items" />
             <End Role="INN" EntitySet="INN" />
           </AssociationSet>
-          <AssociationSet Name="FK__Items__UserId__75A278F5" Association="Self.FK__Items__UserId__75A278F5">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Items" EntitySet="Items" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Passport__Id__76969D2E" Association="Self.FK__Passport__Id__76969D2E">
+          <AssociationSet Name="FK__Passport__Id__6477ECF3" Association="Self.FK__Passport__Id__6477ECF3">
             <End Role="Items" EntitySet="Items" />
             <End Role="Passport" EntitySet="Passport" />
           </AssociationSet>
-          <AssociationSet Name="FK__Photo__Collectio__778AC167" Association="Self.FK__Photo__Collectio__778AC167">
-            <End Role="Items" EntitySet="Items" />
-            <End Role="Photo" EntitySet="Photo" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Photo__Id__787EE5A0" Association="Self.FK__Photo__Id__787EE5A0">
-            <End Role="Items" EntitySet="Items" />
-            <End Role="Photo" EntitySet="Photo" />
-          </AssociationSet>
-          <AssociationSet Name="FK__Polis__Id__797309D9" Association="Self.FK__Polis__Id__797309D9">
+          <AssociationSet Name="FK__Polis__Id__66603565" Association="Self.FK__Polis__Id__66603565">
             <End Role="Items" EntitySet="Items" />
             <End Role="Polis" EntitySet="Polis" />
           </AssociationSet>
-          <AssociationSet Name="FK__SNILS__Id__7A672E12" Association="Self.FK__SNILS__Id__7A672E12">
+          <AssociationSet Name="FK__SNILS__Id__6754599E" Association="Self.FK__SNILS__Id__6754599E">
             <End Role="Items" EntitySet="Items" />
             <End Role="SNILS" EntitySet="SNILS" />
           </AssociationSet>
-          <AssociationSet Name="FK__Template__UserId__7B5B524B" Association="Self.FK__Template__UserId__7B5B524B">
+          <AssociationSet Name="FK__TemplateD__Templ__693CA210" Association="Self.FK__TemplateD__Templ__693CA210">
+            <End Role="Template" EntitySet="Template" />
+            <End Role="TemplateDocument" EntitySet="TemplateDocument" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TemplateD__Templ__6B24EA82" Association="Self.FK__TemplateD__Templ__6B24EA82">
+            <End Role="TemplateDocument" EntitySet="TemplateDocument" />
+            <End Role="TemplateDocumentData" EntitySet="TemplateDocumentData" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TemplateD__Templ__6A30C649" Association="Self.FK__TemplateD__Templ__6A30C649">
+            <End Role="TemplateObject" EntitySet="TemplateObject" />
+            <End Role="TemplateDocumentData" EntitySet="TemplateDocumentData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Photo_Items" Association="test123Model.FK_Photo_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="Photo" EntitySet="Photo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_Users" Association="test123Model.FK_Items_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Template_Users" Association="test123Model.FK_Template_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Template" EntitySet="Template" />
           </AssociationSet>
-          <AssociationSet Name="FK__TemplateD__Templ__7C4F7684" Association="Self.FK__TemplateD__Templ__7C4F7684">
-            <End Role="Template" EntitySet="Template" />
-            <End Role="TemplateDocument" EntitySet="TemplateDocument" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TemplateO__Templ__7F2BE32F" Association="Self.FK__TemplateO__Templ__7F2BE32F">
-            <End Role="Template" EntitySet="Template" />
-            <End Role="TemplateObject" EntitySet="TemplateObject" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TemplateD__Templ__7E37BEF6" Association="Self.FK__TemplateD__Templ__7E37BEF6">
-            <End Role="TemplateDocument" EntitySet="TemplateDocument" />
-            <End Role="TemplateDocumentData" EntitySet="TemplateDocumentData" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TemplateD__Templ__7D439ABD" Association="Self.FK__TemplateD__Templ__7D439ABD">
-            <End Role="TemplateObject" EntitySet="TemplateObject" />
-            <End Role="TemplateDocumentData" EntitySet="TemplateDocumentData" />
-          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_Photo_Items">
+          <End Type="test123Model.Items" Role="Items" Multiplicity="1" />
+          <End Type="test123Model.Photo" Role="Photo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Photo">
+              <PropertyRef Name="CollectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_Users">
+          <End Type="test123Model.Users" Role="Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="test123Model.Items" Role="Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Template_Users">
+          <End Type="test123Model.Users" Role="Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="test123Model.Template" Role="Template" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Template">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище test123Model1Container" CdmEntityContainer="test123Entities1">
+        <EntityContainerMapping StorageEntityContainer="Хранилище test123ModelContainer" CdmEntityContainer="test123Entities1">
           <EntitySetMapping Name="CreditCard">
-            <EntityTypeMapping TypeName="test123Model1.CreditCard">
+            <EntityTypeMapping TypeName="test123Model.CreditCard">
               <MappingFragment StoreEntitySet="CreditCard">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
@@ -775,7 +770,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="INN">
-            <EntityTypeMapping TypeName="test123Model1.INN">
+            <EntityTypeMapping TypeName="test123Model.INN">
               <MappingFragment StoreEntitySet="INN">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
@@ -789,7 +784,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Items">
-            <EntityTypeMapping TypeName="test123Model1.Items">
+            <EntityTypeMapping TypeName="test123Model.Items">
               <MappingFragment StoreEntitySet="Items">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
@@ -804,8 +799,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LastLogginetUser">
+            <EntityTypeMapping TypeName="test123Model.LastLogginetUser">
+              <MappingFragment StoreEntitySet="LastLogginetUser">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserLogin" ColumnName="UserLogin" />
+                <ScalarProperty Name="UserEmail" ColumnName="UserEmail" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Passport">
-            <EntityTypeMapping TypeName="test123Model1.Passport">
+            <EntityTypeMapping TypeName="test123Model.Passport">
               <MappingFragment StoreEntitySet="Passport">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
@@ -824,7 +829,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Photo">
-            <EntityTypeMapping TypeName="test123Model1.Photo">
+            <EntityTypeMapping TypeName="test123Model.Photo">
               <MappingFragment StoreEntitySet="Photo">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PPath" ColumnName="PPath" />
@@ -833,7 +838,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Polis">
-            <EntityTypeMapping TypeName="test123Model1.Polis">
+            <EntityTypeMapping TypeName="test123Model.Polis">
               <MappingFragment StoreEntitySet="Polis">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
@@ -847,7 +852,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SNILS">
-            <EntityTypeMapping TypeName="test123Model1.SNILS">
+            <EntityTypeMapping TypeName="test123Model.SNILS">
               <MappingFragment StoreEntitySet="SNILS">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
@@ -861,7 +866,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Template">
-            <EntityTypeMapping TypeName="test123Model1.Template">
+            <EntityTypeMapping TypeName="test123Model.Template">
               <MappingFragment StoreEntitySet="Template">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="TName" ColumnName="TName" />
@@ -872,7 +877,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TemplateDocument">
-            <EntityTypeMapping TypeName="test123Model1.TemplateDocument">
+            <EntityTypeMapping TypeName="test123Model.TemplateDocument">
               <MappingFragment StoreEntitySet="TemplateDocument">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="TemplateId" ColumnName="TemplateId" />
@@ -880,7 +885,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TemplateDocumentData">
-            <EntityTypeMapping TypeName="test123Model1.TemplateDocumentData">
+            <EntityTypeMapping TypeName="test123Model.TemplateDocumentData">
               <MappingFragment StoreEntitySet="TemplateDocumentData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="TDDValue" ColumnName="TDDValue" />
@@ -890,7 +895,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="TemplateObject">
-            <EntityTypeMapping TypeName="test123Model1.TemplateObject">
+            <EntityTypeMapping TypeName="test123Model.TemplateObject">
               <MappingFragment StoreEntitySet="TemplateObject">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Position" ColumnName="Position" />
@@ -901,7 +906,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="test123Model1.Users">
+            <EntityTypeMapping TypeName="test123Model.Users">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -909,6 +914,7 @@
                 <ScalarProperty Name="ULogin" ColumnName="ULogin" />
                 <ScalarProperty Name="Syncing" ColumnName="Syncing" />
                 <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

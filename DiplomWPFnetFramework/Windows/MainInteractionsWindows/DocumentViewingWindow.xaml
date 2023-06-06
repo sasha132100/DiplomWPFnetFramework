@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DiplomWPFnetFramework.Windows.MainInteractionsWindows"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Просмотр документов" Height="750" Width="1100">
+        Title="Просмотр документов" Height="750" Width="1100" MinHeight="750" MinWidth="1100" Icon="/Resources/AppLogo.ico">
     <Window.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>
@@ -14,60 +14,113 @@
             <Setter Property="Foreground" Value="#FCF3DC"/>
             <Setter Property="Margin" Value="0,0,0,0"/>
         </Style>
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <ResourceDictionary x:Key="CornerRadiusSetter">
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="120"/>
+            </Style>
+        </ResourceDictionary>
+        <ContextMenu Background="White" x:Key="SortContextMenu">
+            <MenuItem Header="Скрыть/показать документы" Click="MenuItemShowOrHideDocuments_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/DocumentImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скрыть/показать карты" Click="MenuItemShowOrHideCreditCards_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/CreditCardImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скрыть/показать коллекции" Click="MenuItemShowOrHideCollections_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/CollectionImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скрыть/показать папки" Click="MenuItemShowOrHideFolders_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/FolderImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Показать все" Click="MenuItemShowAll_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/ShowAllImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
     </Window.Resources>
     <DockPanel>
         <DockPanel.Background>
             <ImageBrush ImageSource="pack://application:,,,/Resources/MainWindowBackgroundGradient.png"/>
         </DockPanel.Background>
+        <Border x:Name="SettingsGrid" Width="0" BorderThickness="1" BorderBrush="#2D346F">
+            <Grid>
+                <Grid>
+                    <TextBlock x:Name="TitleTextBlock" Text="My docs" FontFamily="Roboto" FontSize="40" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" FontWeight="Bold">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Opacity="0.6" ShadowDepth="8"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <Border x:Name="AvatarPhotoBorder" Width="150" Background="White" Height="150" CornerRadius="120" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,120,0,0" Cursor="Hand" MouseLeftButtonUp="AvatarPhotoBorder_MouseLeftButtonUp">
+                        <Image x:Name="AvatarPhotoImage" Stretch="Fill" Width="150" Height="150"/>
+                    </Border>
+                    <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,145,30,0">
+                        <StackPanel>
+                            <TextBlock x:Name="UserEmailTextBlock" TextWrapping="Wrap" Width="200" Style="{StaticResource TextBlockMainProperties}" Height="70" Foreground="#442C6E"/>
+                            <TextBlock x:Name="ChangeAccountTextBlock" Text="Сменить аккаунт" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" MouseLeftButtonUp="ChangeAccountTextBlock_MouseLeftButtonUp"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel>
+                            <Grid Margin="-10,100,0,0">
+                                <Image x:Name="AccountSettingsImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/ChangePasswordImage.png" Stretch="None" MouseLeftButtonUp="AccountSettingsButtonClick_MouseLeftButtonUp"/>
+                                <TextBlock x:Name="AccountSettingsTextBlock" Text="Настройки аккаунта" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" MouseLeftButtonUp="AccountSettingsButtonClick_MouseLeftButtonUp"/>
+                            </Grid>
+                            <Grid Margin="-10,10,0,0">
+                                <Image x:Name="SynchronizationImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/CloudSyncImage.png" Stretch="None" MouseLeftButtonUp="SynchronizationButtonClick_MouseLeftButtonUp"/>
+                                <TextBlock x:Name="SynchronizationTextBlock" Text="Синхронизация" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" MouseLeftButtonUp="SynchronizationButtonClick_MouseLeftButtonUp"/>
+                            </Grid>
+                            <Grid Margin="-10,10,0,0">
+                                <Image x:Name="MyTemplatesImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/MyTemplatesImage.png" Stretch="None" MouseLeftButtonUp="MyTemplatesButtonClick_MouseLeftButtonUp"/>
+                                <TextBlock x:Name="MyTemplatesTextBlock" Text="Мои шаблоны" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" MouseLeftButtonUp="MyTemplatesButtonClick_MouseLeftButtonUp"/>
+                            </Grid>
+                            <Grid Margin="-10,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="116*"/>
+                                    <ColumnDefinition Width="37*"/>
+                                    <ColumnDefinition Width="153*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image x:Name="HiddenFilesImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/HiddenFilesImage.png" Stretch="None" MouseLeftButtonUp="HiddenFilesButtonClick_MouseLeftButtonUp"/>
+                                <TextBlock x:Name="HiddenFilesTextBlock" Text="Скрытые файлы" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" Grid.ColumnSpan="3" MouseLeftButtonUp="HiddenFilesButtonClick_MouseLeftButtonUp"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="10,0,0,10">
+                        <Image x:Name="SettingsImage" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/SettingsImage.png" Stretch="None" MouseLeftButtonUp="SettingsButtonClick_MouseLeftButtonUp"/>
+                        <TextBlock x:Name="SettingsTextBlock" Text="Настройки" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,10" MouseLeftButtonUp="SettingsButtonClick_MouseLeftButtonUp"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
         <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
             <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" MouseLeftButtonUp="OpenSettingPageButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/OpenSettingsPageButtonImage.png"/>
                 </Grid.Background>
             </Grid>
-            <TextBlock x:Name="EmailOutTextBlock" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="LoginOutTextBlock" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Grid x:Name="sortImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" MouseLeftButtonUp="sortImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/SortButtonImage.png"/>
                 </Grid.Background>
             </Grid>
         </Grid>
-        <ScrollViewer Height="Auto" DockPanel.Dock="Top" Padding="0,18,0,0">
-            <WrapPanel x:Name="DocumentsViewGrid">
-                <WrapPanel.Resources>
-                    <Style x:Key="ContentBorderStyle" TargetType="Border">
-                        <Setter Property="Width" Value="160"/>
-                        <Setter Property="Height" Value="200"/>
-                        <Setter Property="CornerRadius" Value="10"/>
-                        <Setter Property="Margin" Value="18,0,0,18"/>
-                        <Setter Property="Background" Value="White"/>
-                        <Setter Property="Cursor" Value="Hand"/>
-                    </Style>
-                    <Style x:Key="BottomBorderProperties" TargetType="Border">
-                        <Setter Property="Width" Value="158"/>
-                        <Setter Property="Height" Value="48"/>
-                        <Setter Property="Margin" Value="0,0,0,0"/>
-                        <Setter Property="CornerRadius" Value="10"/>
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="VerticalAlignment" Value="Bottom"/>
-                        <Setter Property="Background" Value="#6D6F80"/>
-                        <Setter Property="Opacity" Value="0.8"/>
-                    </Style>
-                    <Style x:Key="DocumentTextBlockPropeties" TargetType="TextBlock">
-                        <Setter Property="FontFamily" Value="Arial"/>
-                        <Setter Property="Foreground" Value="White"/>
-                        <Setter Property="FontSize" Value="16"/>
-                        <Setter Property="HorizontalAlignment" Value="Center"/>
-                        <Setter Property="VerticalAlignment" Value="Bottom"/>
-                        <Setter Property="Margin" Value="0,0,0,16"/>
-                    </Style>
-                    <ResourceDictionary x:Key="CornerRadiusSetter">
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10"/>
-                        </Style>
-                    </ResourceDictionary>
-                </WrapPanel.Resources>
-            </WrapPanel>
-        </ScrollViewer>
+        <Frame x:Name="openPageFrame" NavigationUIVisibility="Hidden"/>
     </DockPanel>
 </Window>

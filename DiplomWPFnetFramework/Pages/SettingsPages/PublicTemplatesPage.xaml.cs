@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DiplomWPFnetFramework.Pages
+namespace DiplomWPFnetFramework.Pages.SettingsPages
 {
     /// <summary>
-    /// Логика взаимодействия для FolderContentPage.xaml
+    /// Логика взаимодействия для PublicTemplatesPage.xaml
     /// </summary>
-    public partial class FolderContentPage : Page
+    public partial class PublicTemplatesPage : Page
     {
-        public FolderContentPage()
+        public PublicTemplatesPage()
         {
             InitializeComponent();
         }

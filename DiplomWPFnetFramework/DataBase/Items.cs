@@ -33,12 +33,11 @@ namespace DiplomWPFnetFramework.DataBase
     
         public virtual CreditCard CreditCard { get; set; }
         public virtual INN INN { get; set; }
-        public virtual Users Users { get; set; }
         public virtual Passport Passport { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Photo> Photo { get; set; }
-        public virtual Photo Photo1 { get; set; }
         public virtual Polis Polis { get; set; }
         public virtual SNILS SNILS { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Photo> Photo { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

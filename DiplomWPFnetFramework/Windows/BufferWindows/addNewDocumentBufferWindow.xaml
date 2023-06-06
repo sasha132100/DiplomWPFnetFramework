@@ -1,0 +1,78 @@
+﻿<Window x:Class="DiplomWPFnetFramework.Windows.BufferWindows.addNewDocumentBufferWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DiplomWPFnetFramework.Windows.BufferWindows"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Создание документа" Height="Auto" Width="520" MinHeight="85" MinWidth="520">
+    <Window.Resources>
+        <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+        <Style x:Key="ButtonProperties" TargetType="Button">
+            <Setter Property="Background" Value="#442C6E"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <ResourceDictionary x:Key="CornerRadiusSetter">
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="10"/>
+            </Style>
+        </ResourceDictionary>
+        <ContextMenu Background="White" x:Key="TemplateTypeContextMenu">
+            <MenuItem Header="Системные шаблоны" Click="SystemTemplatesShow_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/DocumentImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Мои шаблоны" Click="MyTemplatesShow_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/CreditCardImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скаченные шаблоны" Click="DownloadTemplatesShow_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/CollectionImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+    <DockPanel>
+        <DockPanel.Background>
+            <ImageBrush ImageSource="pack://application:,,,/Resources/MainWindowBackgroundGradient.png"/>
+        </DockPanel.Background>
+        <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
+            <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" MouseLeftButtonUp="BackWindowButtonImage_MouseLeftButtonUp" Cursor="Hand">
+                <Grid.Background>
+                    <ImageBrush ImageSource="pack://application:,,,/Resources/BackArrowButtonImage.png"/>
+                </Grid.Background>
+            </Grid>
+            <TextBlock Text="Создание документа" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Grid x:Name="DocumentMoreInteractionsImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
+                <Grid.Background>
+                    <ImageBrush ImageSource="/Resources\DocumentMoreInteractionsImage.png"/>
+                </Grid.Background>
+            </Grid>
+        </Grid>
+        <Grid>
+            <Frame  x:Name="ChooseTemplatesTypePageFrame" NavigationUIVisibility="Hidden"/>
+        </Grid>
+    </DockPanel>
+</Window>

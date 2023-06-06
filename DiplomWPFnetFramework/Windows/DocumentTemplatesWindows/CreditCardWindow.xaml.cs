@@ -1,5 +1,6 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,9 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
     /// </summary>
     public partial class CreditCardWindow : Window
     {
+        byte[] creditCardImageBytes = null;
+        byte[] coverImage = null;
+
         public CreditCardWindow()
         {
             InitializeComponent();
@@ -35,7 +39,11 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         private void LoadContent()
         {
             if (SystemContext.isChange == false)
+            {
+                DocumentMoreInteractionsGrid.Visibility = Visibility.Hidden;
+                confirmButtonImage.Margin = new Thickness(0, 0, 10, 0);
                 return;
+            }
             using (var db = new test123Entities1())
             {
                 var creditCard = (from p in db.CreditCard where p.Id == SystemContext.Item.Id select p).FirstOrDefault<CreditCard>();
@@ -43,6 +51,8 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 FIOTextBox.Text = creditCard.FIO;
                 MonthAndYearTextBox.Text = creditCard.ExpiryDate;
                 CVVCodeTextBox.Text = creditCard.CVV.ToString();
+                CreditCardPhotoHolder.Source = ByteArrayToImage(creditCard.PhotoPage1);
+                creditCardImageBytes = creditCard.PhotoPage1;
             }
 
         }
@@ -61,6 +71,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 creditCard.FIO = FIOTextBox.Text;
                 creditCard.ExpiryDate = MonthAndYearTextBox.Text;
                 creditCard.CVV = Convert.ToInt32(CVVCodeTextBox.Text);
+                creditCard.PhotoPage1 = creditCardImageBytes;
                 return creditCard;
             }
         }
@@ -69,9 +80,15 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             if (CardNumberTextBox.Text != "" && FIOTextBox.Text != "" && MonthAndYearTextBox.Text != "" &&
                 CVVCodeTextBox.Text != "")
-                return "Заполнены";
+                return "Добавить";
             else
-                return "Не заполнены";
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("Вы заполнили не все поля, вы уверены, что хотите сохранить?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (messageBoxResult == MessageBoxResult.No)
+                    return "Не добавить";
+                else
+                    return "Добавить";
+            } 
         }
 
         private void AddNewItem()
@@ -79,8 +96,8 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             using (var db = new test123Entities1())
             {
                 Items item = new Items();
-                item.Title = "NewTitle" + db.Items.OrderByDescending(items => items.Id).FirstOrDefault().Id.ToString();
-                item.IType = "Photo";
+                item.Title = "Новая карта" + db.Items.Where(i => i.IType == "CreditCard" && i.UserId == SystemContext.User.Id).Count();
+                item.IType = "CreditCard";
                 item.IPriority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
@@ -88,20 +105,19 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.UserId = SystemContext.User.Id;
                 db.Items.AddOrUpdate(item);
                 db.SaveChanges();
-                SystemContext.NewItem = (from i in db.Items where i.DateCreation == item.DateCreation select i).FirstOrDefault<Items>();
+                SystemContext.NewItem = item;
             }
         }
 
-        private string AddNewCreditCard()
+        private void AddNewCreditCard()
         {
-            if (CheckingTheFullness() != "Заполнены")
-                return "Не заполнены";
+            if (CheckingTheFullness() != "Добавить")
+                return;
             using (var db = new test123Entities1())
             {
                 AddNewItem();
                 db.CreditCard.Add(CreatingCreditCardObject());
                 db.SaveChanges();
-                return "Добавлен";
             }
         }
 
@@ -115,29 +131,133 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             }
         }
 
+        private void ImageSetter(Image imageName)
+        {
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+                creditCardImageBytes = File.ReadAllBytes(filePath);
+                imageName.Source = ByteArrayToImage(creditCardImageBytes);
+            }
+        }
+
+        private BitmapSource ByteArrayToImage(byte[] buffer)
+        {
+            using (var stream = new MemoryStream(buffer))
+            {
+                return BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            }
+        }
+
+        private void ChangeCoverImage()
+        {
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+                coverImage = File.ReadAllBytes(filePath);
+                Items item;
+                item = SystemContext.Item;
+                using (var db = new test123Entities1())
+                {
+                    item.IImage = coverImage;
+                    db.Items.AddOrUpdate(item);
+                    db.SaveChanges();
+                }
+            }
+        }
+
         private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
+        }
+
+        private void PhotoPageOpen_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MainDataBorder.Visibility = Visibility.Hidden;
+            CreditCardPhotoOpenTextBlock.Visibility = Visibility.Hidden;
+            CreditCardDataOpenTextBlock.Visibility = Visibility.Visible;
+            PhotoBorder.Visibility = Visibility.Visible;
+        }
+
+        private void CreditCardDataOpen_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MainDataBorder.Visibility = Visibility.Visible;
+            CreditCardPhotoOpenTextBlock.Visibility = Visibility.Visible;
+            CreditCardDataOpenTextBlock.Visibility = Visibility.Hidden;
+            PhotoBorder.Visibility = Visibility.Hidden;
+        }
+
+        private void DocumentMoreInteractionsButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Grid grid = (Grid)sender;
+            var contextMenu = (ContextMenu)this.FindResource("DocumentMoreInteractionsContextMenu");
+            contextMenu.PlacementTarget = grid;
+            contextMenu.IsOpen = true;
+        }
+
+        private void confirmButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
             if (SystemContext.isChange == false)
             {
-                if (AddNewCreditCard() == "Не заполнены")
-                {
-                    MessageBoxResult messageBoxResult = MessageBox.Show("Вы заполнили не все поля, уверены, что хотите выйти?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (messageBoxResult == MessageBoxResult.No)
-                        return;
-                }
+                AddNewCreditCard();
             }
             else
             {
                 ChangeCreditCard();
             }
-            DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
-            this.Close();
-            documentViewingWindow.ShowDialog();
         }
 
-        private void PhotoPageOpen_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void CreditCardPhotoHolder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ImageSetter(CreditCardPhotoHolder);
+        }
+
+        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (SystemContext.isChange == false)
+            {
+                AddNewCreditCard();
+            }
+            else
+            {
+                ChangeCreditCard();
+            }
+        }
+
+        private void MenuItemChangeCover_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeCoverImage();
+        }
+
+        private void MenuItemCreateDocumentScan_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Items item;
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+            }
         }
     }
 }

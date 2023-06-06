@@ -4,32 +4,31 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d3b83edf23db4bc6a6b66472b1702e93" Name="Diagram1">
-        <EntityTypeShape EntityType="test123Model1.CreditCard" Width="1.5" PointX="5.25" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.INN" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.Items" Width="1.5" PointX="3" PointY="10.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.Passport" Width="1.5" PointX="5.25" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.Photo" Width="1.5" PointX="5.25" PointY="13.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.Polis" Width="1.5" PointX="5.25" PointY="16.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.SNILS" Width="1.5" PointX="5.25" PointY="19.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.Template" Width="1.5" PointX="3" PointY="24.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.TemplateDocument" Width="1.5" PointX="5.25" PointY="23.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.TemplateDocumentData" Width="1.5" PointX="7.5" PointY="24.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.TemplateObject" Width="1.5" PointX="5.25" PointY="25.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="test123Model1.Users" Width="1.5" PointX="0.75" PointY="13.875" IsExpanded="true" />
-        <AssociationConnector Association="test123Model1.FK__CreditCard__Id__73BA3083" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__INN__Id__74AE54BC" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__Items__UserId__75A278F5" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__Passport__Id__76969D2E" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__Photo__Collectio__778AC167" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__Photo__Id__787EE5A0" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__Polis__Id__797309D9" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__SNILS__Id__7A672E12" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__Template__UserId__7B5B524B" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__TemplateD__Templ__7C4F7684" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__TemplateO__Templ__7F2BE32F" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__TemplateD__Templ__7E37BEF6" ManuallyRouted="false" />
-        <AssociationConnector Association="test123Model1.FK__TemplateD__Templ__7D439ABD" ManuallyRouted="false" />
+      <Diagram DiagramId="a1105f0c1a1b4a6cad96c6b6c55edbd0" Name="Diagram1" ZoomLevel="73">
+        <EntityTypeShape EntityType="test123Model.CreditCard" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.INN" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.Items" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.LastLogginetUser" Width="1.5" PointX="5.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.Passport" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.Photo" Width="1.5" PointX="7.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.Polis" Width="1.5" PointX="3" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.SNILS" Width="1.5" PointX="3" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.Template" Width="1.5" PointX="5.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.TemplateDocument" Width="1.5" PointX="8" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.TemplateDocumentData" Width="1.5" PointX="10.25" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.TemplateObject" Width="1.5" PointX="8" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="test123Model.Users" Width="1.5" PointX="9.75" PointY="8.75" IsExpanded="true" />
+        <AssociationConnector Association="test123Model.FK__CreditCard__Id__619B8048" ManuallyRouted="false" />
+        <AssociationConnector Association="test123Model.FK__INN__Id__628FA481" ManuallyRouted="false" />
+        <AssociationConnector Association="test123Model.FK__Passport__Id__6477ECF3" ManuallyRouted="false" />
+        <AssociationConnector Association="test123Model.FK__Polis__Id__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="test123Model.FK__SNILS__Id__6754599E" ManuallyRouted="false" />
+        <AssociationConnector Association="test123Model.FK__TemplateD__Templ__693CA210" ManuallyRouted="false" />
+        <AssociationConnector Association="test123Model.FK__TemplateD__Templ__6B24EA82" ManuallyRouted="false" />
+        <AssociationConnector Association="test123Model.FK__TemplateD__Templ__6A30C649" ManuallyRouted="false" />
+        <AssociationConnector Association="test123Model.FK_Photo_Items" />
+        <AssociationConnector Association="test123Model.FK_Items_Users" />
+        <AssociationConnector Association="test123Model.FK_Template_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

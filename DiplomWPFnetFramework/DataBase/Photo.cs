@@ -19,6 +19,5 @@ namespace DiplomWPFnetFramework.DataBase
         public int CollectionID { get; set; }
     
         public virtual Items Items { get; set; }
-        public virtual Items Items1 { get; set; }
     }
 }

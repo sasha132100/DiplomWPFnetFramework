@@ -8,8 +8,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using DiplomWPFnetFramework.DataBase;
 using DiplomWPFnetFramework.Classes;
-using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
+using DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows;
 using System.IO;
+using DiplomWPFnetFramework.Pages;
+using System.Data.Entity.Migrations;
+using DiplomWPFnetFramework.Windows.BufferWindows;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 
 namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 {
@@ -18,44 +22,19 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
     /// </summary>
     public partial class DocumentViewingWindow : Window
     {
+        byte[] avatarsPhotoBytes = null;
+
         public DocumentViewingWindow()
         {
             InitializeComponent();
             CheckIsGuest();
-            LoadContent();
         }
 
         private void CheckIsGuest()
         {
-            if (SystemContext.isGuest)
-            {
-                EmailOutTextBlock.Text = "Гость";
-            }
-            else
-            {
-                EmailOutTextBlock.Text = SystemContext.User.ULogin;
-            }
-        }
-
-        private void LoadContent()
-        {
-            using (var db = new test123Entities1())
-            {
-                List<Items> items = null;
-                try
-                {
-                    items = (from i in db.Items 
-                             where i.UserId == SystemContext.User.Id
-                             select i).ToList<Items>();
-                }
-                catch
-                {
-                    MessageBox.Show("Ошибка при загрузке документов");
-                    return;
-                }
-                foreach(var item in items)
-                    AddNewDocument(item);
-            }
+            LoginOutTextBlock.Text = SystemContext.User.ULogin;
+            DocumentViewingPage documentViewingPage = new DocumentViewingPage();
+            openPageFrame.Content = documentViewingPage;
         }
 
         private BitmapSource ByteArrayToImage(byte[] buffer)
@@ -66,132 +45,194 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             }
         }
 
-        private void AddNewDocument(Items item)
+        private void ImageSetter(Image imageName)
         {
-            var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyle"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")) };
-            var mainGrid = new Grid() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
-            var bottomDarkeningBorder = new Border() { Style = (Style)DocumentsViewGrid.Resources["BottomBorderProperties"] };
-
-            ImageBrush imageBrush = new ImageBrush();
-            Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
-            if (item.IImage != null && item.IImage.ToString() != "")
-                image.Source = ByteArrayToImage(item.IImage);
-            else
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                switch (item.IType) 
+                string filePath = openFileDialog.FileName;
+                avatarsPhotoBytes = File.ReadAllBytes(filePath);
+                imageName.Source = ByteArrayToImage(avatarsPhotoBytes);
+                AvatarPhotoImage.Width = 150;
+                AvatarPhotoImage.Height = 150;
+                AvatarPhotoImage.Stretch = Stretch.Fill;
+                Users user = new Users();
+                user = SystemContext.User;
+                using (var db = new test123Entities1())
                 {
-                    case "CreditCard":
-                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CreditCardPlugImage.png"));
-                        break;
-
-                    case "Folder":
-                        break;
-
-                    case "Collection":
-                        break;
-
-                    default:
-                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/DocumentPlugImage.png"));
-                        break;
+                    user.Photo = avatarsPhotoBytes;
+                    db.Users.AddOrUpdate(user);
+                    db.SaveChanges();
                 }
             }
-            imageBrush.ImageSource = image.Source;
-            imageBrush.Stretch = Stretch.UniformToFill;
-            mainGrid.Background = imageBrush;
-
-            bottomDarkeningBorder.VerticalAlignment = VerticalAlignment.Bottom;
-            TextBlock itemName = new TextBlock() { Text = item.Title, Style = (Style)DocumentsViewGrid.Resources["DocumentTextBlockPropeties"] };
-
-            borderPanel.Tag = item;
-            bottomDarkeningBorder.Tag = item;
-            itemName.Tag = item;
-
-            borderPanel.MouseLeftButtonUp += ChangeItemButton_Click;
-            bottomDarkeningBorder.MouseLeftButtonUp += ChangeTitleNameButton_Click;
-
-            mainGrid.Children.Add(bottomDarkeningBorder);
-            mainGrid.Children.Add(itemName);
-            borderPanel.Child = mainGrid;
-            DocumentsViewGrid.Children.Add(borderPanel);
-        }
-
-        private void ChangeItemButton_Click(object sender, MouseButtonEventArgs e)
-        {
-            using (var db = new test123Entities1())
-            {
-                SystemContext.Item = (sender as Border).Tag as Items;
-                SystemContext.isChange = true;
-                switch (SystemContext.Item?.IType) 
-                {
-                    case "Passport":
-                        var passportWindow = new PassportWindow();
-                        this.Close();
-                        passportWindow.ShowDialog();
-                        break;
-
-                    case "INN":
-                        var innWindow = new InnWindow();
-                        this.Close();
-                        innWindow.ShowDialog();
-                        break;
-
-                    case "SNILS":
-                        var snilsWindow = new SnilsWindow();
-                        this.Close();
-                        snilsWindow.ShowDialog();
-                        break;
-
-                    case "Polis":
-                        var polisWindow = new PolisWindow();
-                        this.Close();
-                        polisWindow.ShowDialog();
-                        break;
-
-                    case "Photo":
-                        var photoWindow = new PhotoWindow();
-                        this.Close(); 
-                        photoWindow.ShowDialog();
-                        break;
-
-                    case "CreditCard":
-                        var creditCardWindow = new CreditCardWindow();
-                        this.Close();
-                        creditCardWindow.ShowDialog();
-                        break;
-
-                    case "Folder":
-                        MessageBox.Show("Открытие папки пока не реализовано");
-                        break;
-                    
-                    case "Collection":
-                        MessageBox.Show("Открытие коллекции пока не реализовано");
-                        break;
-
-                    default:
-                        MessageBox.Show("Ошибка при открытии документа");
-                        break;
-                }
-            } 
-        }
-
-        private void ChangeTitleNameButton_Click(object sender, MouseButtonEventArgs e)
-        {
-            SystemContext.Item = (sender as Border).Tag as Items;
         }
 
         private void OpenSettingPageButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            LoginWindow mainWindow = new LoginWindow();
-            this.Close();
-            mainWindow.ShowDialog();
+            if (SettingsGrid.Width == 0)
+            {
+                UserEmailTextBlock.Text = "";
+                if (SystemContext.isGuest)
+                {
+                    AvatarPhotoImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/AvatarPhotoImage.png"));
+                    UserEmailTextBlock.Text = "Гость";
+                }
+                else if (SystemContext.User.Photo == null)
+                {
+                    AvatarPhotoImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/UserAvatarPlug.png"));
+                    AvatarPhotoImage.Width = 120;
+                    AvatarPhotoImage.Height = 120;
+                    AvatarPhotoImage.Stretch = Stretch.Uniform;
+                    UserEmailTextBlock.Text += SystemContext.User.Email;
+                }
+                else
+                {
+                    AvatarPhotoImage.Source = ByteArrayToImage(SystemContext.User.Photo);
+                    UserEmailTextBlock.Text += SystemContext.User.Email;
+                }
+                SettingsGrid.Width = 450;
+            }
+            else
+                SettingsGrid.Width = 0;
         }
 
         private void sortImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            SystemContext.isChange = false;
-            PassportWindow passportWindow = new PassportWindow();
+            Grid grid = (Grid)sender;
+            var contextMenu = (ContextMenu)this.FindResource("SortContextMenu");
+            contextMenu.PlacementTarget = grid;
+            contextMenu.IsOpen = true;
+        }
+
+        private void ChangeAccountTextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
             this.Close();
-            passportWindow.ShowDialog();
+            loginWindow.ShowDialog();
+        }
+
+        private void AvatarPhotoBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ImageSetter(AvatarPhotoImage);
+        }
+
+        private void HiddenFilesButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SystemContext.FromWhichWindowIsCalled = "DocumentViewingWindow";
+            if (SystemContext.User.PinCode == null)
+            {
+                MessageBox.Show("Назначте код доступа в меню настроек -> Безопасность");
+            }
+            else
+            {
+                EnteringAccessCodeWindow enteringAccessCodeWindow = new EnteringAccessCodeWindow();
+                enteringAccessCodeWindow.Owner = this;
+                enteringAccessCodeWindow.ShowDialog();
+            }
+        }
+
+        private void MyTemplatesButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SystemContext.WindowType = "MyTemplates";
+            SettingsAndPatternWindow settingsAndPatternWindow = new SettingsAndPatternWindow();
+            this.Close();
+            settingsAndPatternWindow.ShowDialog();
+        }
+
+        private void SynchronizationButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SynchronizationWindow synchronizationWindow = new SynchronizationWindow();
+            synchronizationWindow.ShowDialog();
+        }
+
+        private void AccountSettingsButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            AccountSettingsWindow accountSettingsWindow = new AccountSettingsWindow();
+            accountSettingsWindow.ShowDialog();
+        }
+
+        private void SettingsButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SystemContext.WindowType = "Settings";
+            SettingsAndPatternWindow settingsAndPatternWindow = new SettingsAndPatternWindow();
+            this.Close();
+            settingsAndPatternWindow.ShowDialog();
+        }
+
+        private void MenuItemShowOrHideDocuments_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isDocumentNeedToShow = !SystemContext.isDocumentNeedToShow;
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+        }
+
+        private void MenuItemShowOrHideCreditCards_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isCreditCardNeedToShow = !SystemContext.isCreditCardNeedToShow;
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+        }
+
+        private void MenuItemShowOrHideCollections_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isCollectionNeedToShow = !SystemContext.isCollectionNeedToShow;
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+        }
+
+        private void MenuItemShowOrHideFolders_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContext.isFolderNeedToShow = !SystemContext.isFolderNeedToShow;
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+        }
+
+        private void MenuItemShowAll_Click(object sender, RoutedEventArgs e)
+        {
+            SystemContextService.MakeAllElementsShowable(); 
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
         }
     }
 }

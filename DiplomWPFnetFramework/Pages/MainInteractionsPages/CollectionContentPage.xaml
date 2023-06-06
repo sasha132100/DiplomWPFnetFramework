@@ -1,0 +1,101 @@
+﻿<Page x:Class="DiplomWPFnetFramework.Pages.MainInteractionsPages.CollectionContentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages.MainInteractionsPages"
+      mc:Ignorable="d" 
+      d:Height="750" d:Width="1100">
+    <Page.Resources>
+        <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+        <Style x:Key="ButtonProperties" TargetType="Button">
+            <Setter Property="Background" Value="#442C6E"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <ResourceDictionary x:Key="CornerRadiusSetter">
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="120"/>
+            </Style>
+        </ResourceDictionary>
+        <ContextMenu Background="White" x:Key="MyContextMenu">
+            <MenuItem Header="Закрепить" Click="MenuItemLock_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/LockImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Скрыть" Click="MenuItemHide_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/HideImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Удалить" Click="MenuItemDelete_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/DeleteImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Page.Resources>
+    <ScrollViewer Height="Auto" DockPanel.Dock="Top" Padding="0,18,0,0">
+        <Grid>
+            <WrapPanel x:Name="DocumentsViewGrid">
+                <WrapPanel.Resources>
+                    <Style x:Key="ContentBorderStyle" TargetType="Border">
+                        <Setter Property="Width" Value="160"/>
+                        <Setter Property="Height" Value="200"/>
+                        <Setter Property="CornerRadius" Value="10"/>
+                        <Setter Property="Margin" Value="18,0,0,18"/>
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                    </Style>
+                    <Style x:Key="BottomBorderProperties" TargetType="Border">
+                        <Setter Property="Width" Value="158"/>
+                        <Setter Property="Height" Value="48"/>
+                        <Setter Property="Margin" Value="0,0,0,0"/>
+                        <Setter Property="CornerRadius" Value="10"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Bottom"/>
+                        <Setter Property="Background" Value="#6D6F80"/>
+                        <Setter Property="Opacity" Value="0.8"/>
+                    </Style>
+                    <Style x:Key="DocumentTextBlockPropeties" TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="Arial"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Bottom"/>
+                        <Setter Property="Margin" Value="0,0,0,16"/>
+                    </Style>
+                    <ResourceDictionary x:Key="CornerRadiusSetter">
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </ResourceDictionary>
+                </WrapPanel.Resources>
+            </WrapPanel>
+            <Button x:Name="addNewElementsInFolderButton" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,60" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Click="addNewElementsInFolderButton_Click">
+                <Image Source="pack://application:,,,/Resources/addImage.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill"/>
+            </Button>
+            <Border x:Name="CloseCollectionPage" Height="80" Background="#2D346F" VerticalAlignment="Bottom" CornerRadius="20" Margin="0,0,0,-40" MouseLeftButtonUp="CloseFolderPage_MouseLeftButtonUp" Cursor="Hand">
+                <TextBlock x:Name="CollectionNameTextBlock" Style="{StaticResource TextBlockMainProperties}" Margin="0,5,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</Page>

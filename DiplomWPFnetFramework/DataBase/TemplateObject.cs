@@ -26,7 +26,6 @@ namespace DiplomWPFnetFramework.DataBase
         public string Title { get; set; }
         public int TemplateId { get; set; }
     
-        public virtual Template Template { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateDocumentData> TemplateDocumentData { get; set; }
     }
