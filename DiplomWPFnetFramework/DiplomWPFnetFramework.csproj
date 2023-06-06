@@ -155,9 +155,6 @@
     <Compile Include="Pages\MainInteractionsPages\CollectionContentPage.xaml.cs">
       <DependentUpon>CollectionContentPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\DocumentPages\CreditCardPhotoPage.xaml.cs">
-      <DependentUpon>CreditCardPhotoPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\MainInteractionsPages\DocumentViewingPage.xaml.cs">
       <DependentUpon>DocumentViewingPage.xaml</DependentUpon>
     </Compile>
@@ -247,10 +244,6 @@
     <Page Include="Pages\MainInteractionsPages\CollectionContentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\DocumentPages\CreditCardPhotoPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\MainInteractionsPages\DocumentViewingPage.xaml">
       <SubType>Designer</SubType>
@@ -389,6 +382,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataBase\CreateDB\Скрипт создания БД.sql" />
+    <Resource Include="Resources\CreateDocumentScanImage.png" />
+    <Resource Include="Resources\CheckMarkImagePurple.png" />
+    <Resource Include="Resources\ChangeCoverImage.png" />
+    <Resource Include="DataBase\CreateDB\Скрипт создания БД.txt" />
     <Content Include="DataBase\TestModel1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TestModel1.edmx</DependentUpon>
@@ -423,7 +420,6 @@
     <Resource Include="Resources\CheckMarkImage.png" />
     <Resource Include="Resources\DocumentMoreInteractionsImage.png" />
     <Resource Include="Resources\addImage.png" />
-    <Resource Include="DataBase\CreateDB\Скрипт создания БД.txt" />
     <Resource Include="Resources\CreditCardPlugImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -28,6 +28,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
     {
         byte[] polisPhoto1Bytes = null;
         byte[] polisPhoto2Bytes = null;
+        byte[] coverImage = null;
 
         public PolisWindow()
         {
@@ -40,7 +41,11 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         private void LoadContent()
         {
             if (SystemContext.isChange == false)
+            {
+                DocumentMoreInteractionsGrid.Visibility = Visibility.Hidden;
+                confirmButtonImage.Margin = new Thickness(0, 0, 10, 0);
                 return;
+            }
             using (var db = new test123Entities1())
             {
                 var polis = (from p in db.Polis where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Polis>();
@@ -97,11 +102,21 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 DateOfBirthDatePicker.Text != "")
             {
                 if (MaleChoiseRadioButton.IsChecked == true || FemaleChoiseRadioButton.IsChecked == true)
-                    return "Заполнены";
-                return "Не заполнены";
+                    return "Добавить";
+                MessageBoxResult messageBoxResult = MessageBox.Show("Вы заполнили не все поля, вы уверены, что хотите сохранить?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (messageBoxResult == MessageBoxResult.No)
+                    return "Не добавить";
+                else
+                    return "Добавить";
             }
             else
-                return "Не заполнены";
+            {
+                MessageBoxResult messageBoxResult = MessageBox.Show("Вы заполнили не все поля, вы уверены, что хотите сохранить?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (messageBoxResult == MessageBoxResult.No)
+                    return "Не добавить";
+                else
+                    return "Добавить";
+            }
         }
 
         private void AddNewItem()
@@ -109,7 +124,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             using (var db = new test123Entities1())
             {
                 Items item = new Items();
-                item.Title = "NewTitle" + db.Items.OrderByDescending(items => items.Id).FirstOrDefault().Id.ToString();
+                item.Title = "Новый полис" + db.Items.Where(i => i.IType == "Polis" && i.UserId == SystemContext.User.Id).Count();
                 item.IType = "Polis";
                 item.IPriority = 0;
                 item.IsHidden = 0;
@@ -122,16 +137,15 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             }
         }
 
-        private string AddNewPolis()
+        private void AddNewPolis()
         {
-            if (CheckingTheFullness() != "Заполнены")
-                return "Не заполнены";
+            if (CheckingTheFullness() != "Добавить")
+                return;
             using (var db = new test123Entities1())
             {
                 AddNewItem();
                 db.Polis.Add(CreatingPolisObject());
                 db.SaveChanges();
-                return "Добавлен";
             }
         }
 
@@ -178,21 +192,27 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             }
         }
 
-        private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void ChangeCoverImage()
         {
-            if (SystemContext.isChange == false)
+            System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                if (AddNewPolis() == "Не заполнены")
+                string filePath = openFileDialog.FileName;
+                coverImage = File.ReadAllBytes(filePath);
+                Items item;
+                item = SystemContext.Item;
+                using (var db = new test123Entities1())
                 {
-                    MessageBoxResult messageBoxResult = MessageBox.Show("Вы заполнили не все поля, уверены, что хотите выйти?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (messageBoxResult == MessageBoxResult.No)
-                        return;
+                    item.IImage = coverImage;
+                    db.Items.AddOrUpdate(item);
+                    db.SaveChanges();
                 }
             }
-            else
-            {
-                ChangePolis();
-            }
+        }
+
+        private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
             {
                 DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
@@ -216,9 +236,57 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             ImageSetter(PolisPhoto2Holder);
         }
 
+        private void confirmButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (SystemContext.isChange == false)
+            {
+                AddNewPolis();
+            }
+            else
+            {
+                ChangePolis();
+            }
+        }
+
         private void DocumentMoreInteractionsButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            Grid grid = (Grid)sender;
+            var contextMenu = (ContextMenu)this.FindResource("DocumentMoreInteractionsContextMenu");
+            contextMenu.PlacementTarget = grid;
+            contextMenu.IsOpen = true;
+        }
 
+        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (SystemContext.isChange == false)
+            {
+                AddNewPolis();
+            }
+            else
+            {
+                ChangePolis();
+            }
+        }
+
+        private void MenuItemChangeCover_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeCoverImage();
+        }
+
+        private void MenuItemCreateDocumentScan_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Items item;
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+            }
         }
     }
 }

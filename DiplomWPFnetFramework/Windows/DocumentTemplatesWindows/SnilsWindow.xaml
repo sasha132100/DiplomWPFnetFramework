@@ -65,11 +65,41 @@
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="CornerRadius" Value="10"/>
         </Style>
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
         <ResourceDictionary x:Key="CornerRadiusSetter">
             <Style TargetType="Border">
                 <Setter Property="CornerRadius" Value="10"/>
             </Style>
         </ResourceDictionary>
+        <ContextMenu Background="White" x:Key="DocumentMoreInteractionsContextMenu">
+            <MenuItem Header="Сохранить" Click="MenuItemSave_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/CheckMarkImagePurple.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Изменить обложку" Click="MenuItemChangeCover_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/ChangeCoverImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Создать скан документа" Click="MenuItemCreateDocumentScan_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/CreateDocumentScanImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Удалить" Click="MenuItemDelete_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/DeleteImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
     </Window.Resources>
     <DockPanel>
         <DockPanel.Background>
@@ -82,7 +112,12 @@
                 </Grid.Background>
             </Grid>
             <TextBlock x:Name="SNILSOutTextBlock" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Grid Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid x:Name="confirmButtonImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,80,0" MouseLeftButtonUp="confirmButtonImage_MouseLeftButtonUp" Cursor="Hand">
+                <Grid.Background>
+                    <ImageBrush ImageSource="pack://application:,,,/Resources/CheckMarkImage.png"/>
+                </Grid.Background>
+            </Grid>
+            <Grid x:Name="DocumentMoreInteractionsGrid" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Resources\DocumentMoreInteractionsImage.png"/>
                 </Grid.Background>

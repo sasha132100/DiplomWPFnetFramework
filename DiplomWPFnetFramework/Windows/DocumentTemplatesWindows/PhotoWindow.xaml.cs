@@ -26,6 +26,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
     public partial class PhotoWindow : Window
     {
         byte[] photoBytes = null;
+        byte[] coverImage = null;
 
         public PhotoWindow()
         {
@@ -38,7 +39,11 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         private void LoadContent()
         {
             if (SystemContext.isChange == false)
+            {
+                DocumentMoreInteractionsGrid.Visibility = Visibility.Hidden;
+                confirmButtonImage.Margin = new Thickness(0, 0, 10, 0);
                 return;
+            }
             using (var db = new test123Entities1())
             {
                 var photo = SystemContext.Photo;
@@ -94,7 +99,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             using (var db = new test123Entities1())
             {
                 Items item = new Items();
-                item.Title = "NewTitle" + db.Items.OrderByDescending(items => items.Id).FirstOrDefault().Id.ToString();
+                item.Title = "Новая коллекция" + db.Items.Where(i => i.IType == "Collection" && i.UserId == SystemContext.User.Id).Count();
                 item.IType = "Collection";
                 item.IPriority = 0;
                 item.IsHidden = 0;
@@ -132,7 +137,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             if (PhotoHolder.Source == null)
             {
-                MessageBoxResult messageBoxResult = MessageBox.Show("Фото не добавлено, точно хотите выйти?");
+                MessageBoxResult messageBoxResult = MessageBox.Show("Фото не добавлено, точно хотите выйти?", "Предупреждение", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (messageBoxResult == MessageBoxResult.No)
                     return;
                 else if (messageBoxResult == MessageBoxResult.Yes && SystemContext.isChange)
@@ -151,12 +156,31 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             }
             else
             {
-                if (SystemContext.isChange)
-                    ChangePhoto();
+                if (SystemContext.PageForLoadContent is DocumentViewingPage)
+                {
+                    DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                    documentViewingPage.LoadContent();
+                }
                 else
-                    AddNewPhoto();
+                {
+                    FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                    folderContentPage.LoadContent();
+                }
                 this.Close();
             }
+        }
+
+        private void Photo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ImageSetter(PhotoHolder);
+        }
+
+        private void confirmButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (SystemContext.isChange)
+                ChangePhoto();
+            else
+                AddNewPhoto();
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
             {
                 DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
@@ -167,16 +191,39 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
                 folderContentPage.LoadContent();
             }
-        }
-
-        private void Photo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            ImageSetter(PhotoHolder);
+            this.Close();
         }
 
         private void DocumentMoreInteractionsButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            Grid grid = (Grid)sender;
+            var contextMenu = (ContextMenu)this.FindResource("DocumentMoreInteractionsContextMenu");
+            contextMenu.PlacementTarget = grid;
+            contextMenu.IsOpen = true;
+        }
 
+        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (SystemContext.isChange)
+                ChangePhoto();
+            else
+                AddNewPhoto();
+        }
+
+        private void MenuItemCreateDocumentScan_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            Items item;
+            item = SystemContext.Item;
+            using (var db = new test123Entities1())
+            {
+                db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
+            }
         }
     }
 }
