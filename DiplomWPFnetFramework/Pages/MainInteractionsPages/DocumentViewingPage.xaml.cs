@@ -58,7 +58,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                         else
                         {
                             items = (from i in db.Items
-                                     where i.UserId == SystemContext.User.Id && i.IType != "Folder" && (i.FolderId == null || i.FolderId == SystemContext.Item.Id)
+                                     where i.UserId == SystemContext.User.Id && i.IType != "Folder" && (i.FolderId == null || i.FolderId == SystemContext.Item.Id) && i.IsHidden == 0
                                      orderby i.IPriority descending, i.DateCreation
                                      select i).ToList<Items>();
                             addNewImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CheckMarkImage.png"));
