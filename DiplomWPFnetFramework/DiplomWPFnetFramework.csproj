@@ -161,11 +161,17 @@
     <Compile Include="Pages\MainInteractionsPages\FolderContentPage.xaml.cs">
       <DependentUpon>FolderContentPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SettingsPages\AboutAppPage.xaml.cs">
+      <DependentUpon>AboutAppPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SettingsPages\MainSettingsPage.xaml.cs">
       <DependentUpon>MainSettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SettingsPages\MyTemplatesPage.xaml.cs">
       <DependentUpon>MyTemplatesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SettingsPages\PrivacyPolicyPage.xaml.cs">
+      <DependentUpon>PrivacyPolicyPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SettingsPages\PublicTemplatesPage.xaml.cs">
       <DependentUpon>PublicTemplatesPage.xaml</DependentUpon>
@@ -253,11 +259,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\SettingsPages\AboutAppPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SettingsPages\MainSettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SettingsPages\MyTemplatesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SettingsPages\PrivacyPolicyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -382,6 +396,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataBase\CreateDB\Скрипт создания БД.sql" />
+    <Resource Include="Resources\RemoveRedImage.png" />
+    <Resource Include="Resources\HelpImage.png" />
+    <Resource Include="Resources\InfoImage.png" />
+    <Resource Include="Resources\PrivatePolicyImage.png" />
+    <Resource Include="Resources\SecurityImage.png" />
     <Resource Include="Resources\CreateDocumentScanImage.png" />
     <Resource Include="Resources\CheckMarkImagePurple.png" />
     <Resource Include="Resources\ChangeCoverImage.png" />

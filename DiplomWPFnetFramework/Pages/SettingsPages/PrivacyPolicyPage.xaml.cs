@@ -16,23 +16,13 @@ using System.Windows.Shapes;
 namespace DiplomWPFnetFramework.Pages.SettingsPages
 {
     /// <summary>
-    /// Логика взаимодействия для SecurityPage.xaml
+    /// Логика взаимодействия для PrivacyPolicyPage.xaml
     /// </summary>
-    public partial class SecurityPage : Page
+    public partial class PrivacyPolicyPage : Page
     {
-        public SecurityPage()
+        public PrivacyPolicyPage()
         {
             InitializeComponent();
-        }
-
-        private void RemoveAccessCodeImageClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void confirmAccessCodeButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

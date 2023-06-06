@@ -28,14 +28,16 @@
             </Style>
         </ResourceDictionary>
     </Page.Resources>
-    <StackPanel>
-        <TextBlock Text="Системные шаблоны" Style="{StaticResource TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-        <Button x:Name="PassportButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Паспорт" Margin="15,5,15,0" Cursor="Hand" Click="PassportButton_Click"/>
-        <Button x:Name="SNILSButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Снилс" Margin="15,5,15,0" Cursor="Hand" Click="SNILSButton_Click"/>
-        <Button x:Name="INNButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="ИНН" Margin="15,5,15,0" Cursor="Hand" Click="INNButton_Click"/>
-        <Button x:Name="PolisButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Полис" Margin="15,5,15,0" Cursor="Hand" Click="PolisButton_Click"/>
-        <Button x:Name="FolderButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Папка" Margin="15,5,15,0" Cursor="Hand" Click="FolderButton_Click"/>
-        <Button x:Name="CreditCardButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Карта" Margin="15,5,15,0" Cursor="Hand" Click="CreditCardButton_Click"/>
-        <Button x:Name="PhotoButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Фото" Margin="15,5,15,0" Cursor="Hand" Click="PhotoButton_Click"/>
-    </StackPanel>
+    <ScrollViewer>
+        <StackPanel>
+            <TextBlock Text="Системные шаблоны" Style="{StaticResource TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+            <Button x:Name="PassportButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Паспорт" Margin="15,5,15,0" Cursor="Hand" Click="PassportButton_Click"/>
+            <Button x:Name="SNILSButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Снилс" Margin="15,5,15,0" Cursor="Hand" Click="SNILSButton_Click"/>
+            <Button x:Name="INNButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="ИНН" Margin="15,5,15,0" Cursor="Hand" Click="INNButton_Click"/>
+            <Button x:Name="PolisButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Полис" Margin="15,5,15,0" Cursor="Hand" Click="PolisButton_Click"/>
+            <Button x:Name="FolderButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Папка" Margin="15,5,15,0" Cursor="Hand" Click="FolderButton_Click"/>
+            <Button x:Name="CreditCardButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Карта" Margin="15,5,15,0" Cursor="Hand" Click="CreditCardButton_Click"/>
+            <Button x:Name="PhotoButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Фото" Margin="15,5,15,0" Cursor="Hand" Click="PhotoButton_Click"/>
+        </StackPanel>
+    </ScrollViewer>
 </Page>

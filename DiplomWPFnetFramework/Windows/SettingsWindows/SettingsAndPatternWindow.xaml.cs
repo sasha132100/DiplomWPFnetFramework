@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using DiplomWPFnetFramework.DataBase;
 using DiplomWPFnetFramework.Classes;
+using DiplomWPFnetFramework.Pages.SettingsPages;
 
 namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
 {
@@ -25,9 +26,20 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
         {
             InitializeComponent();
             if (SystemContext.WindowType == "Settings")
+            {
                 WindowTypeTextBlock.Text = "Настройки";
+                MainSettingsPage mainSettingsPage = new MainSettingsPage();
+                AboutAppPage aboutAppPage = new AboutAppPage();
+                LeftFrame.Content = mainSettingsPage;
+                RightFrame.Content = aboutAppPage;
+
+            }
             else
+            {
                 WindowTypeTextBlock.Text = "Шаблоны";
+                MyTemplatesPage myTemplatesPage = new MyTemplatesPage();
+                LeftFrame.Content = myTemplatesPage;
+            }
         }
 
         private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

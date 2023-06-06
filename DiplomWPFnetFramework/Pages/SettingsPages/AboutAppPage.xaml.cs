@@ -16,23 +16,16 @@ using System.Windows.Shapes;
 namespace DiplomWPFnetFramework.Pages.SettingsPages
 {
     /// <summary>
-    /// Логика взаимодействия для SecurityPage.xaml
+    /// Логика взаимодействия для AboutAppPage.xaml
     /// </summary>
-    public partial class SecurityPage : Page
+    public partial class AboutAppPage : Page
     {
-        public SecurityPage()
+        public AboutAppPage()
         {
             InitializeComponent();
-        }
-
-        private void RemoveAccessCodeImageClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void confirmAccessCodeButton_Click(object sender, RoutedEventArgs e)
-        {
-
+            Run run = new Run("MyDocsApp.PublicRelations@gmail.com");
+            run.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D346F"));
+            mainTextBlock.Inlines.Add(run);
         }
     }
 }

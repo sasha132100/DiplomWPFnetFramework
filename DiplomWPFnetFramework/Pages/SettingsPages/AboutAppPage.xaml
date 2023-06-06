@@ -1,0 +1,33 @@
+﻿<Page x:Class="DiplomWPFnetFramework.Pages.SettingsPages.AboutAppPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages.SettingsPages"
+      mc:Ignorable="d" 
+      d:DesignHeight="750" d:DesignWidth="450">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <TextBlock Text="О приложении" FontSize="30" FontWeight="Bold" Margin="10" HorizontalAlignment="Center"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,50,0,0">
+            <TextBlock x:Name="mainTextBlock" Text="Приложение MyDocs разработано с целью создания мобильного инструмента для хранения и организации личных данных. В рамках этого приложения под личными данными понимаются персональные документы (паспорт, СНИЛС и пр.), банковские карты и другие ценные информации, которая важна для пользователей.
+                       
+                       Наше приложение помогает пользователю структурировать и хранить его персональные данные, обеспечивая быстрый доступ к ним и гарантируя полную безопасность. Мы предоставляем возможность создавать сканы документов, а также обеспечиваем защиту данных, чтобы ваши личные сведения оставались в безопасности.
+                       
+                       MyDocs позволяет хранить данные непосредственно на вашем устройстве, обеспечивая доступ к ним в любое удобное время. Помимо этого, мы предлагаем возможность синхронизации ваших данных с сервером, чтобы вы могли иметь доступ к своим личным данным в любом месте и на разных устройствах.
+                       
+                       Мы придерживаемся высоких стандартов безопасности и конфиденциальности данных, и мы уделяем особое внимание защите ваших личных данных. Мы стремимся предоставить вам надежный инструмент для хранения и организации вашей ценной информации.
+                       
+                       Если у вас возникнут вопросы или предложения, не стесняйтесь обращаться к нам. 
+                       
+                       Почта для связи с разработчиком: " TextWrapping="Wrap" HorizontalAlignment="Center" Margin="10,10,10,5"/>
+        </ScrollViewer>
+    </Grid>
+</Page>

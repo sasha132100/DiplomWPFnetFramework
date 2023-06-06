@@ -74,7 +74,7 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
             using (var db = new test123Entities1())
             {
                 Items item = new Items();
-                item.Title = "NewFolder" + db.Items.OrderByDescending(items => items.Id).FirstOrDefault().Id.ToString();
+                item.Title = "Новая папка" + db.Items.Where(i => i.IType == "Folder" && i.UserId == SystemContext.User.Id).Count();
                 item.IType = "Folder";
                 item.IPriority = 0;
                 item.IsHidden = 0;

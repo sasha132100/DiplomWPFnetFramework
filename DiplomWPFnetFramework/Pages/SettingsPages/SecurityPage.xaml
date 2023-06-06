@@ -3,12 +3,57 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages"
+      xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages.SettingsPages"
       mc:Ignorable="d" 
-      d:DesignHeight="750" d:DesignWidth="450"
-      Title="SecurityPage">
-
+      d:DesignHeight="750" d:DesignWidth="450">
+    <Page.Resources>
+        <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+        <Style x:Key="TextBoxProperties" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="160"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="ButtonProperties" TargetType="Button">
+            <Setter Property="Background" Value="#442C6E"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <ResourceDictionary x:Key="CornerRadiusSetterForTextBox">
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="10"/>
+            </Style>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="CornerRadiusSetterForButton">
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="120"/>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
     <Grid>
-        
+        <TextBlock Text="Код доступа" Style="{StaticResource TextBlockMainProperties}" FontSize="30" FontWeight="Bold" Margin="10" HorizontalAlignment="Center"/>
+        <StackPanel VerticalAlignment="Top" Margin="0,50,0,0">
+            <TextBlock Style="{StaticResource TextBlockMainProperties}" Text="Введите код доступа" HorizontalAlignment="Center"/>
+            <TextBox x:Name="AccessCodeTextBox" Style="{StaticResource TextBoxProperties}" VerticalContentAlignment="Top" Resources="{StaticResource CornerRadiusSetterForTextBox}" TextWrapping="Wrap" AcceptsReturn="True" Margin="40,10,40,0"/>
+            <Grid Margin="10">
+                <Image Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Margin="50,0,0,0" Source="pack://application:,,,/Resources/RemoveRedImage.png" Stretch="Uniform" MouseLeftButtonUp="RemoveAccessCodeImageClick_MouseLeftButtonUp"/>
+                <Button x:Name="confirmAccessCodeButton" Width="60" Height="60" HorizontalAlignment="Right" Margin="0,0,50,0" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetterForButton}" Click="confirmAccessCodeButton_Click" BorderThickness="0">
+                    <Image Source="pack://application:,,,/Resources/CheckMarkImage.png" Stretch="Uniform"/>
+                </Button>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Page>
