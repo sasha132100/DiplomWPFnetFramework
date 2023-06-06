@@ -15,7 +15,7 @@
         </Style>
     </Page.Resources>
     <Grid>
-        <TextBlock Text="Политика конфиденциальности" FontSize="30" FontWeight="Bold" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+        <TextBlock Text="Политика конфиденциальности" FontSize="28" FontWeight="Bold" Margin="0,10,0,0" HorizontalAlignment="Center"/>
         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,50,0,0">
             <TextBlock x:Name="mainTextBlock" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="10,10,10,5"/>
         </ScrollViewer>
