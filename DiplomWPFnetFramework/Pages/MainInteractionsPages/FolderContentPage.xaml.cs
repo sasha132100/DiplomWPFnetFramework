@@ -206,7 +206,9 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                         break;
 
                     case "Collection":
-                        MessageBox.Show("Открытие коллекции пока не реализовано");
+                        Frame openCollectionPageFrame = parentWindow.FindName("openPageFrame") as Frame;
+                        CollectionContentPage collectionContentPage = new CollectionContentPage();
+                        openCollectionPageFrame.Content = collectionContentPage;
                         break;
 
                     default:
