@@ -1,23 +1,15 @@
-﻿using System;
+﻿using DiplomWPFnetFramework.Classes;
+using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using System;
 using System.Data;
-using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.IO;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using DiplomWPFnetFramework.DataBase;
-using DiplomWPFnetFramework.Classes;
-using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
-using System.Data.Entity.Migrations;
-using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {

@@ -24,5 +24,10 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
         {
             InitializeComponent();
         }
+
+        private void CreateNewTemplateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -30,7 +30,7 @@
             </Grid>
             <Grid Margin="20,10,0,0">
                 <Image Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/PrivatePolicyImage.png" Stretch="Uniform" MouseLeftButtonUp="PrivatePolicyButtonClick_MouseLeftButtonUp"/>
-                <TextBlock Text="Политика конфиденциальности" TextWrapping="Wrap" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,10,0,0" MouseLeftButtonUp="PrivatePolicyButtonClick_MouseLeftButtonUp"/>
+                <TextBlock Text="Политика конфиденциальности" TextWrapping="Wrap" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,10" MouseLeftButtonUp="PrivatePolicyButtonClick_MouseLeftButtonUp"/>
             </Grid>
         </StackPanel>
     </Grid>

@@ -28,22 +28,22 @@
             </Style>
         </ResourceDictionary>
         <ContextMenu Background="White" x:Key="SortContextMenu">
-            <MenuItem Header="Скрыть/показать документы" Click="MenuItemShowOrHideDocuments_Click">
+            <MenuItem x:Name="HideShowDocuments" Header="Скрыть документы" Click="MenuItemShowOrHideDocuments_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/DocumentImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Скрыть/показать карты" Click="MenuItemShowOrHideCreditCards_Click">
+            <MenuItem x:Name="HideShowCreditCards" Header="Скрыть карты" Click="MenuItemShowOrHideCreditCards_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/CreditCardImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Скрыть/показать коллекции" Click="MenuItemShowOrHideCollections_Click">
+            <MenuItem x:Name="HideShowCollections" Header="Скрыть коллекции" Click="MenuItemShowOrHideCollections_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/CollectionImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Скрыть/показать папки" Click="MenuItemShowOrHideFolders_Click">
+            <MenuItem x:Name="HideShowFolders" Header="Скрыть папки" Click="MenuItemShowOrHideFolders_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/FolderImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>

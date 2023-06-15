@@ -1,4 +1,5 @@
-﻿using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+﻿using DiplomWPFnetFramework.Classes;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,16 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
         private void SecurityButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             parentWindow = Window.GetWindow(this);
-            Frame openInfoPageFrame = parentWindow.FindName("RightFrame") as Frame;
-            SecurityPage securityPage = new SecurityPage();
-            openInfoPageFrame.Content = securityPage;
+            if (SystemContext.User.PinCode != null)
+            {
+
+            }
+            else
+            {
+                Frame openSecurityoPageFrame = parentWindow.FindName("RightFrame") as Frame;
+                SecurityPage securityPage = new SecurityPage();
+                openSecurityoPageFrame.Content = securityPage;
+            }
         }
 
         private void HelpButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -52,9 +60,9 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
         private void PrivatePolicyButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             parentWindow = Window.GetWindow(this);
-            Frame openInfoPageFrame = parentWindow.FindName("RightFrame") as Frame;
-            AboutAppPage aboutAppPage = new AboutAppPage();
-            openInfoPageFrame.Content = aboutAppPage;
+            Frame openPrivatePolicyPageFrame = parentWindow.FindName("RightFrame") as Frame;
+            PrivacyPolicyPage privacyPolicyPage = new PrivacyPolicyPage();
+            openPrivatePolicyPageFrame.Content = privacyPolicyPage;
         }
     }
 }

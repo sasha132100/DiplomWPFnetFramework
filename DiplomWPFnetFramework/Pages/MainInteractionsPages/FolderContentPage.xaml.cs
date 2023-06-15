@@ -104,11 +104,29 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             {
                 switch (item.IType)
                 {
-                    case "CreditCard":
-                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CreditCardPlugImage.png"));
+                    case "Passport":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianPassportPlug.png"));
+                        imageBrush.Stretch = Stretch.Uniform;
                         break;
 
-                    case "Folder":
+                    case "INN":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianINNPlug.jpg"));
+                        imageBrush.Stretch = Stretch.Uniform;
+                        break;
+
+                    case "SNILS":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianSNILSPlug.jpg"));
+                        imageBrush.Stretch = Stretch.Uniform;
+                        break;
+
+                    case "CreditCard":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CreditCardPlugImage.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
+                        break;
+
+                    case "Polis":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianPolisPlug.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
                         break;
 
                     case "Collection":
@@ -116,6 +134,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 
                     default:
                         image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/DocumentPlugImage.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
                         break;
                 }
             }

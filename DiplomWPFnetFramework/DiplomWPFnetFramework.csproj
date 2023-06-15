@@ -14,6 +14,21 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -390,12 +405,31 @@
     <Resource Include="Resources\OpenSettingsPageButtonImage.png" />
     <Resource Include="Resources\SortButtonImage.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DataBase\CreateDB\Скрипт создания БД.sql" />
+    <Resource Include="Resources\selected_circleType2.png" />
+    <Resource Include="Resources\unselected_circleType2.png" />
+    <Resource Include="Resources\AvatarPhotoImage.png" />
+    <Resource Include="Resources\RussianPolisPlug.png" />
+    <Resource Include="Resources\RussianINNPlug.jpg" />
+    <Resource Include="Resources\RussianPassportPlug.png" />
+    <Resource Include="Resources\RussianSNILSPlug.jpg" />
+    <Resource Include="Resources\MyTemplateDocumentImage.png" />
     <Resource Include="Resources\RemoveRedImage.png" />
     <Resource Include="Resources\HelpImage.png" />
     <Resource Include="Resources\InfoImage.png" />
@@ -405,6 +439,10 @@
     <Resource Include="Resources\CheckMarkImagePurple.png" />
     <Resource Include="Resources\ChangeCoverImage.png" />
     <Resource Include="DataBase\CreateDB\Скрипт создания БД.txt" />
+    <Content Include="DataBase\test123.mdf" />
+    <Content Include="DataBase\test123_log.ldf">
+      <DependentUpon>test123.mdf</DependentUpon>
+    </Content>
     <Content Include="DataBase\TestModel1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TestModel1.edmx</DependentUpon>
@@ -432,7 +470,6 @@
     <Resource Include="Resources\DeleteImage.png" />
     <Resource Include="Resources\HideImage.png" />
     <Resource Include="Resources\LockImage.png" />
-    <Resource Include="Resources\AvatarPhotoImage.png" />
     <Resource Include="Resources\AppLogo.ico" />
     <Resource Include="Resources\selected_circle.png" />
     <Resource Include="Resources\unselected_circle.png" />

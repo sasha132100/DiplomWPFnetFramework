@@ -1,6 +1,5 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
-using DiplomWPFnetFramework.Windows;
 using DiplomWPFnetFramework.Windows.BufferWindows;
 using DiplomWPFnetFramework.Windows.DocumentTemplatesWindows;
 using System;
@@ -8,17 +7,12 @@ using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 {
@@ -115,12 +109,91 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             }
         }
 
+        private void AddPhotoInCollectionView(Photo photo, Grid parentGrid, int marginTop, int marginRight)
+        {
+            var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyle"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")), Width = 100, Height = 170, VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, marginTop, marginRight, 0) };
+            var mainGrid = new Grid() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
+
+            ImageBrush imageBrush = new ImageBrush();
+            Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
+            image.Source = ByteArrayToImage(photo.PPath);
+
+            imageBrush.ImageSource = image.Source;
+            imageBrush.Stretch = Stretch.UniformToFill;
+            mainGrid.Background = imageBrush;
+            borderPanel.Child = mainGrid;
+            parentGrid.Children.Add(borderPanel);
+        }
+
+        private void AddItemInFolderView(Items item, WrapPanel parentWrapPanel)
+        {
+            var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyleMini"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")) };
+            var mainGrid = new Grid() { Name = "mainGrid", Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetterMini"] };
+            var bottomDarkeningBorder = new Border() { Style = (Style)DocumentsViewGrid.Resources["BottomBorderPropertiesMini"] };
+            var blurEffect = new BlurEffect() { Radius = 5 };
+            borderPanel.Effect = blurEffect;
+
+            ImageBrush imageBrush = new ImageBrush();
+            Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetterMini"] };
+            if (item.IImage != null && item.IImage.ToString() != "")
+                image.Source = ByteArrayToImage(item.IImage);
+            else
+            {
+                switch (item.IType)
+                {
+                    case "Passport":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianPassportPlug.png"));
+                        imageBrush.Stretch = Stretch.Uniform;
+                        break;
+
+                    case "INN":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianINNPlug.jpg"));
+                        imageBrush.Stretch = Stretch.Uniform;
+                        break;
+
+                    case "SNILS":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianSNILSPlug.jpg"));
+                        imageBrush.Stretch = Stretch.Uniform;
+                        break;
+
+                    case "CreditCard":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CreditCardPlugImage.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
+                        break;
+
+                    case "Polis":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianPolisPlug.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
+                        break;
+
+                    case "Collection":
+                        break;
+
+                    default:
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/DocumentPlugImage.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
+                        break;
+                }
+            }
+            imageBrush.ImageSource = image.Source;
+            mainGrid.Background = imageBrush;
+
+            bottomDarkeningBorder.VerticalAlignment = VerticalAlignment.Bottom;
+            TextBlock itemName = new TextBlock() { Text = item.Title, Style = (Style)DocumentsViewGrid.Resources["DocumentTextBlockPropetiesMini"] };
+
+            mainGrid.Children.Add(bottomDarkeningBorder);
+            mainGrid.Children.Add(itemName);
+            borderPanel.Child = mainGrid;
+            parentWrapPanel.Children.Add(borderPanel);
+        }
+
         private void AddNewDocument(Items item)
         {
             var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyle"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")) };
             var mainGrid = new Grid() { Name = "mainGrid", Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
             var bottomDarkeningBorder = new Border() { Style = (Style)DocumentsViewGrid.Resources["BottomBorderProperties"] };
             var contextMenu = (ContextMenu)this.FindResource("MyContextMenu");
+            var wrapPanel = new WrapPanel();
 
             ImageBrush imageBrush = new ImageBrush();
             Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
@@ -130,23 +203,92 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             {
                 switch (item.IType)
                 {
+                    case "Passport":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianPassportPlug.png"));
+                        imageBrush.Stretch = Stretch.Uniform;
+                        break;
+
+                    case "INN":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianINNPlug.jpg"));
+                        imageBrush.Stretch = Stretch.Uniform;
+                        break;
+
+                    case "SNILS":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianSNILSPlug.jpg"));
+                        imageBrush.Stretch = Stretch.Uniform;
+                        break;
+
                     case "CreditCard":
                         image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/CreditCardPlugImage.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
+                        break;
+
+                    case "Polis":
+                        image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianPolisPlug.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
                         break;
 
                     case "Folder":
+                        List<Items> inFolderList;
+                        using (var db = new test123Entities1())
+                        {
+                            inFolderList = (from i in db.Items
+                                            where i.UserId == SystemContext.User.Id && item.Id == i.FolderId
+                                            orderby i.IPriority descending, i.DateCreation
+                                            select i).ToList<Items>();
+                            if (inFolderList.Count >= 4)
+                            {
+                                for (int i = 0; i < 4; i++)
+                                {
+                                    AddItemInFolderView(inFolderList[i], wrapPanel);
+                                }
+                            }
+                            else if (inFolderList.Count > 0)
+                            {
+                                for (int i = 0; i < inFolderList.Count; i++)
+                                {
+                                    AddItemInFolderView(inFolderList[i], wrapPanel);
+                                }
+                            }
+                        }
                         break;
 
                     case "Collection":
+                        List<Photo> photoInCollectionList;
+                        int marginTop = 15, marginRight = 15;
+                        using (var db = new test123Entities1())
+                        {
+                            photoInCollectionList = (from p in db.Photo
+                                                     where p.CollectionID == item.Id
+                                                     select p).ToList<Photo>();
+                            if (photoInCollectionList.Count >= 3)
+                            {
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    AddPhotoInCollectionView(photoInCollectionList[i], mainGrid, marginTop, marginRight);
+                                    marginTop += 15;
+                                    marginRight += 15;
+                                }
+                            }
+                            else if (photoInCollectionList.Count > 0)
+                            {
+                                for (int i = 0; i < photoInCollectionList.Count; i++)
+                                {
+                                    AddPhotoInCollectionView(photoInCollectionList[i], mainGrid, marginTop, marginRight);
+                                    marginTop += 15;
+                                    marginRight += 15;
+                                }
+                            }
+                        }
                         break;
 
                     default:
                         image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/DocumentPlugImage.png"));
+                        imageBrush.Stretch = Stretch.UniformToFill;
                         break;
                 }
             }
             imageBrush.ImageSource = image.Source;
-            imageBrush.Stretch = Stretch.UniformToFill;
             mainGrid.Background = imageBrush;
 
             bottomDarkeningBorder.VerticalAlignment = VerticalAlignment.Bottom;
@@ -173,8 +315,18 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             {
                 Image unselectedImage = new Image() { Name = "unselectedImage", VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 5, 5, 0), Height = 25, Width = 25 };
                 Image selectedImage = new Image() { Name = "selectedImage", VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 5, 5, 0), Height = 25, Width = 25 };
-                unselectedImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/unselected_circle.png"));
-                selectedImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/selected_circle.png"));
+                if ((item.IImage == null || item.IImage.ToString() == "") && item.IType == "Passport")
+                {
+                    unselectedImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/unselected_circleType2.png"));
+                    selectedImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/selected_circleType2.png"));
+                    unselectedImage.Width = 20;
+                    unselectedImage.Height= 20;
+                }
+                else
+                {
+                    unselectedImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/unselected_circle.png"));
+                    selectedImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/selected_circle.png"));
+                }
                 mainGrid.Children.Add(unselectedImage);
                 mainGrid.Children.Add(selectedImage);
                 if (item.IsSelected == 1)
@@ -183,6 +335,8 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                     selectedImage.Visibility = Visibility.Hidden;
             }
 
+            if (item.IType == "Folder")
+                mainGrid.Children.Add(wrapPanel);
             mainGrid.Children.Add(bottomDarkeningBorder);
             mainGrid.Children.Add(itemName);
             borderPanel.Child = mainGrid;

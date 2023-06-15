@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using DiplomWPFnetFramework.Classes;
+using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using DiplomWPFnetFramework.Windows.BufferWindows;
+using DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows;
+using System;
+using System.Data.Entity.Migrations;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using DiplomWPFnetFramework.DataBase;
-using DiplomWPFnetFramework.Classes;
-using DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows;
-using System.IO;
-using DiplomWPFnetFramework.Pages;
-using System.Data.Entity.Migrations;
-using DiplomWPFnetFramework.Windows.BufferWindows;
-using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 
 namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 {
@@ -68,6 +65,39 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             }
         }
 
+        private MenuItem FindMenuItemByName(ContextMenu contextMenu, string menuItemName)
+        {
+            foreach (var item in contextMenu.Items)
+            {
+                if (item is MenuItem menuItem && menuItem.Name == menuItemName)
+                    return menuItem;
+            }
+            return null;
+        }
+
+        private void SetterSortName(ContextMenu contextMenu)
+        {
+            if (!SystemContext.isDocumentNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowDocuments").Header = "Показать документы";
+            else if (SystemContext.isDocumentNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowDocuments").Header = "Скрыть документы";
+
+            if (!SystemContext.isCreditCardNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowCreditCards").Header = "Показать карты";
+            else if (SystemContext.isCreditCardNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowCreditCards").Header = "Скрыть карты";
+
+            if (!SystemContext.isCollectionNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowCollections").Header = "Показать коллекции";
+            else if (SystemContext.isCollectionNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowCollections").Header = "Скрыть коллекции";
+
+            if (!SystemContext.isFolderNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowFolders").Header = "Показать папки";
+            else if (SystemContext.isFolderNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowFolders").Header = "Скрыть папки";
+        }
+
         private void OpenSettingPageButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (SettingsGrid.Width == 0)
@@ -101,6 +131,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         {
             Grid grid = (Grid)sender;
             var contextMenu = (ContextMenu)this.FindResource("SortContextMenu");
+            SetterSortName(contextMenu);
             contextMenu.PlacementTarget = grid;
             contextMenu.IsOpen = true;
         }

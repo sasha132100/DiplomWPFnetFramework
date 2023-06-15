@@ -38,7 +38,9 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
             {
                 WindowTypeTextBlock.Text = "Шаблоны";
                 MyTemplatesPage myTemplatesPage = new MyTemplatesPage();
+                PublicTemplatesPage publicTemplatesPage = new PublicTemplatesPage();
                 LeftFrame.Content = myTemplatesPage;
+                RightFrame.Content = publicTemplatesPage;
             }
         }
 
