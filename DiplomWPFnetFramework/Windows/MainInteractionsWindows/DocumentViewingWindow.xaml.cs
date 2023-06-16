@@ -4,6 +4,7 @@ using DiplomWPFnetFramework.Pages.MainInteractionsPages;
 using DiplomWPFnetFramework.Windows.BufferWindows;
 using DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows;
 using System;
+using System.Linq;
 using System.Data.Entity.Migrations;
 using System.IO;
 using System.Windows;
@@ -29,7 +30,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void CheckIsGuest()
         {
-            LoginOutTextBlock.Text = SystemContext.User.ULogin;
+            LoginOutTextBlock.Text = SystemContext.User.Login;
             DocumentViewingPage documentViewingPage = new DocumentViewingPage();
             openPageFrame.Content = documentViewingPage;
         }
@@ -48,18 +49,18 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                avatarsPhotoBytes = File.ReadAllBytes(filePath);
+                string fileImage = openFileDialog.FileName;
+                avatarsPhotoBytes = File.ReadAllBytes(fileImage);
                 imageName.Source = ByteArrayToImage(avatarsPhotoBytes);
                 AvatarPhotoImage.Width = 150;
                 AvatarPhotoImage.Height = 150;
                 AvatarPhotoImage.Stretch = Stretch.Fill;
-                Users user = new Users();
+                User user = new User();
                 user = SystemContext.User;
-                using (var db = new test123Entities1())
+                using (var db = new LocalMyDocsAppDBEntities())
                 {
                     user.Photo = avatarsPhotoBytes;
-                    db.Users.AddOrUpdate(user);
+                    db.User.AddOrUpdate(user);
                     db.SaveChanges();
                 }
             }
@@ -138,6 +139,14 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void ChangeAccountTextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            using (var db = new LocalMyDocsAppDBEntities())
+            {
+                LastLogginedUser lastLogginedUser = (from llu in db.LastLogginedUser select llu).FirstOrDefault();
+                lastLogginedUser.Email = null;
+                lastLogginedUser.Login = null;
+                db.LastLogginedUser.AddOrUpdate(lastLogginedUser);
+                //db.SaveChanges();
+            }
             LoginWindow loginWindow = new LoginWindow();
             this.Close();
             loginWindow.ShowDialog();
@@ -151,7 +160,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         private void HiddenFilesButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             SystemContext.FromWhichWindowIsCalled = "DocumentViewingWindow";
-            if (SystemContext.User.PinCode == null)
+            if (SystemContext.User.AccessCode == null)
             {
                 MessageBox.Show("Назначте код доступа в меню настроек -> Безопасность");
             }
@@ -191,7 +200,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             settingsAndPatternWindow.ShowDialog();
         }
 
-        private void MenuItemShowOrHideDocuments_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowOrHideDocuments_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isDocumentNeedToShow = !SystemContext.isDocumentNeedToShow;
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
@@ -206,7 +215,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             }
         }
 
-        private void MenuItemShowOrHideCreditCards_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowOrHideCreditCards_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isCreditCardNeedToShow = !SystemContext.isCreditCardNeedToShow;
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
@@ -221,7 +230,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             }
         }
 
-        private void MenuItemShowOrHideCollections_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowOrHideCollections_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isCollectionNeedToShow = !SystemContext.isCollectionNeedToShow;
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
@@ -236,7 +245,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             }
         }
 
-        private void MenuItemShowOrHideFolders_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowOrHideFolders_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isFolderNeedToShow = !SystemContext.isFolderNeedToShow;
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
@@ -251,7 +260,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             }
         }
 
-        private void MenuItemShowAll_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowAll_Click(object sender, RoutedEventArgs e)
         {
             SystemContextService.MakeAllElementsShowable(); 
             if (SystemContext.PageForLoadContent is DocumentViewingPage)

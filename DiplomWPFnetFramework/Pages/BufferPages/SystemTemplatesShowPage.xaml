@@ -28,7 +28,7 @@
             </Style>
         </ResourceDictionary>
     </Page.Resources>
-    <ScrollViewer>
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
         <StackPanel>
             <TextBlock Text="Системные шаблоны" Style="{StaticResource TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
             <Button x:Name="PassportButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Паспорт" Margin="15,5,15,0" Cursor="Hand" Click="PassportButton_Click"/>

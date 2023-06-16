@@ -41,42 +41,42 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         {
             SystemContext.PageForLoadContent = this;
             DocumentsViewGrid.Children.Clear();
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                List<Items> items = null;
+                List<Item> Item = null;
                 try
                 {
                     if (SystemContext.isFromHiddenFiles)
                     {
-                        items = (from i in db.Items
+                        Item = (from i in db.Item
                                  where i.UserId == SystemContext.User.Id && i.IsHidden == 1 && i.FolderId == SystemContext.Folder.Id
-                                 orderby i.IPriority descending, i.DateCreation
-                                 select i).ToList<Items>();
+                                 orderby i.Priority descending, i.DateCreation
+                                 select i).ToList<Item>();
                     }
                     else
                     {
-                        items = (from i in db.Items
+                        Item = (from i in db.Item
                                  where i.UserId == SystemContext.User.Id && i.IsHidden == 0 && i.FolderId == SystemContext.Folder.Id
-                                 orderby i.IPriority descending, i.DateCreation
-                                 select i).ToList<Items>();
+                                 orderby i.Priority descending, i.DateCreation
+                                 select i).ToList<Item>();
                     }
                     if (!SystemContext.isDocumentNeedToShow)
                     {
-                        items.RemoveAll(d => d.IType == "Passport" || d.IType == "INN" || d.IType == "SNILS" || d.IType == "Polis");
+                        Item.RemoveAll(d => d.Type == "Passport" || d.Type == "INN" || d.Type == "SNILS" || d.Type == "Polis");
                     }
                     if (!SystemContext.isCreditCardNeedToShow)
-                        items.RemoveAll(cc => cc.IType == "CreditCard");
+                        Item.RemoveAll(cc => cc.Type == "CreditCard");
                     if (!SystemContext.isCollectionNeedToShow)
-                        items.RemoveAll(c => c.IType == "Collection");
+                        Item.RemoveAll(c => c.Type == "Collection");
                     if (!SystemContext.isFolderNeedToShow)
-                        items.RemoveAll(f => f.IType == "Folder");
+                        Item.RemoveAll(f => f.Type == "Folder");
                 }
                 catch
                 {
                     MessageBox.Show("Ошибка при загрузке документов");
                     return;
                 }
-                foreach (var item in items)
+                foreach (var item in Item)
                     AddNewDocument(item);
             }
         }
@@ -89,7 +89,23 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             }
         }
 
-        private void AddNewDocument(Items item)
+        private void AddPhotoInCollectionView(Photo photo, Grid parentGrid, int marginTop, int marginRight)
+        {
+            var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyle"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")), Width = 100, Height = 170, VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, marginTop, marginRight, 0) };
+            var mainGrid = new Grid() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
+
+            ImageBrush imageBrush = new ImageBrush();
+            Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
+            image.Source = ByteArrayToImage(photo.Image);
+
+            imageBrush.ImageSource = image.Source;
+            imageBrush.Stretch = Stretch.UniformToFill;
+            mainGrid.Background = imageBrush;
+            borderPanel.Child = mainGrid;
+            parentGrid.Children.Add(borderPanel);
+        }
+
+        private void AddNewDocument(Item item)
         {
             var borderPanel = new Border() { BorderBrush = Brushes.LightGray, BorderThickness = new Thickness(2), Style = (Style)DocumentsViewGrid.Resources["ContentBorderStyle"], Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#8a8eab")) };
             var mainGrid = new Grid() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
@@ -98,11 +114,11 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 
             ImageBrush imageBrush = new ImageBrush();
             Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
-            if (item.IImage != null && item.IImage.ToString() != "")
-                image.Source = ByteArrayToImage(item.IImage);
+            if (item.Image != null && item.Image.ToString() != "")
+                image.Source = ByteArrayToImage(item.Image);
             else
             {
-                switch (item.IType)
+                switch (item.Type)
                 {
                     case "Passport":
                         image.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/RussianPassportPlug.png"));
@@ -130,6 +146,32 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                         break;
 
                     case "Collection":
+                        List<Photo> photoInCollectionList;
+                        int marginTop = 15, marginRight = 15;
+                        using (var db = new LocalMyDocsAppDBEntities())
+                        {
+                            photoInCollectionList = (from p in db.Photo
+                                                     where p.CollectionID == item.Id
+                                                     select p).ToList<Photo>();
+                            if (photoInCollectionList.Count >= 3)
+                            {
+                                for (int i = 0; i < 3; i++)
+                                {
+                                    AddPhotoInCollectionView(photoInCollectionList[i], mainGrid, marginTop, marginRight);
+                                    marginTop += 15;
+                                    marginRight += 15;
+                                }
+                            }
+                            else if (photoInCollectionList.Count > 0)
+                            {
+                                for (int i = 0; i < photoInCollectionList.Count; i++)
+                                {
+                                    AddPhotoInCollectionView(photoInCollectionList[i], mainGrid, marginTop, marginRight);
+                                    marginTop += 15;
+                                    marginRight += 15;
+                                }
+                            }
+                        }
                         break;
 
                     default:
@@ -157,7 +199,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             Image LockImage = new Image() { Name = "LockImage", VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(5, 5, 0, 0), Height = 25, Width = 25 };
             LockImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/LockImage.png"));
             mainGrid.Children.Add(LockImage);
-            if (item.IPriority == 0)
+            if (item.Priority == 0)
                 LockImage.Visibility = Visibility.Hidden;
 
             mainGrid.Children.Add(bottomDarkeningBorder);
@@ -174,12 +216,12 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 return;
             }
             parentWindow = Window.GetWindow(this);
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                SystemContext.Item = (sender as Border).Tag as Items;
+                SystemContext.Item = (sender as Border).Tag as Item;
                 SystemContext.isChange = true;
                 SystemContext.PageForLoadContent = this;
-                switch (SystemContext.Item?.IType)
+                switch (SystemContext.Item?.Type)
                 {
                     case "Passport":
                         var passportWindow = new PassportWindow();
@@ -240,9 +282,9 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void ChangeTitleNameButton_Click(object sender, MouseButtonEventArgs e)
         {
             if (sender is TextBlock)
-                SystemContext.Item = (sender as TextBlock).Tag as Items;
+                SystemContext.Item = (sender as TextBlock).Tag as Item;
             else
-                SystemContext.Item = (sender as Border).Tag as Items;
+                SystemContext.Item = (sender as Border).Tag as Item;
             SystemContext.isChangeTitleName = true;
             SystemContext.PageForLoadContent = this;
             ChangeItemTitleNameWindow changeItemTitleNameWindow = new ChangeItemTitleNameWindow();
@@ -272,23 +314,23 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
             Grid grid = border.Child as Grid;
-            SystemContext.Item = border.Tag as Items;
-            Items item;
+            SystemContext.Item = border.Tag as Item;
+            Item item;
             item = SystemContext.Item;
             Image LockImage = grid.Children.OfType<Image>().FirstOrDefault(li => li.Name == "LockImage");
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                if (item.IPriority == 1)
+                if (item.Priority == 1)
                 {
                     LockImage.Visibility = Visibility.Hidden;
-                    item.IPriority = 0;
+                    item.Priority = 0;
                 }
                 else
                 {
                     LockImage.Visibility = Visibility.Visible;
-                    item.IPriority = 1;
+                    item.Priority = 1;
                 }
-                db.Items.AddOrUpdate(item);
+                db.Item.AddOrUpdate(item);
                 db.SaveChanges();
             }
             LoadContent();
@@ -297,10 +339,10 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void MenuItemHide_Click(object sender, RoutedEventArgs e)
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
-            SystemContext.Item = border.Tag as Items;
-            Items item = new Items();
+            SystemContext.Item = border.Tag as Item;
+            Item item = new Item();
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 if (SystemContext.isFromHiddenFiles)
                 {
@@ -310,7 +352,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 {
                     item.IsHidden = 1;
                 }
-                db.Items.AddOrUpdate(item);
+                db.Item.AddOrUpdate(item);
                 db.SaveChanges();
             }
             LoadContent();
@@ -319,10 +361,10 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
-            SystemContext.Item = border.Tag as Items;
-            Items item = new Items();
+            SystemContext.Item = border.Tag as Item;
+            Item item = new Item();
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();

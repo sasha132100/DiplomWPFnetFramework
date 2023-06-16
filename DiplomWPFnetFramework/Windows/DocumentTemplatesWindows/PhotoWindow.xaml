@@ -25,7 +25,7 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <ContextMenu Background="White" x:Key="DocumentMoreInteractionsContextMenu">
-            <MenuItem Header="Сохранить" Click="MenuItemSave_Click">
+            <MenuItem Header="Сохранить" Click="MenuItemave_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/CheckMarkImagePurple.png" Width="16" Height="16"/>
                 </MenuItem.Icon>

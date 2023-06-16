@@ -71,17 +71,19 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
 
         private void FolderButton_Click(object sender, RoutedEventArgs e)
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                Items item = new Items();
-                item.Title = "Новая папка" + db.Items.Where(i => i.IType == "Folder" && i.UserId == SystemContext.User.Id).Count();
-                item.IType = "Folder";
-                item.IPriority = 0;
+                Item item = new Item();
+                item.Id = Guid.NewGuid();
+                item.Title = "Новая папка " + (db.Item.Where(i => i.Type == "Folder" && i.UserId == SystemContext.User.Id).Count() + 1);
+                item.Type = "Folder";
+                item.Priority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
                 item.DateCreation = DateTime.Now;
+                item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
-                db.Items.AddOrUpdate(item);
+                db.Item.AddOrUpdate(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
             }

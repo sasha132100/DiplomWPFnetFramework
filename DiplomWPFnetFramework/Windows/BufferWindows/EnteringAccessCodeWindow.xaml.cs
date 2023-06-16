@@ -1,5 +1,6 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Pages.SettingsPages;
 using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
 using DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows;
 using System;
@@ -43,7 +44,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                     return;
                 }
 
-                if (CodeCheckTextBox.Password == SystemContext.User.PinCode)
+                if (CodeCheckTextBox.Password == SystemContext.User.AccessCode)
                 {
                     SystemContext.isFromHiddenFiles = true;
                     HiddenFilesViewerWindow hiddenFilesViewerWindow = new HiddenFilesViewerWindow();
@@ -54,15 +55,43 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                 else
                     MessageBox.Show("Код доступа введен неправильно!");
             }
-            else
+            else if (SystemContext.FromWhichWindowIsCalled == "LoginWindow")
             {
-                if (CodeCheckTextBox.Password == SystemContext.User.PinCode)
+                if (CodeCheckTextBox.Password == null || CodeCheckTextBox.Password == "")
                 {
-                    SystemContext.isFromHiddenFiles = true;
+                    MessageBox.Show("Введите код доступа");
+                    return;
+                }
+                
+                if (CodeCheckTextBox.Password == SystemContext.User.AccessCode)
+                {
+                    SystemContext.isFromHiddenFiles = false;
                     DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
                     this.Owner.Close();
                     this.Close();
                     documentViewingWindow.ShowDialog();
+                }
+                else
+                    MessageBox.Show("Код введен неправильно!");
+            }
+            else
+            {
+                if (CodeCheckTextBox.Password == null || CodeCheckTextBox.Password == "")
+                {
+                    MessageBox.Show("Введите код доступа");
+                    return;
+                }
+
+                if (CodeCheckTextBox.Password == SystemContext.User.AccessCode)
+                {
+                    SystemContext.isFromHiddenFiles = false;
+                    if (this.Owner is SettingsAndPatternWindow)
+                    {
+                        SettingsAndPatternWindow settingsAndPatternWindow = this.Owner as SettingsAndPatternWindow;
+                        SecurityPage securityPage = new SecurityPage();
+                        settingsAndPatternWindow.RightFrame.Content = securityPage;
+                    }
+                    this.Close();
                 }
                 else
                     MessageBox.Show("Код введен неправильно!");
@@ -82,7 +111,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                         return;
                     }
 
-                    if (CodeCheckTextBox.Password == SystemContext.User.PinCode)
+                    if (CodeCheckTextBox.Password == SystemContext.User.AccessCode)
                     {
                         HiddenFilesViewerWindow hiddenFilesViewerWindow = new HiddenFilesViewerWindow();
                         this.Owner.Close();

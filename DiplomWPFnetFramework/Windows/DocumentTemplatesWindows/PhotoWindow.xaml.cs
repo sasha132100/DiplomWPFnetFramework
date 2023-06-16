@@ -1,6 +1,8 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
 using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using Microsoft.Office.Interop.Word;
+using Microsoft.Win32;
 using System;
 using System.Data.Entity.Migrations;
 using System.IO;
@@ -9,13 +11,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Application = Microsoft.Office.Interop.Word.Application;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
     /// <summary>
     /// Логика взаимодействия для PhotoWindow.xaml
     /// </summary>
-    public partial class PhotoWindow : Window
+    public partial class PhotoWindow : System.Windows.Window
     {
         byte[] photoBytes = null;
         byte[] coverImage = null;
@@ -36,13 +39,13 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 confirmButtonImage.Margin = new Thickness(0, 0, 10, 0);
                 return;
             }
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 var photo = SystemContext.Photo;
                 try
                 {
-                    PhotoHolder.Source = ByteArrayToImage(photo.PPath);
-                    photoBytes = photo.PPath;
+                    PhotoHolder.Source = ByteArrayToImage(photo.Image);
+                    photoBytes = photo.Image;
                 }
                 catch
                 {
@@ -58,8 +61,8 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                photoBytes = File.ReadAllBytes(filePath);
+                string fileImage = openFileDialog.FileName;
+                photoBytes = File.ReadAllBytes(fileImage);
                 imageName.Source = ByteArrayToImage(photoBytes);
             }
         }
@@ -74,31 +77,33 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private Photo CreatingPhotoObject()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 Photo photo = new Photo();
                 if (SystemContext.isChange == false)
                     photo.CollectionID = SystemContext.NewItem.Id;
                 else
                     photo = SystemContext.Photo;
-                photo.PPath = photoBytes;
+                photo.Image = photoBytes;
                 return photo;
             }
         }
 
         private void AddNewItem()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                Items item = new Items();
-                item.Title = "Новая коллекция" + db.Items.Where(i => i.IType == "Collection" && i.UserId == SystemContext.User.Id).Count();
-                item.IType = "Collection";
-                item.IPriority = 0;
+                Item item = new Item();
+                item.Id = Guid.NewGuid();
+                item.Title = "Новая коллекция " + (db.Item.Where(i => i.Type == "Collection" && i.UserId == SystemContext.User.Id).Count() + 1);
+                item.Type = "Collection";
+                item.Priority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
                 item.DateCreation = DateTime.Now;
+                item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
-                db.Items.AddOrUpdate(item);
+                db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
             }
@@ -106,7 +111,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private string AddNewPhoto()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 AddNewItem();
                 db.Photo.Add(CreatingPhotoObject());
@@ -117,7 +122,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void ChangePhoto()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Photo.AddOrUpdate(CreatingPhotoObject());
                 db.SaveChanges();
@@ -134,7 +139,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                     return;
                 else if (messageBoxResult == MessageBoxResult.Yes && SystemContext.isChange)
                 {
-                    using (var db = new test123Entities1())
+                    using (var db = new LocalMyDocsAppDBEntities())
                     {
                         var photo = SystemContext.Photo;
                         db.Entry(photo).State = System.Data.Entity.EntityState.Deleted;
@@ -194,7 +199,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             contextMenu.IsOpen = true;
         }
 
-        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        private void MenuItemave_Click(object sender, RoutedEventArgs e)
         {
             if (SystemContext.isChange)
                 ChangePhoto();
@@ -204,14 +209,38 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void MenuItemCreateDocumentScan_Click(object sender, RoutedEventArgs e)
         {
+            Photo photo;
+            using (var db = new LocalMyDocsAppDBEntities())
+            {
+                photo = (from p in db.Photo where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Photo>();
+            }
+            Application wordApp = new Application();
 
+            Document doc = wordApp.Documents.Add();
+
+            Paragraph photoParagraph = doc.Content.Paragraphs.Add();
+            photoParagraph.Range.Text = $"{photo.Image}";
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+            saveFileDialog.FileName = "CreditCardDetails.pdf";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string outputPath = saveFileDialog.FileName;
+
+                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+            }
+            else
+            {
+                return;
+            }
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-            Items item;
+            Item item;
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();

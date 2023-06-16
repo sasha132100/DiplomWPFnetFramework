@@ -44,7 +44,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
             contextMenu.IsOpen = true;
         }
 
-        private void MenuItemShowOrHideDocuments_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowOrHideDocuments_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isDocumentNeedToShow = !SystemContext.isDocumentNeedToShow;
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
@@ -59,7 +59,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
             }
         }
 
-        private void MenuItemShowOrHideCreditCards_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowOrHideCreditCards_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isCreditCardNeedToShow = !SystemContext.isCreditCardNeedToShow;
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
@@ -74,7 +74,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
             }
         }
 
-        private void MenuItemShowOrHideCollections_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowOrHideCollections_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isCollectionNeedToShow = !SystemContext.isCollectionNeedToShow;
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
@@ -89,7 +89,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
             }
         }
 
-        private void MenuItemShowOrHideFolders_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowOrHideFolders_Click(object sender, RoutedEventArgs e)
         {
             SystemContext.isFolderNeedToShow = !SystemContext.isFolderNeedToShow;
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
@@ -104,7 +104,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
             }
         }
 
-        private void MenuItemShowAll_Click(object sender, RoutedEventArgs e)
+        private void MenuItemhowAll_Click(object sender, RoutedEventArgs e)
         {
             SystemContextService.MakeAllElementsShowable();
             if (SystemContext.PageForLoadContent is DocumentViewingPage)

@@ -14,10 +14,11 @@ namespace DiplomWPFnetFramework.DataBase
     
     public partial class Photo
     {
-        public int Id { get; set; }
-        public byte[] PPath { get; set; }
-        public int CollectionID { get; set; }
+        public System.Guid Id { get; set; }
+        public byte[] Image { get; set; }
+        public System.Guid CollectionID { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
-        public virtual Items Items { get; set; }
+        public virtual Item Item { get; set; }
     }
 }

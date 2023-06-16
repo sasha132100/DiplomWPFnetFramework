@@ -1,7 +1,5 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
-using DiplomWPFnetFramework.Pages;
-using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
@@ -20,14 +18,13 @@ using System.Windows.Shapes;
 namespace DiplomWPFnetFramework.Windows.BufferWindows
 {
     /// <summary>
-    /// Логика взаимодействия для ChangeItemTitleNameWindow.xaml
+    /// Логика взаимодействия для TemplateObjectTitleNameSetterWindow.xaml
     /// </summary>
-    public partial class ChangeItemTitleNameWindow : Window
+    public partial class TemplateObjectTitleNameSetterWindow : Window
     {
-        public ChangeItemTitleNameWindow()
+        public TemplateObjectTitleNameSetterWindow()
         {
             InitializeComponent();
-            TitleNameTextBlock.Text = SystemContext.Item.Title;
         }
 
         private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -39,14 +36,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
         {
             if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
             {
-                Item item;
-                using (var db = new LocalMyDocsAppDBEntities())
-                {
-                    item = SystemContext.Item;
-                    item.Title = NewTitleNameTextBox.Text;
-                    db.Item.AddOrUpdate(item);
-                    db.SaveChanges();
-                }
+                SystemContext.TemplateObjectTitle = NewTitleNameTextBox.Text;
                 MessageBox.Show("Название успешно изменено");
                 this.Close();
             }
@@ -58,18 +48,11 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
 
         private void NewTitleNameTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
                 {
-                    Item item;
-                    using (var db = new LocalMyDocsAppDBEntities())
-                    {
-                        item = SystemContext.Item;
-                        item.Title = NewTitleNameTextBox.Text;
-                        db.Item.AddOrUpdate(item);
-                        db.SaveChanges();
-                    }
+                    SystemContext.TemplateObjectTitle = NewTitleNameTextBox.Text;
                     MessageBox.Show("Название успешно изменено");
                     this.Close();
                 }

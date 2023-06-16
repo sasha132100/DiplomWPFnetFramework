@@ -1,7 +1,9 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using DiplomWPFnetFramework.Windows.BufferWindows;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,9 +34,12 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
         private void SecurityButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             parentWindow = Window.GetWindow(this);
-            if (SystemContext.User.PinCode != null)
+            if (SystemContext.User.AccessCode != null)
             {
-
+                SystemContext.FromWhichWindowIsCalled = "Another";
+                EnteringAccessCodeWindow enteringAccessCodeWindow = new EnteringAccessCodeWindow();
+                enteringAccessCodeWindow.Owner = parentWindow;
+                enteringAccessCodeWindow.ShowDialog();
             }
             else
             {
@@ -46,7 +51,9 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
 
         private void HelpButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            //
+            string fileName = "HelpMyDocsApp.pdf";
+            string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+            Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
         }
 
         private void InfoButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

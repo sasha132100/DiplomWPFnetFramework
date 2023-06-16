@@ -28,27 +28,27 @@
             </Style>
         </ResourceDictionary>
         <ContextMenu Background="White" x:Key="SortContextMenu">
-            <MenuItem Header="Скрыть/показать документы" Click="MenuItemShowOrHideDocuments_Click">
+            <MenuItem Header="Скрыть/показать документы" Click="MenuItemhowOrHideDocuments_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/DocumentImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Скрыть/показать карты" Click="MenuItemShowOrHideCreditCards_Click">
+            <MenuItem Header="Скрыть/показать карты" Click="MenuItemhowOrHideCreditCards_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/CreditCardImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Скрыть/показать коллекции" Click="MenuItemShowOrHideCollections_Click">
+            <MenuItem Header="Скрыть/показать коллекции" Click="MenuItemhowOrHideCollections_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/CollectionImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Скрыть/показать папки" Click="MenuItemShowOrHideFolders_Click">
+            <MenuItem Header="Скрыть/показать папки" Click="MenuItemhowOrHideFolders_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/FolderImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Показать все" Click="MenuItemShowAll_Click">
+            <MenuItem Header="Показать все" Click="MenuItemhowAll_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/ShowAllImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>

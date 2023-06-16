@@ -1,5 +1,8 @@
-﻿using System;
+﻿using DiplomWPFnetFramework.Classes;
+using DiplomWPFnetFramework.DataBase;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,12 +30,33 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
 
         private void RemoveAccessCodeImageClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
+            using (var db = new LocalMyDocsAppDBEntities())
+            {
+                User user = SystemContext.User;
+                user.AccessCode = null;
+                db.User.AddOrUpdate(user);
+                db.SaveChanges();
+                SystemContext.User = user;
+            }
         }
 
         private void confirmAccessCodeButton_Click(object sender, RoutedEventArgs e)
         {
+            if (AccessCodeTextBox.Text == "")
+            {
+                MessageBox.Show("Введите код доступа");
+                return;
+            }
 
+            User user = SystemContext.User;
+            user.AccessCode = AccessCodeTextBox.Text;
+
+            using (var db = new LocalMyDocsAppDBEntities())
+            {
+                db.User.AddOrUpdate(user);
+                db.SaveChanges();
+                SystemContext.User = user;
+            }
         }
     }
 }

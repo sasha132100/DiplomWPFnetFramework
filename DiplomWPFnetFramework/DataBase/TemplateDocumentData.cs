@@ -14,10 +14,11 @@ namespace DiplomWPFnetFramework.DataBase
     
     public partial class TemplateDocumentData
     {
-        public int Id { get; set; }
-        public string TDDValue { get; set; }
-        public int TemplateObjectId { get; set; }
-        public int TemplateDocumentId { get; set; }
+        public System.Guid Id { get; set; }
+        public string Value { get; set; }
+        public System.Guid TemplateObjectId { get; set; }
+        public System.Guid TemplateDocumentId { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
         public virtual TemplateDocument TemplateDocument { get; set; }
         public virtual TemplateObject TemplateObject { get; set; }

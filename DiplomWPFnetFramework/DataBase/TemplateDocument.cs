@@ -20,9 +20,11 @@ namespace DiplomWPFnetFramework.DataBase
             this.TemplateDocumentData = new HashSet<TemplateDocumentData>();
         }
     
-        public int Id { get; set; }
-        public int TemplateId { get; set; }
+        public System.Guid Id { get; set; }
+        public System.Guid TemplateId { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
+        public virtual Item Item { get; set; }
         public virtual Template Template { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateDocumentData> TemplateDocumentData { get; set; }

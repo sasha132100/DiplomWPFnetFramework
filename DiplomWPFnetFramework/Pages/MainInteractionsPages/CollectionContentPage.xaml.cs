@@ -40,7 +40,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void LoadContent()
         {
             DocumentsViewGrid.Children.Clear();
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 List<Photo> photoes = null;
                 try
@@ -75,7 +75,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 
             ImageBrush imageBrush = new ImageBrush();
             Image image = new Image() { Resources = (ResourceDictionary)DocumentsViewGrid.Resources["CornerRadiusSetter"] };
-            image.Source = ByteArrayToImage(photo.PPath);
+            image.Source = ByteArrayToImage(photo.Image);
 
             imageBrush.ImageSource = image.Source;
             imageBrush.Stretch = Stretch.UniformToFill;
@@ -90,23 +90,29 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             DocumentsViewGrid.Children.Add(borderPanel);
         }
 
-        private void ImageSetter()
+        private string ImageSetter()
         {
             System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                photoBytes = File.ReadAllBytes(filePath);
+                string fileImage = openFileDialog.FileName;
+                photoBytes = File.ReadAllBytes(fileImage);
+                return "Успешно";
+            }
+            else
+            {
+                return "Отмена";
             }
         }
 
         private Photo CreatingPhotoObject()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 Photo photo = new Photo();
-                photo.PPath = photoBytes;
+                photo.Id = Guid.NewGuid();
+                photo.Image = photoBytes;
                 photo.CollectionID = SystemContext.Item.Id;
                 return photo;
             }
@@ -114,7 +120,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 
         private string AddNewPhoto()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Photo.Add(CreatingPhotoObject());
                 db.SaveChanges();
@@ -126,7 +132,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void ChangeItemButton_Click(object sender, MouseButtonEventArgs e)
         {
             parentWindow = Window.GetWindow(this);
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 SystemContext.Photo = (sender as Border).Tag as Photo;
                 SystemContext.isChange = true;
@@ -137,8 +143,10 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
 
         private void addNewElementsInFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            ImageSetter();
-            AddNewPhoto();
+            if (ImageSetter() == "Успешно")
+                AddNewPhoto();
+            else
+                return;
         }
 
         private void CloseFolderPage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -160,13 +168,13 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void MenuItemLock_Click(object sender, RoutedEventArgs e)
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
-            SystemContext.Item = border.Tag as Items;
-            Items item = new Items();
+            SystemContext.Item = border.Tag as Item;
+            Item item = new Item();
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                item.IPriority = 1;
-                db.Items.AddOrUpdate(item);
+                item.Priority = 1;
+                db.Item.AddOrUpdate(item);
                 db.SaveChanges();
             }
         }
@@ -174,13 +182,13 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void MenuItemHide_Click(object sender, RoutedEventArgs e)
         {
             Border border = (Border)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget;
-            SystemContext.Item = border.Tag as Items;
-            Items item = new Items();
+            SystemContext.Item = border.Tag as Item;
+            Item item = new Item();
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 item.IsHidden = 1;
-                db.Items.AddOrUpdate(item);
+                db.Item.AddOrUpdate(item);
                 db.SaveChanges();
             }
         }
@@ -191,7 +199,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             SystemContext.Photo = border.Tag as Photo;
             Photo photo;
             photo = SystemContext.Photo;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Entry(photo).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();

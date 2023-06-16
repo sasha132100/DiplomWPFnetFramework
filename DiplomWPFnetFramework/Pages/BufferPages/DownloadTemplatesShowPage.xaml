@@ -5,10 +5,32 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages.BufferPages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="DownloadTemplatesShowPage">
-
-    <Grid>
-        
-    </Grid>
+      d:DesignHeight="495" d:DesignWidth="520">
+    <Page.Resources>
+        <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+        <Style x:Key="ButtonProperties" TargetType="Button">
+            <Setter Property="Background" Value="#442C6E"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <ResourceDictionary x:Key="CornerRadiusSetter">
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="10"/>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+        <StackPanel x:Name="mainStackPanel">
+            <TextBlock Text="Cкаченные шаблоны" Style="{StaticResource TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        </StackPanel>
+    </ScrollViewer>
 </Page>

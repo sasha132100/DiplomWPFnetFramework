@@ -17,13 +17,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Linq;
+using Microsoft.Office.Interop.Word;
+using Application = Microsoft.Office.Interop.Word.Application;
+using Paragraph = Microsoft.Office.Interop.Word.Paragraph;
+using Microsoft.Win32;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
     /// <summary>
     /// Логика взаимодействия для CreditCardWindow.xaml
     /// </summary>
-    public partial class CreditCardWindow : Window
+    public partial class CreditCardWindow : System.Windows.Window
     {
         byte[] creditCardImageBytes = null;
         byte[] coverImage = null;
@@ -44,7 +49,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 confirmButtonImage.Margin = new Thickness(0, 0, 10, 0);
                 return;
             }
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 var creditCard = (from p in db.CreditCard where p.Id == SystemContext.Item.Id select p).FirstOrDefault<CreditCard>();
                 CardNumberTextBox.Text = creditCard.Number;
@@ -59,7 +64,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private CreditCard CreatingCreditCardObject()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 CreditCard creditCard = new CreditCard();
                 if (SystemContext.isChange == false)
@@ -93,17 +98,19 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void AddNewItem()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                Items item = new Items();
-                item.Title = "Новая карта" + db.Items.Where(i => i.IType == "CreditCard" && i.UserId == SystemContext.User.Id).Count();
-                item.IType = "CreditCard";
-                item.IPriority = 0;
+                Item item = new Item();
+                item.Id = Guid.NewGuid();
+                item.Title = "Новая карта " + (db.Item.Where(i => i.Type == "CreditCard" && i.UserId == SystemContext.User.Id).Count() + 1);
+                item.Type = "CreditCard";
+                item.Priority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
                 item.DateCreation = DateTime.Now;
+                item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
-                db.Items.AddOrUpdate(item);
+                db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
             }
@@ -113,7 +120,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             if (CheckingTheFullness() != "Добавить")
                 return;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 AddNewItem();
                 db.CreditCard.Add(CreatingCreditCardObject());
@@ -123,7 +130,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void ChangeCreditCard()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.CreditCard.AddOrUpdate(CreatingCreditCardObject());
                 db.SaveChanges();
@@ -137,8 +144,8 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                creditCardImageBytes = File.ReadAllBytes(filePath);
+                string fileImage = openFileDialog.FileName;
+                creditCardImageBytes = File.ReadAllBytes(fileImage);
                 imageName.Source = ByteArrayToImage(creditCardImageBytes);
             }
         }
@@ -157,14 +164,14 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                coverImage = File.ReadAllBytes(filePath);
-                Items item;
+                string fileImage = openFileDialog.FileName;
+                coverImage = File.ReadAllBytes(fileImage);
+                Item item;
                 item = SystemContext.Item;
-                using (var db = new test123Entities1())
+                using (var db = new LocalMyDocsAppDBEntities())
                 {
-                    item.IImage = coverImage;
-                    db.Items.AddOrUpdate(item);
+                    item.Image = coverImage;
+                    db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
             }
@@ -215,6 +222,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             if (SystemContext.isChange == false)
             {
                 AddNewCreditCard();
+                BackWindowButtonImage_MouseLeftButtonUp(sender, e);
             }
             else
             {
@@ -227,7 +235,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             ImageSetter(CreditCardPhotoHolder);
         }
 
-        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        private void MenuItemave_Click(object sender, RoutedEventArgs e)
         {
             if (SystemContext.isChange == false)
             {
@@ -246,14 +254,47 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void MenuItemCreateDocumentScan_Click(object sender, RoutedEventArgs e)
         {
+            CreditCard creditCard;
+            using (var db = new LocalMyDocsAppDBEntities())
+            {
+                creditCard = (from p in db.CreditCard where p.Id == SystemContext.Item.Id select p).FirstOrDefault<CreditCard>();
+            }
+            Application wordApp = new Application();
 
+            Document doc = wordApp.Documents.Add();
+
+            Paragraph numberParagraph = doc.Content.Paragraphs.Add();
+            numberParagraph.Range.Text = $"Number: {creditCard.Number}";
+
+            Paragraph fioParagraph = doc.Content.Paragraphs.Add();
+            fioParagraph.Range.Text = $"FIO: {creditCard.FIO}";
+
+            Paragraph expiryDateParagraph = doc.Content.Paragraphs.Add();
+            expiryDateParagraph.Range.Text = $"Expiry Date: {creditCard.ExpiryDate}";
+
+            Paragraph cvvParagraph = doc.Content.Paragraphs.Add();
+            cvvParagraph.Range.Text = $"CVV: {creditCard.CVV}";
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+            saveFileDialog.FileName = "CreditCardDetails.pdf";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string outputPath = saveFileDialog.FileName;
+
+                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+            }
+            else
+            {
+                return;
+            }
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-            Items item;
+            Item item;
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();

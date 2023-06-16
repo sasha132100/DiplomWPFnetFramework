@@ -32,12 +32,12 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
                 return "Минимальный размер пароля: 8 символов!";
             if (password != confirmPas)
                 return "Пароли не соответсвуют друг другу!";
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                var user = (from u in db.Users where u.Email == email select u).FirstOrDefault<Users>();
+                var user = (from u in db.User where u.Email == email select u).FirstOrDefault<User>();
                 if (user != null)
                     return "Пользователь с такой почтой уже существует!";
-                db.Users.Add(new Users() { Email = email, ULogin = login, UPassword = password, Syncing = "No" });
+                db.User.Add(new User() { Email = email, Login = login, Password = password });
                 db.SaveChanges();
             }
             return "Регистрация прошла успешно!";

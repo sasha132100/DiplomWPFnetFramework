@@ -12,18 +12,10 @@ namespace DiplomWPFnetFramework.DataBase
     using System;
     using System.Collections.Generic;
     
-    public partial class Polis
+    public partial class LastLogginedUser
     {
-        public System.Guid Id { get; set; }
-        public string Number { get; set; }
-        public string FIO { get; set; }
-        public string Gender { get; set; }
-        public Nullable<System.DateTime> BirthDate { get; set; }
-        public byte[] PhotoPage1 { get; set; }
-        public byte[] PhotoPage2 { get; set; }
-        public string ValidUntil { get; set; }
-        public Nullable<System.DateTime> UpdateTime { get; set; }
-    
-        public virtual Item Item { get; set; }
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string Login { get; set; }
     }
 }

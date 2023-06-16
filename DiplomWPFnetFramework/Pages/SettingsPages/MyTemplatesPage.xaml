@@ -13,6 +13,12 @@
             <Setter Property="Foreground" Value="#FCF3DC"/>
             <Setter Property="Margin" Value="0,10,0,0"/>
         </Style>
+        <Style x:Key="Templates" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="40,15,0,0"/>
+        </Style>
         <Style x:Key="TextBoxProperties" TargetType="TextBox">
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="26"/>
@@ -43,9 +49,9 @@
         <Button x:Name="CreateNewTemplateButton" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Content="Создать шаблон" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Margin="10,10,10,10" Cursor="Hand" Click="CreateNewTemplateButton_Click"/>
         <Border CornerRadius="10" Margin="10,0,10,10" Height="Auto" Background = "#2D346F" >
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                <Grid>
+                <StackPanel x:Name="mainStackPanel">
                     
-                </Grid>
+                </StackPanel>
             </ScrollViewer>
         </Border>
     </DockPanel>

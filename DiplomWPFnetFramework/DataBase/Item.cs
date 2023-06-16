@@ -12,32 +12,34 @@ namespace DiplomWPFnetFramework.DataBase
     using System;
     using System.Collections.Generic;
     
-    public partial class Items
+    public partial class Item
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Items()
+        public Item()
         {
             this.Photo = new HashSet<Photo>();
         }
     
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
         public string Title { get; set; }
-        public string IType { get; set; }
-        public byte[] IImage { get; set; }
-        public int IPriority { get; set; }
+        public string Type { get; set; }
+        public byte[] Image { get; set; }
+        public int Priority { get; set; }
         public int IsHidden { get; set; }
         public int IsSelected { get; set; }
         public System.DateTime DateCreation { get; set; }
-        public Nullable<int> FolderId { get; set; }
-        public Nullable<int> UserId { get; set; }
+        public Nullable<System.Guid> FolderId { get; set; }
+        public int UserId { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
         public virtual CreditCard CreditCard { get; set; }
         public virtual INN INN { get; set; }
+        public virtual User User { get; set; }
         public virtual Passport Passport { get; set; }
-        public virtual Polis Polis { get; set; }
-        public virtual SNILS SNILS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Photo> Photo { get; set; }
-        public virtual Users Users { get; set; }
+        public virtual Polis Polis { get; set; }
+        public virtual SNILS SNILS { get; set; }
+        public virtual TemplateDocument TemplateDocument { get; set; }
     }
 }

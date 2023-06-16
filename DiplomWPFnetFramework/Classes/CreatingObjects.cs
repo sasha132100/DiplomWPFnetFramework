@@ -10,9 +10,9 @@ namespace DiplomWPFnetFramework.Classes
 {
     internal class CreatingObjects
     {
-        public static Passport CreatingPassportObject(int id, string serialNumber, string divisionCode, DateTime giveDate, string byWhom, string fio, DateTime birthDate, string gender, string birthPlace, string residencePlace)
+        public static Passport CreatingPassportObject(Guid id, string serialNumber, string divisionCode, DateTime giveDate, string byWhom, string fio, DateTime birthDate, string gender, string birthPlace, string residencePlace)
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 Passport passport = new Passport();
                 passport.Id = id;
@@ -29,12 +29,12 @@ namespace DiplomWPFnetFramework.Classes
             }
         }
 
-        public static Items CreateNewItemObject(string itemType)
+        public static Item CreateNewItemObject(string itemType)
         {
-            Items item = new Items();
+            Item item = new Item();
             item.Title = "NewTitle";
-            item.IType = itemType;
-            item.IPriority = 0;
+            item.Type = itemType;
+            item.Priority = 0;
             item.IsHidden = 0;
             item.IsSelected = 0;
             item.DateCreation = DateTime.Now;
