@@ -34,29 +34,29 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
 
         private void LoadContent()
         {
-            List<Item> items = new List<Item>();
+            List<Template> templates = new List<Template>();
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                items = (from i in db.Item
-                         where i.UserId == SystemContext.User.Id && i.Type == "Template"
-                         orderby i.Priority descending, i.DateCreation
-                         select i).ToList<Item>();
+                templates = (from t in db.Template
+                         where t.UserId == SystemContext.User.Id
+                         orderby t.Date
+                         select t).ToList<Template>();
             }
-            foreach (var item in items)
+            foreach (var template in templates)
             {
-                AddNewButton(item);
+                AddNewButton(template);
             }
         }
 
-        private void AddNewButton(Item item)
+        private void AddNewButton(Template template)
         {
             Button templateButton = new Button() { Style = (Style)this.Resources["ButtonProperties"], Resources = (ResourceDictionary)this.Resources["CornerRadiusSetter"], Margin = new Thickness(15,5,15,0) };
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                Template currentTemplate = (from t in db.Template where t.Id == item.Id select t).FirstOrDefault();
-                templateButton.Content = currentTemplate.Name;
-                templateButton.Tag = currentTemplate;
+                templateButton.Content = template.Name;
+                templateButton.Tag = template;
                 templateButton.Click += TemplateButton_Click;
+                mainStackPanel.Children.Add(templateButton);
             }
         }
 
