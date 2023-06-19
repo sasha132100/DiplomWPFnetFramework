@@ -28,9 +28,43 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
             openPageFrame.Content = documentViewingPage;
         }
 
+        private MenuItem FindMenuItemByName(ContextMenu contextMenu, string menuItemName)
+        {
+            foreach (var item in contextMenu.Items)
+            {
+                if (item is MenuItem menuItem && menuItem.Name == menuItemName)
+                    return menuItem;
+            }
+            return null;
+        }
+
+        private void SetterSortName(ContextMenu contextMenu)
+        {
+            if (!SystemContext.isDocumentNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowDocuments").Header = "Показать документы";
+            else if (SystemContext.isDocumentNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowDocuments").Header = "Скрыть документы";
+
+            if (!SystemContext.isCreditCardNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowCreditCards").Header = "Показать карты";
+            else if (SystemContext.isCreditCardNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowCreditCards").Header = "Скрыть карты";
+
+            if (!SystemContext.isCollectionNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowCollections").Header = "Показать коллекции";
+            else if (SystemContext.isCollectionNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowCollections").Header = "Скрыть коллекции";
+
+            if (!SystemContext.isFolderNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowFolders").Header = "Показать папки";
+            else if (SystemContext.isFolderNeedToShow)
+                FindMenuItemByName(contextMenu, "HideShowFolders").Header = "Скрыть папки";
+        }
+
         private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             SystemContext.isFromHiddenFiles = false;
+            SystemContext.isFromFolder = false;
             DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
             this.Close();
             documentViewingWindow.ShowDialog();
@@ -40,6 +74,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
         {
             Grid grid = (Grid)sender;
             var contextMenu = (ContextMenu)this.FindResource("SortContextMenu");
+            SetterSortName(contextMenu);
             contextMenu.PlacementTarget = grid;
             contextMenu.IsOpen = true;
         }

@@ -59,6 +59,9 @@
     <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
@@ -143,9 +146,6 @@
       <DependentUpon>DbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DataBase\SNILS.cs">
-      <DependentUpon>DbModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataBase\sysdiagrams.cs">
       <DependentUpon>DbModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DataBase\Template.cs">
@@ -469,6 +469,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>LocalMyDocsAppDB.mdf</DependentUpon>
     </Content>
+    <Resource Include="Resources\LockImageWhite.png" />
     <Resource Include="Resources\selected_circleType2.png" />
     <Resource Include="Resources\unselected_circleType2.png" />
     <Resource Include="Resources\AvatarPhotoImage.png" />

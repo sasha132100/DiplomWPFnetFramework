@@ -4,21 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="fe7977f04cab41589b68ccfe471dcc2f" Name="Diagram1">
+      <Diagram DiagramId="e7e248577e5442db92c1f2408f971a05" Name="Diagram1">
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.CreditCard" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.INN" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.Item" Width="1.5" PointX="3" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="LocalMyDocsAppDBModel.LastLogginedUser" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.Passport" Width="1.5" PointX="5.25" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.Photo" Width="1.5" PointX="5.25" PointY="15.375" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.Polis" Width="1.5" PointX="5.25" PointY="18.125" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.SNILS" Width="1.5" PointX="5.25" PointY="21.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="LocalMyDocsAppDBModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.Template" Width="1.5" PointX="3" PointY="25.5" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.TemplateDocument" Width="1.5" PointX="8.25" PointY="19" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.TemplateDocumentData" Width="1.5" PointX="10.5" PointY="22.375" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.TemplateObject" Width="1.5" PointX="5.25" PointY="25.625" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.User" Width="1.5" PointX="0.75" PointY="14.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="LocalMyDocsAppDBModel.LastLogginedUser" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <AssociationConnector Association="LocalMyDocsAppDBModel.FK_CreditCard_Item" ManuallyRouted="false" />
         <AssociationConnector Association="LocalMyDocsAppDBModel.FK_INN_Item" ManuallyRouted="false" />
         <AssociationConnector Association="LocalMyDocsAppDBModel.FK_Item_User" ManuallyRouted="false" />

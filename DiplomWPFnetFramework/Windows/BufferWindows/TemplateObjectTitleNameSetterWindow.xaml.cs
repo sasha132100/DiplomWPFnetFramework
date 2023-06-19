@@ -29,6 +29,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
 
         private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            SystemContext.TemplateObjectTitle = "";
             this.Close();
         }
 
@@ -37,12 +38,11 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
             if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
             {
                 SystemContext.TemplateObjectTitle = NewTitleNameTextBox.Text;
-                MessageBox.Show("Название успешно изменено");
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Введите данные!");
+                MessageBox.Show("Введите данные!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -53,12 +53,11 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                 if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
                 {
                     SystemContext.TemplateObjectTitle = NewTitleNameTextBox.Text;
-                    MessageBox.Show("Название успешно изменено");
                     this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Введите новое название!");
+                    MessageBox.Show("Введите данные!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
         }

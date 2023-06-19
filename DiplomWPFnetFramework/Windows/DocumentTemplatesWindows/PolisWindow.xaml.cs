@@ -23,6 +23,7 @@ using Application = Microsoft.Office.Interop.Word.Application;
 using Paragraph = Microsoft.Office.Interop.Word.Paragraph;
 using Microsoft.Win32;
 using System.Xml.Linq;
+using Path = System.IO.Path;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
@@ -288,34 +289,43 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 polis = (from p in db.Polis where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Polis>();
             }
+
             Application wordApp = new Application();
 
             Document doc = wordApp.Documents.Add();
 
-            Paragraph numberParagraph = doc.Content.Paragraphs.Add();
-            numberParagraph.Range.Text = $"Number: {polis.Number}";
+            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
+            passportParagraph.Range.Text = "";
+            passportParagraph.Range.Text += $"Номер: {polis.Number}";
+            passportParagraph.Range.Text += $"ФИО: {polis.FIO}";
+            passportParagraph.Range.Text += $"Пол: {polis.Gender}";
+            passportParagraph.Range.Text += $"Дата рождения: {polis.BirthDate}";
+            passportParagraph.Range.Text += $"Годен до: {polis.ValidUntil}";
 
-            Paragraph fioParagraph = doc.Content.Paragraphs.Add();
-            fioParagraph.Range.Text = $"FIO: {polis.FIO}";
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Paragraph genderParagraph = doc.Content.Paragraphs.Add();
-            genderParagraph.Range.Text = $"Gender: {polis.Gender}";
+            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+            imageRange1.InsertParagraphAfter();
 
-            Paragraph birthDateParagraph = doc.Content.Paragraphs.Add();
-            birthDateParagraph.Range.Text = $"Birth Date: {polis.BirthDate}";
+            string tempImage1Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage1Path, polis.PhotoPage1);
+            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+            File.Delete(tempImage1Path);
 
-            Paragraph photo1Paragraph = doc.Content.Paragraphs.Add();
-            photo1Paragraph.Range.Text = $"FIO: {polis.PhotoPage1}";
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Paragraph photo2Paragraph = doc.Content.Paragraphs.Add();
-            photo2Paragraph.Range.Text = $"Expiry Date: {polis.PhotoPage2}";
+            Range imageRange2 = doc.Content.Paragraphs.Add().Range;
+            imageRange2.InsertParagraphAfter();
 
-            Paragraph validUntilParagraph = doc.Content.Paragraphs.Add();
-            validUntilParagraph.Range.Text = $"CVV: {polis.ValidUntil}";
+            string tempImage2Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage2Path, polis.PhotoPage2);
+            InlineShape shape2 = imageRange2.InlineShapes.AddPicture(tempImage2Path);
+            File.Delete(tempImage2Path);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
-            saveFileDialog.FileName = "CreditCardDetails.pdf";
+            saveFileDialog.FileName = $"{SystemContext.Item.Title}.pdf";
+
             if (saveFileDialog.ShowDialog() == true)
             {
                 string outputPath = saveFileDialog.FileName;
@@ -337,6 +347,17 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
         }
     }
 }

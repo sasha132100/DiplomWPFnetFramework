@@ -157,6 +157,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             {
                 FolderContentPage folderContentPage = new FolderContentPage();
                 openDocumentViewingPageFrame.Content = folderContentPage;
+                SystemContext.isFromFolder = false;
             }
             else
             {

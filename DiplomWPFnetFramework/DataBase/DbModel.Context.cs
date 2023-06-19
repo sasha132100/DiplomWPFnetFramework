@@ -28,16 +28,15 @@ namespace DiplomWPFnetFramework.DataBase
         public virtual DbSet<CreditCard> CreditCard { get; set; }
         public virtual DbSet<INN> INN { get; set; }
         public virtual DbSet<Item> Item { get; set; }
+        public virtual DbSet<LastLogginedUser> LastLogginedUser { get; set; }
         public virtual DbSet<Passport> Passport { get; set; }
         public virtual DbSet<Photo> Photo { get; set; }
         public virtual DbSet<Polis> Polis { get; set; }
         public virtual DbSet<SNILS> SNILS { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Template> Template { get; set; }
         public virtual DbSet<TemplateDocument> TemplateDocument { get; set; }
         public virtual DbSet<TemplateDocumentData> TemplateDocumentData { get; set; }
         public virtual DbSet<TemplateObject> TemplateObject { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<LastLogginedUser> LastLogginedUser { get; set; }
     }
 }

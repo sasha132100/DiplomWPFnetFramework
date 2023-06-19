@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows"
         mc:Ignorable="d"
+        ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        Title="Изменение данных аккаунта" Height="475" Width="410" MinHeight="475" MinWidth="410">
+        Title="Синхронизация с сервером" Height="475" Width="410" MinHeight="475" MinWidth="410" Icon="/Resources/AppLogo.ico">
     <Window.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>

@@ -42,11 +42,15 @@
         <TextBlock Text="Доступные шаблоны" FontSize="30" FontWeight="Bold" Margin="10" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
         <Border CornerRadius="10" Margin="10,0,10,10" Height="Auto" Background = "#2D346F" >
             <Grid>
-                <TextBox Style="{StaticResource TextBoxProperties}" Resources="{StaticResource CornerRadiusSetter}" VerticalAlignment="Top" Margin="10"/>
-                <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                    <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" Style="{StaticResource TextBoxProperties}" Resources="{StaticResource CornerRadiusSetter}" VerticalAlignment="Top" Margin="10"/>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" >
+                    <StackPanel>
 
-                    </Grid>
+                    </StackPanel>
                 </ScrollViewer>
             </Grid>
         </Border>

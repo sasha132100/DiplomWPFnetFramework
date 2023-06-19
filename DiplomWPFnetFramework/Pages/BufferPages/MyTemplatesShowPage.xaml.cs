@@ -38,7 +38,7 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
             using (var db = new LocalMyDocsAppDBEntities())
             {
                 items = (from i in db.Item
-                         where i.UserId == SystemContext.User.Id && i.Type != "Template"
+                         where i.UserId == SystemContext.User.Id && i.Type == "Template"
                          orderby i.Priority descending, i.DateCreation
                          select i).ToList<Item>();
             }
@@ -53,8 +53,7 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
             Button templateButton = new Button() { Style = (Style)this.Resources["ButtonProperties"], Resources = (ResourceDictionary)this.Resources["CornerRadiusSetter"], Margin = new Thickness(15,5,15,0) };
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                TemplateDocument templateDocument = (from td in db.TemplateDocument where td.Id == item.Id select td).FirstOrDefault();
-                Template currentTemplate = (from t in db.Template where t.Id == templateDocument.TemplateId select t).FirstOrDefault();
+                Template currentTemplate = (from t in db.Template where t.Id == item.Id select t).FirstOrDefault();
                 templateButton.Content = currentTemplate.Name;
                 templateButton.Tag = currentTemplate;
                 templateButton.Click += TemplateButton_Click;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using DiplomWPFnetFramework.DataBase;
 
@@ -32,5 +33,7 @@ namespace DiplomWPFnetFramework.Classes
         public static string ObjectType { get; set; } = "";
         public static string TemplateObjectTitle { get; set; } = "";
         public static Template Template { get; set; } = null;
+        public static bool isSystemStart { get; set; } = true;
+        public static Window loginWindow { get; set; } = null;
     }
 }

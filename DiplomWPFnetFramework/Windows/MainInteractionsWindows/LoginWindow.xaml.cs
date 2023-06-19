@@ -29,16 +29,21 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
                 LastLogginedUser lastLogginedUser = (from llu in db.LastLogginedUser select llu).FirstOrDefault();
                 if (lastLogginedUser == null)
                 {
-                    /*db.LastLogginedUser.Add(new LastLogginedUser());
-                    db.SaveChanges();*/
+                    db.LastLogginedUser.Add(new LastLogginedUser());
+                    db.SaveChanges();
                     return;
                 }
                 if (lastLogginedUser.Email != null && lastLogginedUser.Login != null)
                     SystemContext.User = (from u in db.User where u.Email == lastLogginedUser.Email && u.Login == lastLogginedUser.Login select u).FirstOrDefault();
                 if (SystemContext.User == null || SystemContext.User.AccessCode == null)
                     return;
+                if (!SystemContext.isSystemStart)
+                    return;
+                if (SystemContext.isGuest)
+                    return;
                 SystemContext.FromWhichWindowIsCalled = "LoginWindow";
                 EnteringAccessCodeWindow enteringAccessCodeWindow = new EnteringAccessCodeWindow();
+                SystemContext.loginWindow = this;
                 enteringAccessCodeWindow.ShowDialog();
             }
         }
@@ -60,8 +65,8 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
                 LastLogginedUser lastLogginedUser = (from llu in db.LastLogginedUser select llu).FirstOrDefault();
                 lastLogginedUser.Login = login;
                 lastLogginedUser.Email = email;
-                /*db.LastLogginedUser.AddOrUpdate(lastLogginedUser);
-                db.SaveChanges();*/
+                db.LastLogginedUser.AddOrUpdate(lastLogginedUser);
+                db.SaveChanges();
             }
             return $"Добро пожаловать, {login}!";
         }

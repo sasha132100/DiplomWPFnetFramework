@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DiplomWPFnetFramework.Windows.BufferWindows"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        Title="Изменение названия" Height="195" Width="520" MinHeight="195" MinWidth="520">
+        Title="Изменение названия" Height="195" Width="520" MinHeight="195" MinWidth="520" Icon="/Resources/AppLogo.ico">
     <Window.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>

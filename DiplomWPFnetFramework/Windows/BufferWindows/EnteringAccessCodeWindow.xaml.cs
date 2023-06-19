@@ -67,7 +67,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                 {
                     SystemContext.isFromHiddenFiles = false;
                     DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
-                    this.Owner.Close();
+                    SystemContext.loginWindow.Close();
                     this.Close();
                     documentViewingWindow.ShowDialog();
                 }

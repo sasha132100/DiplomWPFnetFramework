@@ -306,8 +306,11 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
             itemName.MouseLeftButtonUp += ChangeTitleNameButton_Click;
 
             Image LockImage = new Image() { Name = "LockImage", VerticalAlignment = VerticalAlignment.Top, HorizontalAlignment = HorizontalAlignment.Left, Margin = new Thickness(5, 5, 0, 0), Height = 25, Width = 25 };
-            LockImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/LockImage.png"));
-            mainGrid.Children.Add(LockImage);
+            if (item.Type == "Folder" || (item.Type == "Passport" && item.Image == null))
+                LockImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/LockImageWhite.png"));
+            else
+                LockImage.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/LockImage.png"));
+
             if (item.Priority == 0)
                 LockImage.Visibility = Visibility.Hidden;
 
@@ -339,6 +342,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 mainGrid.Children.Add(wrapPanel);
             mainGrid.Children.Add(bottomDarkeningBorder);
             mainGrid.Children.Add(itemName);
+            mainGrid.Children.Add(LockImage);
             borderPanel.Child = mainGrid;
             DocumentsViewGrid.Children.Add(borderPanel);
         }
@@ -615,6 +619,25 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
         private void Window_Closed(object sender, EventArgs e)
         {
             LoadContent();
+        }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            var contextMenu = sender as ContextMenu;
+            Border border = contextMenu.PlacementTarget as Border;
+            Item item = border.Tag as Item;
+
+            MenuItem LockMenu = contextMenu.Items[0] as MenuItem;
+            MenuItem HideMenu = contextMenu.Items[1] as MenuItem;
+
+            if (item.IsHidden == 1)
+                HideMenu.Header = "Сделать публичным";
+            else
+                HideMenu.Header = "Скрыть";
+            if (item.Priority == 1)
+                LockMenu.Header = "Открепить";
+            else
+                LockMenu.Header = "Закрепить";
         }
     }
 }

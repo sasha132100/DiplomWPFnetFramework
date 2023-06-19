@@ -33,6 +33,12 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             LoginOutTextBlock.Text = SystemContext.User.Login;
             DocumentViewingPage documentViewingPage = new DocumentViewingPage();
             openPageFrame.Content = documentViewingPage;
+            if (SystemContext.isGuest)
+            {
+                AccountSettingsTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6D6F80"));
+                SynchronizationTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6D6F80"));
+                MyTemplatesTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6D6F80"));
+            }
         }
 
         private BitmapSource ByteArrayToImage(byte[] buffer)
@@ -141,11 +147,15 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         {
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                LastLogginedUser lastLogginedUser = (from llu in db.LastLogginedUser select llu).FirstOrDefault();
-                lastLogginedUser.Email = null;
-                lastLogginedUser.Login = null;
-                db.LastLogginedUser.AddOrUpdate(lastLogginedUser);
-                //db.SaveChanges();
+                if (!SystemContext.isGuest)
+                {
+                    LastLogginedUser lastLogginedUser = (from llu in db.LastLogginedUser select llu).FirstOrDefault();
+                    lastLogginedUser.Email = null;
+                    lastLogginedUser.Login = null;
+                    db.LastLogginedUser.AddOrUpdate(lastLogginedUser);
+                    db.SaveChanges();
+                    SystemContext.isSystemStart = false;
+                }
             }
             LoginWindow loginWindow = new LoginWindow();
             this.Close();
@@ -154,6 +164,11 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void AvatarPhotoBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (SystemContext.isGuest)
+            {
+                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!");
+                return;
+            }
             ImageSetter(AvatarPhotoImage);
         }
 
@@ -174,6 +189,11 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void MyTemplatesButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (SystemContext.isGuest)
+            {
+                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!");
+                return;
+            }
             SystemContext.WindowType = "MyTemplates";
             SettingsAndPatternWindow settingsAndPatternWindow = new SettingsAndPatternWindow();
             this.Close();
@@ -182,12 +202,22 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void SynchronizationButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (SystemContext.isGuest)
+            {
+                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!");
+                return;
+            }
             SynchronizationWindow synchronizationWindow = new SynchronizationWindow();
             synchronizationWindow.ShowDialog();
         }
 
         private void AccountSettingsButtonClick_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (SystemContext.isGuest)
+            {
+                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!");
+                return;
+            }
             AccountSettingsWindow accountSettingsWindow = new AccountSettingsWindow();
             accountSettingsWindow.ShowDialog();
         }

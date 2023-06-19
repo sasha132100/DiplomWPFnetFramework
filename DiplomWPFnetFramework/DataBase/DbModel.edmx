@@ -47,8 +47,6 @@
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "LocalMyDocsAppDB.dbo.LastLogginedUser" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="LastLogginedUser">
           <Key>
             <PropertyRef Name="Id" />
@@ -112,16 +110,6 @@
           <Property Name="RegistrationDate" Type="datetime" />
           <Property Name="PhotoPage1" Type="image" />
           <Property Name="UpdateTime" Type="datetime" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Template">
           <Key>
@@ -343,13 +331,13 @@
           <End Role="Template" Type="Self.Template" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="0..1" />
+          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Template">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="TemplateObject">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="TemplateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -357,23 +345,16 @@
           <EntitySet Name="CreditCard" EntityType="Self.CreditCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="INN" EntityType="Self.INN" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LastLogginedUser" EntityType="Self.LastLogginedUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Passport" EntityType="Self.Passport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Photo" EntityType="Self.Photo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Polis" EntityType="Self.Polis" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SNILS" EntityType="Self.SNILS" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Template" EntityType="Self.Template" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateDocument" EntityType="Self.TemplateDocument" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateDocumentData" EntityType="Self.TemplateDocumentData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TemplateObject" EntityType="Self.TemplateObject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="LastLogginedUser" EntityType="Self.LastLogginedUser" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [LastLogginedUser].[Id] AS [Id], 
-    [LastLogginedUser].[Email] AS [Email], 
-    [LastLogginedUser].[Login] AS [Login]
-    FROM [dbo].[LastLogginedUser] AS [LastLogginedUser]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_CreditCard_Item" Association="Self.FK_CreditCard_Item">
             <End Role="Item" EntitySet="Item" />
             <End Role="CreditCard" EntitySet="CreditCard" />
@@ -484,6 +465,14 @@
           <NavigationProperty Name="SNILS" Relationship="Self.FK_SNILS_Item" FromRole="Item" ToRole="SNILS" />
           <NavigationProperty Name="TemplateDocument" Relationship="Self.FK_TemplateDocument_Item" FromRole="Item" ToRole="TemplateDocument" />
         </EntityType>
+        <EntityType Name="LastLogginedUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Login" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Passport">
           <Key>
             <PropertyRef Name="Id" />
@@ -543,16 +532,6 @@
           <Property Name="PhotoPage1" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Item" Relationship="Self.FK_SNILS_Item" FromRole="SNILS" ToRole="Item" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Template">
           <Key>
@@ -617,14 +596,6 @@
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Item" Relationship="Self.FK_Item_User" FromRole="User" ToRole="Item" />
           <NavigationProperty Name="Template" Relationship="Self.FK_Template_User" FromRole="User" ToRole="Template" />
-        </EntityType>
-        <EntityType Name="LastLogginedUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Login" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_CreditCard_Item">
           <End Role="Item" Type="Self.Item" Multiplicity="1">
@@ -768,13 +739,13 @@
           <End Role="Template" Type="Self.Template" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="0..1" />
+          <End Role="TemplateObject" Type="Self.TemplateObject" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Template">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="TemplateObject">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="TemplateId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -808,17 +779,16 @@
           <EntitySet Name="CreditCard" EntityType="Self.CreditCard" />
           <EntitySet Name="INN" EntityType="Self.INN" />
           <EntitySet Name="Item" EntityType="Self.Item" />
+          <EntitySet Name="LastLogginedUser" EntityType="Self.LastLogginedUser" />
           <EntitySet Name="Passport" EntityType="Self.Passport" />
           <EntitySet Name="Photo" EntityType="Self.Photo" />
           <EntitySet Name="Polis" EntityType="Self.Polis" />
           <EntitySet Name="SNILS" EntityType="Self.SNILS" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Template" EntityType="Self.Template" />
           <EntitySet Name="TemplateDocument" EntityType="Self.TemplateDocument" />
           <EntitySet Name="TemplateDocumentData" EntityType="Self.TemplateDocumentData" />
           <EntitySet Name="TemplateObject" EntityType="Self.TemplateObject" />
           <EntitySet Name="User" EntityType="Self.User" />
-          <EntitySet Name="LastLogginedUser" EntityType="Self.LastLogginedUser" />
           <AssociationSet Name="FK_CreditCard_Item" Association="Self.FK_CreditCard_Item">
             <End Role="Item" EntitySet="Item" />
             <End Role="CreditCard" EntitySet="CreditCard" />
@@ -923,6 +893,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LastLogginedUser">
+            <EntityTypeMapping TypeName="LocalMyDocsAppDBModel.LastLogginedUser">
+              <MappingFragment StoreEntitySet="LastLogginedUser">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Passport">
             <EntityTypeMapping TypeName="LocalMyDocsAppDBModel.Passport">
               <MappingFragment StoreEntitySet="Passport">
@@ -983,17 +962,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="LocalMyDocsAppDBModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Template">
             <EntityTypeMapping TypeName="LocalMyDocsAppDBModel.Template">
               <MappingFragment StoreEntitySet="Template">
@@ -1048,15 +1016,6 @@
                 <ScalarProperty Name="Photo" ColumnName="Photo" />
                 <ScalarProperty Name="AccessCode" ColumnName="AccessCode" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LastLogginedUser">
-            <EntityTypeMapping TypeName="LocalMyDocsAppDBModel.LastLogginedUser">
-              <MappingFragment StoreEntitySet="LastLogginedUser">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Login" ColumnName="Login" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

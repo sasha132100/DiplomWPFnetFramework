@@ -153,6 +153,10 @@ namespace DiplomWPFnetFramework.Windows.SettingsWindows
 
         private void TitleNameWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (SystemContext.TemplateObjectTitle == "")
+            {
+                return;
+            }
             switch (SystemContext.ObjectType) 
             {
                 case "TextBox":
@@ -180,14 +184,14 @@ namespace DiplomWPFnetFramework.Windows.SettingsWindows
                         foreach (var templateObject in allTemplateObjects)
                         {
                             db.TemplateObject.AddOrUpdate(templateObject);
-                            //db.SaveChanges();
+                            db.SaveChanges();
                         }
                     }
                     this.Close();
                     break;
 
                 default:
-                    MessageBox.Show("Ошибка при определении типа объекта");
+                    MessageBox.Show("Ошибка при определении типа объекта!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     break;
             }
         }

@@ -10,9 +10,15 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Globalization;
+using System.Windows.Data;
 using Application = Microsoft.Office.Interop.Word.Application;
+using Paragraph = Microsoft.Office.Interop.Word.Paragraph;
+using Path = System.IO.Path;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
@@ -310,36 +316,50 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             Document doc = wordApp.Documents.Add();
 
-            Paragraph serialNumberParagraph = doc.Content.Paragraphs.Add();
-            serialNumberParagraph.Range.Text = $"Serial Number: {passport.SerialNumber}";
+            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
+            passportParagraph.Range.Text = "";
+            passportParagraph.Range.Text += $"Серия и номер: {passport.SerialNumber}";
+            passportParagraph.Range.Text += $"ФИО: {passport.FIO}";
+            passportParagraph.Range.Text += $"Пол: {passport.Gender}";
+            passportParagraph.Range.Text += $"Дата рождения: {passport.BirthDate}";
+            passportParagraph.Range.Text += $"Место рождения: {passport.BirthPlace}";
+            passportParagraph.Range.Text += $"Место жительства: {passport.ResidencePlace}";
+            passportParagraph.Range.Text += $"Кем выдан: {passport.ByWhom}";
+            passportParagraph.Range.Text += $"Код подразделения: {passport.DivisionCode}";
+            passportParagraph.Range.Text += $"Дата выдачи: {passport.GiveDate}";
 
-            Paragraph fioParagraph = doc.Content.Paragraphs.Add();
-            fioParagraph.Range.Text = $"FIO: {passport.FIO}";
+            string tempFaceImagePath = Path.GetTempFileName();
+            File.WriteAllBytes(tempFaceImagePath, passport.FacePhoto);
+            InlineShape shape = doc.InlineShapes.AddPicture(tempFaceImagePath);
+            shape.LockAspectRatio = Microsoft.Office.Core.MsoTriState.msoFalse;
+            shape.Width = 180;
+            shape.Height = 220;
+            File.Delete(tempFaceImagePath);
 
-            Paragraph genderParagraph = doc.Content.Paragraphs.Add();
-            genderParagraph.Range.Text = $"Gender: {passport.Gender}";
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Paragraph birthDateParagraph = doc.Content.Paragraphs.Add();
-            birthDateParagraph.Range.Text = $"Birth Date: {passport.BirthDate}";
+            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+            imageRange1.InsertParagraphAfter();
 
-            Paragraph birthPlaceParagraph = doc.Content.Paragraphs.Add();
-            birthPlaceParagraph.Range.Text = $"Birth Place: {passport.BirthPlace}";
+            string tempImage1Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage1Path, passport.PhotoPage1);
+            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+            File.Delete(tempImage1Path);
 
-            Paragraph residencePlaceParagraph = doc.Content.Paragraphs.Add();
-            residencePlaceParagraph.Range.Text = $"Residence Place: {passport.ResidencePlace}";
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Paragraph byWhomParagraph = doc.Content.Paragraphs.Add();
-            byWhomParagraph.Range.Text = $"By Whom: {passport.ByWhom}";
+            Range imageRange2 = doc.Content.Paragraphs.Add().Range;
+            imageRange2.InsertParagraphAfter();
 
-            Paragraph divisionCodeParagraph = doc.Content.Paragraphs.Add();
-            divisionCodeParagraph.Range.Text = $"Division Code: {passport.DivisionCode}";
-
-            Paragraph giveDateParagraph = doc.Content.Paragraphs.Add();
-            giveDateParagraph.Range.Text = $"Give Date: {passport.GiveDate}";
+            string tempImage2Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage2Path, passport.PhotoPage2);
+            InlineShape shape2 = imageRange2.InlineShapes.AddPicture(tempImage2Path);
+            File.Delete(tempImage2Path);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
-            saveFileDialog.FileName = "CreditCardDetails.pdf";
+            saveFileDialog.FileName = $"{SystemContext.Item.Title}.pdf";
+
             if (saveFileDialog.ShowDialog() == true)
             {
                 string outputPath = saveFileDialog.FileName;
@@ -361,6 +381,17 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
         }
     }
 }

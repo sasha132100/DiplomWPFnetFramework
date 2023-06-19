@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages"
       mc:Ignorable="d" 
       d:Height="750" d:Width="1100">
     <Page.Resources>
@@ -35,7 +34,7 @@
                 <Setter Property="CornerRadius" Value="120"/>
             </Style>
         </ResourceDictionary>
-        <ContextMenu Background="White" x:Key="MyContextMenu">
+        <ContextMenu Background="White" x:Key="MyContextMenu" Opened="ContextMenu_Opened">
             <MenuItem Header="Закрепить" Click="MenuItemLock_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/LockImage.png" Width="16" Height="16"/>

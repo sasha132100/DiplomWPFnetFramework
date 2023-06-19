@@ -21,6 +21,7 @@ using Microsoft.Office.Interop.Word;
 using Application = Microsoft.Office.Interop.Word.Application;
 using Paragraph = Microsoft.Office.Interop.Word.Paragraph;
 using Microsoft.Win32;
+using Path = System.IO.Path;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
@@ -270,30 +271,29 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             Document doc = wordApp.Documents.Add();
 
-            Paragraph numberParagraph = doc.Content.Paragraphs.Add();
-            numberParagraph.Range.Text = $"Number: {inn.Number}";
+            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
+            passportParagraph.Range.Text = "";
+            passportParagraph.Range.Text += $"Номер: {inn.Number}";
+            passportParagraph.Range.Text += $"ФИО: {inn.FIO}";
+            passportParagraph.Range.Text += $"Пол: {inn.Gender}";
+            passportParagraph.Range.Text += $"Дата рождения: {inn.BirthDate}";
+            passportParagraph.Range.Text += $"Место рождения: {inn.BirthPlace}";
+            passportParagraph.Range.Text += $"Дата регистрации: {inn.RegistrationDate}";
 
-            Paragraph fioParagraph = doc.Content.Paragraphs.Add();
-            fioParagraph.Range.Text = $"FIO: {inn.FIO}";
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Paragraph genderParagraph = doc.Content.Paragraphs.Add();
-            genderParagraph.Range.Text = $"Gender: {inn.Gender}";
+            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+            imageRange1.InsertParagraphAfter();
 
-            Paragraph birthDateParagraph = doc.Content.Paragraphs.Add();
-            birthDateParagraph.Range.Text = $"Birth Date: {inn.BirthDate}";
-
-            Paragraph birthPlaceParagraph = doc.Content.Paragraphs.Add();
-            birthPlaceParagraph.Range.Text = $"Birth Place: {inn.BirthPlace}";
-
-            Paragraph registrationDateParagraph = doc.Content.Paragraphs.Add();
-            registrationDateParagraph.Range.Text = $"Registration Date: {inn.RegistrationDate}";
-
-            Paragraph photoParagraph = doc.Content.Paragraphs.Add();
-            photoParagraph.Range.Text = $"{inn.PhotoPage1}";
+            string tempImage1Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage1Path, inn.PhotoPage1);
+            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+            File.Delete(tempImage1Path);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
-            saveFileDialog.FileName = "CreditCardDetails.pdf";
+            saveFileDialog.FileName = $"{SystemContext.Item.Title}.pdf";
+
             if (saveFileDialog.ShowDialog() == true)
             {
                 string outputPath = saveFileDialog.FileName;
@@ -315,6 +315,17 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
         }
     }
 }

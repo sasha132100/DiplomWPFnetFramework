@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DiplomWPFnetFramework.Windows.MainInteractionsWindows"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Настройки и шаблоны" Height="750" Width="1100">
+        Title="Настройки и шаблоны" Height="750" Width="1100" Icon="/Resources/AppLogo.ico">
     <Window.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>

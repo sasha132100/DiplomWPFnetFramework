@@ -219,11 +219,15 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             Document doc = wordApp.Documents.Add();
 
             Paragraph photoParagraph = doc.Content.Paragraphs.Add();
-            photoParagraph.Range.Text = $"{photo.Image}";
+            string tempImage2Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage2Path, photo.Image);
+            InlineShape shape2 = doc.InlineShapes.AddPicture(tempImage2Path);
+            File.Delete(tempImage2Path);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
-            saveFileDialog.FileName = "CreditCardDetails.pdf";
+            saveFileDialog.FileName = $"{SystemContext.Item.Title}.pdf";
+
             if (saveFileDialog.ShowDialog() == true)
             {
                 string outputPath = saveFileDialog.FileName;
@@ -245,6 +249,17 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
         }
     }
 }

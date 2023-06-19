@@ -22,6 +22,7 @@ using Microsoft.Office.Interop.Word;
 using Application = Microsoft.Office.Interop.Word.Application;
 using Paragraph = Microsoft.Office.Interop.Word.Paragraph;
 using Microsoft.Win32;
+using Path = System.IO.Path;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
@@ -263,21 +264,27 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             Document doc = wordApp.Documents.Add();
 
-            Paragraph numberParagraph = doc.Content.Paragraphs.Add();
-            numberParagraph.Range.Text = $"Number: {creditCard.Number}";
+            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
+            passportParagraph.Range.Text = "";
+            passportParagraph.Range.Text += $"Номер: {creditCard.Number}";
+            passportParagraph.Range.Text += $"ФИО: {creditCard.FIO}";
+            passportParagraph.Range.Text += $"Месяц и год: {creditCard.ExpiryDate}";
+            passportParagraph.Range.Text += $"CVV код: {creditCard.CVV}";
 
-            Paragraph fioParagraph = doc.Content.Paragraphs.Add();
-            fioParagraph.Range.Text = $"FIO: {creditCard.FIO}";
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Paragraph expiryDateParagraph = doc.Content.Paragraphs.Add();
-            expiryDateParagraph.Range.Text = $"Expiry Date: {creditCard.ExpiryDate}";
+            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+            imageRange1.InsertParagraphAfter();
 
-            Paragraph cvvParagraph = doc.Content.Paragraphs.Add();
-            cvvParagraph.Range.Text = $"CVV: {creditCard.CVV}";
+            string tempImage1Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage1Path, creditCard.PhotoPage1);
+            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+            File.Delete(tempImage1Path);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
-            saveFileDialog.FileName = "CreditCardDetails.pdf";
+            saveFileDialog.FileName = $"{SystemContext.Item.Title}.pdf";
+
             if (saveFileDialog.ShowDialog() == true)
             {
                 string outputPath = saveFileDialog.FileName;
@@ -299,6 +306,17 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
         }
     }
 }

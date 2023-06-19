@@ -36,13 +36,13 @@
                 <Setter Property="CornerRadius" Value="120"/>
             </Style>
         </ResourceDictionary>
-        <ContextMenu Background="White" x:Key="MyContextMenu">
-            <MenuItem Header="Закрепить" Click="MenuItemLock_Click">
+        <ContextMenu Background="White" x:Key="MyContextMenu" Opened="ContextMenu_Opened">
+            <MenuItem Header="Закрепить" x:Name="LockMenu" Click="MenuItemLock_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/LockImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Скрыть" Click="MenuItemHide_Click">
+            <MenuItem Header="Скрыть" x:Name="HideMenu" Click="MenuItemHide_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/HideImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
