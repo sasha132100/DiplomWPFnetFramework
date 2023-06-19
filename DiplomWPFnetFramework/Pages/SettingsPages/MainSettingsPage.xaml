@@ -3,12 +3,35 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages"
+      xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages.SettingsPages"
       mc:Ignorable="d" 
-      d:DesignHeight="750" d:DesignWidth="450"
-      Title="MainSettingsPage">
-
+      d:DesignHeight="750" d:DesignWidth="450">
+    <Page.Resources>
+        <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+        </Style>
+    </Page.Resources>
     <Grid>
-        
+        <StackPanel>
+            <Grid Margin="20,10,0,0">
+                <Image Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/SecurityImage.png" Stretch="Uniform" MouseLeftButtonUp="SecurityButtonClick_MouseLeftButtonUp"/>
+                <TextBlock Text="Безопасность" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,10" MouseLeftButtonUp="SecurityButtonClick_MouseLeftButtonUp"/>
+            </Grid>
+            <Grid Margin="20,10,0,0">
+                <Image Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/HelpImage.png" Stretch="Uniform" MouseLeftButtonUp="HelpButtonClick_MouseLeftButtonUp"/>
+                <TextBlock Text="Помощь" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,10" MouseLeftButtonUp="HelpButtonClick_MouseLeftButtonUp"/>
+            </Grid>
+            <Grid Margin="20,10,0,0">
+                <Image Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/InfoImage.png" Stretch="Uniform" MouseLeftButtonUp="InfoButtonClick_MouseLeftButtonUp"/>
+                <TextBlock Text="О приложении" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,10" MouseLeftButtonUp="InfoButtonClick_MouseLeftButtonUp"/>
+            </Grid>
+            <Grid Margin="20,10,0,0">
+                <Image Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Source="pack://application:,,,/Resources/PrivatePolicyImage.png" Stretch="Uniform" MouseLeftButtonUp="PrivatePolicyButtonClick_MouseLeftButtonUp"/>
+                <TextBlock Text="Политика конфиденциальности" TextWrapping="Wrap" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,10" MouseLeftButtonUp="PrivatePolicyButtonClick_MouseLeftButtonUp"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Page>

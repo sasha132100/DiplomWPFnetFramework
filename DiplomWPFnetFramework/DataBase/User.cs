@@ -12,25 +12,25 @@ namespace DiplomWPFnetFramework.DataBase
     using System;
     using System.Collections.Generic;
     
-    public partial class Users
+    public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Users()
+        public User()
         {
-            this.Items = new HashSet<Items>();
+            this.Item = new HashSet<Item>();
             this.Template = new HashSet<Template>();
         }
     
         public int Id { get; set; }
         public string Email { get; set; }
-        public string UPassword { get; set; }
-        public string ULogin { get; set; }
-        public string Syncing { get; set; }
+        public string Password { get; set; }
+        public string Login { get; set; }
         public byte[] Photo { get; set; }
-        public string PinCode { get; set; }
+        public string AccessCode { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Items> Items { get; set; }
+        public virtual ICollection<Item> Item { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Template> Template { get; set; }
     }

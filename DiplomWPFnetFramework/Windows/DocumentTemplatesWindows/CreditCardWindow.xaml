@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        Title="Документ - Банковская карта" Height="500" Width="750" MinHeight="500" MinWidth="750">
+        Title="Документ - Банковская карта" Height="500" Width="750" MinHeight="500" MinWidth="750" Icon="/Resources/AppLogo.ico">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>
@@ -53,7 +53,7 @@
             </Style>
         </ResourceDictionary>
         <ContextMenu Background="White" x:Key="DocumentMoreInteractionsContextMenu">
-            <MenuItem Header="Сохранить" Click="MenuItemSave_Click">
+            <MenuItem Header="Сохранить" Click="MenuItemave_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/CheckMarkImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>

@@ -13,10 +13,10 @@ namespace DiplomWPFnetFramework.DataBase
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class test123Entities1 : DbContext
+    public partial class LocalMyDocsAppDBEntities : DbContext
     {
-        public test123Entities1()
-            : base("name=test123Entities1")
+        public LocalMyDocsAppDBEntities()
+            : base("name=LocalMyDocsAppDBEntities")
         {
         }
     
@@ -27,8 +27,8 @@ namespace DiplomWPFnetFramework.DataBase
     
         public virtual DbSet<CreditCard> CreditCard { get; set; }
         public virtual DbSet<INN> INN { get; set; }
-        public virtual DbSet<Items> Items { get; set; }
-        public virtual DbSet<LastLogginetUser> LastLogginetUser { get; set; }
+        public virtual DbSet<Item> Item { get; set; }
+        public virtual DbSet<LastLogginedUser> LastLogginedUser { get; set; }
         public virtual DbSet<Passport> Passport { get; set; }
         public virtual DbSet<Photo> Photo { get; set; }
         public virtual DbSet<Polis> Polis { get; set; }
@@ -37,6 +37,6 @@ namespace DiplomWPFnetFramework.DataBase
         public virtual DbSet<TemplateDocument> TemplateDocument { get; set; }
         public virtual DbSet<TemplateDocumentData> TemplateDocumentData { get; set; }
         public virtual DbSet<TemplateObject> TemplateObject { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<User> User { get; set; }
     }
 }

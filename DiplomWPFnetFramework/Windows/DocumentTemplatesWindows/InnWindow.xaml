@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        Title="Документ - ИНН" Height="590" Width="770" MinHeight="590" MinWidth="770">
+        Title="Документ - ИНН" Height="590" Width="770" MinHeight="590" MinWidth="770" Icon="/Resources/AppLogo.ico">
     <Window.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>
@@ -71,7 +71,7 @@
             </Style>
         </ResourceDictionary>
         <ContextMenu Background="White" x:Key="DocumentMoreInteractionsContextMenu">
-            <MenuItem Header="Сохранить" Click="MenuItemSave_Click">
+            <MenuItem Header="Сохранить" Click="MenuItemave_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/CheckMarkImagePurple.png" Width="16" Height="16"/>
                 </MenuItem.Icon>

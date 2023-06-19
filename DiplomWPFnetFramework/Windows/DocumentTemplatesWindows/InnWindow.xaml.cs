@@ -17,13 +17,18 @@ using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
 using System.Data.Entity.Migrations;
 using System.IO;
 using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using Microsoft.Office.Interop.Word;
+using Application = Microsoft.Office.Interop.Word.Application;
+using Paragraph = Microsoft.Office.Interop.Word.Paragraph;
+using Microsoft.Win32;
+using Path = System.IO.Path;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
     /// <summary>
     /// Логика взаимодействия для InnWindow.xaml
     /// </summary>
-    public partial class InnWindow : Window
+    public partial class InnWindow : System.Windows.Window
     {
         byte[] innPhotoBytes = null;
         byte[] coverImage = null;
@@ -44,7 +49,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 confirmButtonImage.Margin = new Thickness(0, 0, 10, 0);
                 return;
             }
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 var inn = (from p in db.INN where p.Id == SystemContext.Item.Id select p).FirstOrDefault<INN>();
                 try
@@ -71,7 +76,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private INN CreatingInnObject()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 INN inn = new INN();
                 if (SystemContext.isChange == false)
@@ -118,17 +123,19 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void AddNewItem()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                Items item = new Items();
-                item.Title = "Новый ИНН" + db.Items.Where(i => i.IType == "INN" && i.UserId == SystemContext.User.Id).Count();
-                item.IType = "INN";
-                item.IPriority = 0;
+                Item item = new Item();
+                item.Id = Guid.NewGuid();
+                item.Title = "Новый ИНН " + (db.Item.Where(i => i.Type == "INN" && i.UserId == SystemContext.User.Id).Count() + 1);
+                item.Type = "INN";
+                item.Priority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
                 item.DateCreation = DateTime.Now;
+                item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
-                db.Items.AddOrUpdate(item);
+                db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
             }
@@ -138,7 +145,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             if (CheckingTheFullness() != "Добавить")
                 return;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 AddNewItem();
                 db.INN.Add(CreatingInnObject());
@@ -148,7 +155,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void ChangeINN()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.INN.AddOrUpdate(CreatingInnObject());
                 db.SaveChanges();
@@ -170,8 +177,8 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                innPhotoBytes = File.ReadAllBytes(filePath);
+                string fileImage = openFileDialog.FileName;
+                innPhotoBytes = File.ReadAllBytes(fileImage);
                 imageName.Source = ByteArrayToImage(innPhotoBytes);
             }
         }
@@ -182,14 +189,14 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                coverImage = File.ReadAllBytes(filePath);
-                Items item;
+                string fileImage = openFileDialog.FileName;
+                coverImage = File.ReadAllBytes(fileImage);
+                Item item;
                 item = SystemContext.Item;
-                using (var db = new test123Entities1())
+                using (var db = new LocalMyDocsAppDBEntities())
                 {
-                    item.IImage = coverImage;
-                    db.Items.AddOrUpdate(item);
+                    item.Image = coverImage;
+                    db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
             }
@@ -220,6 +227,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             if (SystemContext.isChange == false)
             {
                 AddNewINN();
+                BackWindowButtonImage_MouseLeftButtonUp(sender, e);
             }
             else
             {
@@ -235,7 +243,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             contextMenu.IsOpen = true;
         }
 
-        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        private void MenuItemave_Click(object sender, RoutedEventArgs e)
         {
             if (SystemContext.isChange == false)
             {
@@ -254,18 +262,70 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void MenuItemCreateDocumentScan_Click(object sender, RoutedEventArgs e)
         {
+            INN inn;
+            using (var db = new LocalMyDocsAppDBEntities())
+            {
+                inn = (from i in db.INN where i.Id == SystemContext.Item.Id select i).FirstOrDefault<INN>();
+            }
+            Application wordApp = new Application();
 
+            Document doc = wordApp.Documents.Add();
+
+            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
+            passportParagraph.Range.Text = "";
+            passportParagraph.Range.Text += $"Номер: {inn.Number}";
+            passportParagraph.Range.Text += $"ФИО: {inn.FIO}";
+            passportParagraph.Range.Text += $"Пол: {inn.Gender}";
+            passportParagraph.Range.Text += $"Дата рождения: {inn.BirthDate}";
+            passportParagraph.Range.Text += $"Место рождения: {inn.BirthPlace}";
+            passportParagraph.Range.Text += $"Дата регистрации: {inn.RegistrationDate}";
+
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+
+            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+            imageRange1.InsertParagraphAfter();
+
+            string tempImage1Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage1Path, inn.PhotoPage1);
+            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+            File.Delete(tempImage1Path);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+            saveFileDialog.FileName = $"{SystemContext.Item.Title}.pdf";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string outputPath = saveFileDialog.FileName;
+
+                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+            }
+            else
+            {
+                return;
+            }
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-            Items item;
+            Item item;
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
         }
     }
 }

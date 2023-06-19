@@ -39,12 +39,12 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
         {
             if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
             {
-                Items item;
-                using (var db = new test123Entities1())
+                Item item;
+                using (var db = new LocalMyDocsAppDBEntities())
                 {
                     item = SystemContext.Item;
                     item.Title = NewTitleNameTextBox.Text;
-                    db.Items.AddOrUpdate(item);
+                    db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
                 MessageBox.Show("Название успешно изменено");
@@ -62,12 +62,12 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
             {
                 if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
                 {
-                    Items item;
-                    using (var db = new test123Entities1())
+                    Item item;
+                    using (var db = new LocalMyDocsAppDBEntities())
                     {
                         item = SystemContext.Item;
                         item.Title = NewTitleNameTextBox.Text;
-                        db.Items.AddOrUpdate(item);
+                        db.Item.AddOrUpdate(item);
                         db.SaveChanges();
                     }
                     MessageBox.Show("Название успешно изменено");

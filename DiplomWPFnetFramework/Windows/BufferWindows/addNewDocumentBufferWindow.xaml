@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DiplomWPFnetFramework.Windows.BufferWindows"
         mc:Ignorable="d"
+        ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen"
-        Title="Создание документа" Height="Auto" Width="520" MinHeight="85" MinWidth="520">
+        Title="Создание документа" Height="Auto" Width="520" MinHeight="85" MinWidth="520" Icon="/Resources/AppLogo.ico">
     <Window.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>

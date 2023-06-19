@@ -36,13 +36,13 @@
                 <Setter Property="CornerRadius" Value="120"/>
             </Style>
         </ResourceDictionary>
-        <ContextMenu Background="White" x:Key="MyContextMenu">
-            <MenuItem Header="Закрепить" Click="MenuItemLock_Click">
+        <ContextMenu Background="White" x:Key="MyContextMenu" Opened="ContextMenu_Opened">
+            <MenuItem Header="Закрепить" x:Name="LockMenu" Click="MenuItemLock_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/LockImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Скрыть" Click="MenuItemHide_Click">
+            <MenuItem Header="Скрыть" x:Name="HideMenu" Click="MenuItemHide_Click">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/HideImage.png" Width="16" Height="16"/>
                 </MenuItem.Icon>
@@ -59,22 +59,22 @@
             <WrapPanel x:Name="DocumentsViewGrid">
                 <WrapPanel.Resources>
                     <Style x:Key="ContentBorderStyle" TargetType="Border">
-                        <Setter Property="Width" Value="160"/>
-                        <Setter Property="Height" Value="200"/>
+                        <Setter Property="Width" Value="172"/>
+                        <Setter Property="Height" Value="240"/>
                         <Setter Property="CornerRadius" Value="10"/>
                         <Setter Property="Margin" Value="18,0,0,18"/>
                         <Setter Property="Background" Value="White"/>
                         <Setter Property="Cursor" Value="Hand"/>
                     </Style>
                     <Style x:Key="BottomBorderProperties" TargetType="Border">
-                        <Setter Property="Width" Value="158"/>
+                        <Setter Property="Width" Value="170"/>
                         <Setter Property="Height" Value="48"/>
                         <Setter Property="Margin" Value="0,0,0,0"/>
                         <Setter Property="CornerRadius" Value="10"/>
                         <Setter Property="HorizontalAlignment" Value="Center"/>
                         <Setter Property="VerticalAlignment" Value="Bottom"/>
                         <Setter Property="Background" Value="#6D6F80"/>
-                        <Setter Property="Opacity" Value="0.8"/>
+                        <Setter Property="Opacity" Value="0.9"/>
                     </Style>
                     <Style x:Key="DocumentTextBlockPropeties" TargetType="TextBlock">
                         <Setter Property="FontFamily" Value="Arial"/>
@@ -84,9 +84,40 @@
                         <Setter Property="VerticalAlignment" Value="Bottom"/>
                         <Setter Property="Margin" Value="0,0,0,16"/>
                     </Style>
+                    <Style x:Key="ContentBorderStyleMini" TargetType="Border">
+                        <Setter Property="Width" Value="76"/>
+                        <Setter Property="Height" Value="110"/>
+                        <Setter Property="CornerRadius" Value="3"/>
+                        <Setter Property="Margin" Value="5,5,0,5"/>
+                        <Setter Property="Background" Value="White"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                    </Style>
+                    <Style x:Key="BottomBorderPropertiesMini" TargetType="Border">
+                        <Setter Property="Width" Value="72"/>
+                        <Setter Property="Height" Value="20"/>
+                        <Setter Property="Margin" Value="0,0,0,0"/>
+                        <Setter Property="CornerRadius" Value="3"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Bottom"/>
+                        <Setter Property="Background" Value="#6D6F80"/>
+                        <Setter Property="Opacity" Value="0.8"/>
+                    </Style>
+                    <Style x:Key="DocumentTextBlockPropetiesMini" TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="Arial"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontSize" Value="8"/>
+                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Bottom"/>
+                        <Setter Property="Margin" Value="0,0,0,4"/>
+                    </Style>
                     <ResourceDictionary x:Key="CornerRadiusSetter">
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </ResourceDictionary>
+                    <ResourceDictionary x:Key="CornerRadiusSetterMini">
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
                         </Style>
                     </ResourceDictionary>
                 </WrapPanel.Resources>

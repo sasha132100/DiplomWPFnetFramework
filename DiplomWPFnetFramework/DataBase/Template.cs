@@ -18,16 +18,20 @@ namespace DiplomWPFnetFramework.DataBase
         public Template()
         {
             this.TemplateDocument = new HashSet<TemplateDocument>();
+            this.TemplateObject = new HashSet<TemplateObject>();
         }
     
-        public int Id { get; set; }
-        public string TName { get; set; }
-        public string TStatus { get; set; }
-        public System.DateTime TDate { get; set; }
-        public Nullable<int> UserId { get; set; }
+        public System.Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public System.DateTime Date { get; set; }
+        public int UserId { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
+        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TemplateDocument> TemplateDocument { get; set; }
-        public virtual Users Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TemplateObject> TemplateObject { get; set; }
     }
 }

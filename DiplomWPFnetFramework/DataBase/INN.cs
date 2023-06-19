@@ -14,7 +14,7 @@ namespace DiplomWPFnetFramework.DataBase
     
     public partial class INN
     {
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
         public string Number { get; set; }
         public string FIO { get; set; }
         public string Gender { get; set; }
@@ -22,7 +22,8 @@ namespace DiplomWPFnetFramework.DataBase
         public string BirthPlace { get; set; }
         public Nullable<System.DateTime> RegistrationDate { get; set; }
         public byte[] PhotoPage1 { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
-        public virtual Items Items { get; set; }
+        public virtual Item Item { get; set; }
     }
 }

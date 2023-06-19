@@ -14,13 +14,14 @@ namespace DiplomWPFnetFramework.DataBase
     
     public partial class CreditCard
     {
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
         public string Number { get; set; }
         public string FIO { get; set; }
         public string ExpiryDate { get; set; }
         public Nullable<int> CVV { get; set; }
         public byte[] PhotoPage1 { get; set; }
+        public Nullable<System.DateTime> UpdateTime { get; set; }
     
-        public virtual Items Items { get; set; }
+        public virtual Item Item { get; set; }
     }
 }

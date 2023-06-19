@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanMinimize"
-        Title="Регистрация" Height="780" Width="1100" MinHeight="750" MinWidth="500">
+        Title="Регистрация" Height="780" Width="1100" MinHeight="750" MinWidth="500" Icon="/Resources/AppLogo.ico">
     <Window.Resources>
         <Style x:Key="TextBlockMainProperties" TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Arial"/>

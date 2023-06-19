@@ -18,13 +18,19 @@ using System.Data.Entity.Migrations;
 using System.IO;
 using System.Globalization;
 using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using Microsoft.Office.Interop.Word;
+using Application = Microsoft.Office.Interop.Word.Application;
+using Paragraph = Microsoft.Office.Interop.Word.Paragraph;
+using Microsoft.Win32;
+using System.Xml.Linq;
+using Path = System.IO.Path;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
     /// <summary>
     /// Логика взаимодействия для PolisWindow.xaml
     /// </summary>
-    public partial class PolisWindow : Window
+    public partial class PolisWindow : System.Windows.Window
     {
         byte[] polisPhoto1Bytes = null;
         byte[] polisPhoto2Bytes = null;
@@ -46,7 +52,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 confirmButtonImage.Margin = new Thickness(0, 0, 10, 0);
                 return;
             }
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 var polis = (from p in db.Polis where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Polis>();
                 try
@@ -74,7 +80,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private Polis CreatingPolisObject()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 Polis polis = new Polis();
                 if (SystemContext.isChange == false)
@@ -121,17 +127,19 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void AddNewItem()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                Items item = new Items();
-                item.Title = "Новый полис" + db.Items.Where(i => i.IType == "Polis" && i.UserId == SystemContext.User.Id).Count();
-                item.IType = "Polis";
-                item.IPriority = 0;
+                Item item = new Item();
+                item.Id = Guid.NewGuid();
+                item.Title = "Новый полис " + (db.Item.Where(i => i.Type == "Polis" && i.UserId == SystemContext.User.Id).Count() + 1);
+                item.Type = "Polis";
+                item.Priority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
                 item.DateCreation = DateTime.Now;
+                item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
-                db.Items.AddOrUpdate(item);
+                db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
             }
@@ -141,7 +149,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             if (CheckingTheFullness() != "Добавить")
                 return;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 AddNewItem();
                 db.Polis.Add(CreatingPolisObject());
@@ -151,7 +159,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void ChangePolis()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Polis.AddOrUpdate(CreatingPolisObject());
                 db.SaveChanges();
@@ -173,16 +181,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
+                string fileImage = openFileDialog.FileName;
                 switch (imageName.Name)
                 {
                     case "PolisPhoto1Holder":
-                        polisPhoto1Bytes = File.ReadAllBytes(filePath);
+                        polisPhoto1Bytes = File.ReadAllBytes(fileImage);
                         imageName.Source = ByteArrayToImage(polisPhoto1Bytes);
                         break;
 
                     case "PolisPhoto2Holder":
-                        polisPhoto2Bytes = File.ReadAllBytes(filePath);
+                        polisPhoto2Bytes = File.ReadAllBytes(fileImage);
                         imageName.Source = ByteArrayToImage(polisPhoto2Bytes);
                         break;
 
@@ -198,14 +206,14 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                coverImage = File.ReadAllBytes(filePath);
-                Items item;
+                string fileImage = openFileDialog.FileName;
+                coverImage = File.ReadAllBytes(fileImage);
+                Item item;
                 item = SystemContext.Item;
-                using (var db = new test123Entities1())
+                using (var db = new LocalMyDocsAppDBEntities())
                 {
-                    item.IImage = coverImage;
-                    db.Items.AddOrUpdate(item);
+                    item.Image = coverImage;
+                    db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
             }
@@ -241,6 +249,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             if (SystemContext.isChange == false)
             {
                 AddNewPolis();
+                BackWindowButtonImage_MouseLeftButtonUp(sender, e);
             }
             else
             {
@@ -256,7 +265,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             contextMenu.IsOpen = true;
         }
 
-        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        private void MenuItemave_Click(object sender, RoutedEventArgs e)
         {
             if (SystemContext.isChange == false)
             {
@@ -275,18 +284,80 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void MenuItemCreateDocumentScan_Click(object sender, RoutedEventArgs e)
         {
+            Polis polis;
+            using (var db = new LocalMyDocsAppDBEntities())
+            {
+                polis = (from p in db.Polis where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Polis>();
+            }
 
+            Application wordApp = new Application();
+
+            Document doc = wordApp.Documents.Add();
+
+            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
+            passportParagraph.Range.Text = "";
+            passportParagraph.Range.Text += $"Номер: {polis.Number}";
+            passportParagraph.Range.Text += $"ФИО: {polis.FIO}";
+            passportParagraph.Range.Text += $"Пол: {polis.Gender}";
+            passportParagraph.Range.Text += $"Дата рождения: {polis.BirthDate}";
+            passportParagraph.Range.Text += $"Годен до: {polis.ValidUntil}";
+
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+
+            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+            imageRange1.InsertParagraphAfter();
+
+            string tempImage1Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage1Path, polis.PhotoPage1);
+            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+            File.Delete(tempImage1Path);
+
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+
+            Range imageRange2 = doc.Content.Paragraphs.Add().Range;
+            imageRange2.InsertParagraphAfter();
+
+            string tempImage2Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage2Path, polis.PhotoPage2);
+            InlineShape shape2 = imageRange2.InlineShapes.AddPicture(tempImage2Path);
+            File.Delete(tempImage2Path);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+            saveFileDialog.FileName = $"{SystemContext.Item.Title}.pdf";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string outputPath = saveFileDialog.FileName;
+
+                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+            }
+            else
+            {
+                return;
+            }
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-            Items item;
+            Item item;
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
         }
     }
 }

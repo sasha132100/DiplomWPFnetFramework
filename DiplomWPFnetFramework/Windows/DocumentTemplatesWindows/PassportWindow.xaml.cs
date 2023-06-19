@@ -1,30 +1,31 @@
-﻿using System;
+﻿using DiplomWPFnetFramework.Classes;
+using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using Microsoft.Office.Interop.Word;
+using Microsoft.Win32;
+using System;
 using System.Data;
-using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.IO;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using DiplomWPFnetFramework.DataBase;
-using DiplomWPFnetFramework.Classes;
-using DiplomWPFnetFramework.Windows.MainInteractionsWindows;
-using System.Data.Entity.Migrations;
-using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using System.Globalization;
+using System.Windows.Data;
+using Application = Microsoft.Office.Interop.Word.Application;
+using Paragraph = Microsoft.Office.Interop.Word.Paragraph;
+using Path = System.IO.Path;
 
 namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 {
     /// <summary>
     /// Логика взаимодействия для PassportWindow.xaml
     /// </summary>
-    public partial class PassportWindow : Window
+    public partial class PassportWindow : System.Windows.Window
     {
         byte[] ownersPhotoBytes = null;
         byte[] passportPhoto1Bytes = null;
@@ -47,7 +48,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 confirmButtonImage.Margin = new Thickness(0, 0, 10, 0);
                 return;
             }
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 var passport = (from p in db.Passport where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Passport>();
                 try
@@ -81,7 +82,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private Passport CreatingPassportObject()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {   
                 Passport passport = new Passport();
                 if (SystemContext.isChange == false)
@@ -134,17 +135,19 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void AddNewItem()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                Items item = new Items();
-                item.Title = "Новый паспорт" + db.Items.Where(i => i.IType == "Passport" && i.UserId == SystemContext.User.Id).Count();
-                item.IType = "Passport";
-                item.IPriority = 0;
+                Item item = new Item();
+                item.Id = Guid.NewGuid();
+                item.Title = "Новый паспорт " + (db.Item.Where(i => i.Type == "Passport" && i.UserId == SystemContext.User.Id).Count() + 1);
+                item.Type = "Passport";
+                item.Priority = 0;
                 item.IsHidden = 0;
                 item.IsSelected = 0;
                 item.DateCreation = DateTime.Now;
+                item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
-                db.Items.AddOrUpdate(item);
+                db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
             }
@@ -154,7 +157,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             if (CheckingTheFullness() != "Добавить")
                 return;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 AddNewItem();
                 db.Passport.Add(CreatingPassportObject());
@@ -164,7 +167,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void ChangePassport()
         {
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Passport.AddOrUpdate(CreatingPassportObject());
                 db.SaveChanges();
@@ -186,21 +189,21 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
+                string fileImage = openFileDialog.FileName;
                 switch (imageName.Name)
                 {
                     case "OwnersPhotoHolder":
-                        ownersPhotoBytes = File.ReadAllBytes(filePath);
+                        ownersPhotoBytes = File.ReadAllBytes(fileImage);
                         imageName.Source = ByteArrayToImage(ownersPhotoBytes);
                         break;
 
                     case "PassportPhoto1Holder":
-                        passportPhoto1Bytes = File.ReadAllBytes(filePath);
+                        passportPhoto1Bytes = File.ReadAllBytes(fileImage);
                         imageName.Source = ByteArrayToImage(passportPhoto1Bytes);
                         break;
 
                     case "PassportPhoto2Holder":
-                        passportPhoto2Bytes = File.ReadAllBytes(filePath);
+                        passportPhoto2Bytes = File.ReadAllBytes(fileImage);
                         imageName.Source = ByteArrayToImage(passportPhoto2Bytes);
                         break;
 
@@ -216,14 +219,14 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             openFileDialog.Filter = "Image Files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                string filePath = openFileDialog.FileName;
-                coverImage = File.ReadAllBytes(filePath);
-                Items item;
+                string fileImage = openFileDialog.FileName;
+                coverImage = File.ReadAllBytes(fileImage);
+                Item item;
                 item = SystemContext.Item;
-                using (var db = new test123Entities1())
+                using (var db = new LocalMyDocsAppDBEntities())
                 {
-                    item.IImage = coverImage;
-                    db.Items.AddOrUpdate(item);
+                    item.Image = coverImage;
+                    db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
             }
@@ -269,6 +272,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             if (SystemContext.isChange == false)
             {
                 AddNewPassport();
+                BackWindowButtonImage_MouseLeftButtonUp(sender, e);
             }
             else
             {
@@ -284,7 +288,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             contextMenu.IsOpen = true;
         }
 
-        private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+        private void MenuItemave_Click(object sender, RoutedEventArgs e)
         {
             if (SystemContext.isChange == false)
             {
@@ -303,18 +307,91 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
         private void MenuItemCreateDocumentScan_Click(object sender, RoutedEventArgs e)
         {
+            Passport passport;
+            using (var db = new LocalMyDocsAppDBEntities())
+            {
+                passport = (from p in db.Passport where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Passport>();
+            }
+            Application wordApp = new Application();
 
+            Document doc = wordApp.Documents.Add();
+
+            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
+            passportParagraph.Range.Text = "";
+            passportParagraph.Range.Text += $"Серия и номер: {passport.SerialNumber}";
+            passportParagraph.Range.Text += $"ФИО: {passport.FIO}";
+            passportParagraph.Range.Text += $"Пол: {passport.Gender}";
+            passportParagraph.Range.Text += $"Дата рождения: {passport.BirthDate}";
+            passportParagraph.Range.Text += $"Место рождения: {passport.BirthPlace}";
+            passportParagraph.Range.Text += $"Место жительства: {passport.ResidencePlace}";
+            passportParagraph.Range.Text += $"Кем выдан: {passport.ByWhom}";
+            passportParagraph.Range.Text += $"Код подразделения: {passport.DivisionCode}";
+            passportParagraph.Range.Text += $"Дата выдачи: {passport.GiveDate}";
+
+            string tempFaceImagePath = Path.GetTempFileName();
+            File.WriteAllBytes(tempFaceImagePath, passport.FacePhoto);
+            InlineShape shape = doc.InlineShapes.AddPicture(tempFaceImagePath);
+            shape.LockAspectRatio = Microsoft.Office.Core.MsoTriState.msoFalse;
+            shape.Width = 180;
+            shape.Height = 220;
+            File.Delete(tempFaceImagePath);
+
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+
+            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+            imageRange1.InsertParagraphAfter();
+
+            string tempImage1Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage1Path, passport.PhotoPage1);
+            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+            File.Delete(tempImage1Path);
+
+            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+
+            Range imageRange2 = doc.Content.Paragraphs.Add().Range;
+            imageRange2.InsertParagraphAfter();
+
+            string tempImage2Path = Path.GetTempFileName();
+            File.WriteAllBytes(tempImage2Path, passport.PhotoPage2);
+            InlineShape shape2 = imageRange2.InlineShapes.AddPicture(tempImage2Path);
+            File.Delete(tempImage2Path);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+            saveFileDialog.FileName = $"{SystemContext.Item.Title}.pdf";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string outputPath = saveFileDialog.FileName;
+
+                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+            }
+            else
+            {
+                return;
+            }
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-            Items item;
+            Item item;
             item = SystemContext.Item;
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();
             }
+            if (SystemContext.PageForLoadContent is DocumentViewingPage)
+            {
+                DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;
+                documentViewingPage.LoadContent();
+            }
+            else
+            {
+                FolderContentPage folderContentPage = (FolderContentPage)SystemContext.PageForLoadContent;
+                folderContentPage.LoadContent();
+            }
+            this.Close();
         }
     }
 }

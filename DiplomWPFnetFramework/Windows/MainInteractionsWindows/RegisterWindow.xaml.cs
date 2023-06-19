@@ -24,7 +24,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             InitializeComponent();
         }
 
-        string registerMethod(string email, string password, string confirmPas)
+        string registerMethod(string email, string login, string password, string confirmPas)
         {
             if (email.Length < 5 || email.Length == 0)
                 return "Логин должен содержать от 5 символов!";
@@ -32,12 +32,12 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
                 return "Минимальный размер пароля: 8 символов!";
             if (password != confirmPas)
                 return "Пароли не соответсвуют друг другу!";
-            using (var db = new test123Entities1())
+            using (var db = new LocalMyDocsAppDBEntities())
             {
-                var user = (from u in db.Users where u.ULogin == email select u).FirstOrDefault<Users>();
+                var user = (from u in db.User where u.Email == email select u).FirstOrDefault<User>();
                 if (user != null)
-                    return "Пользователь с таким логином уже существует!";
-                db.Users.Add(new Users() { Email = email, ULogin = email, UPassword = password, Syncing = "No" });
+                    return "Пользователь с такой почтой уже существует!";
+                db.User.Add(new User() { Email = email, Login = login, Password = password });
                 db.SaveChanges();
             }
             return "Регистрация прошла успешно!";
@@ -45,7 +45,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
-            string result = registerMethod(EmailTextBox.Text, PasswordTextBox.Password, ConfirmPasswordTextBox.Password);
+            string result = registerMethod(EmailTextBox.Text, LoginTextBox.Text, PasswordTextBox.Password, ConfirmPasswordTextBox.Password);
             MessageBox.Show(result, "Результат", MessageBoxButton.OK, MessageBoxImage.Warning);
             if (result == "Регистрация прошла успешно!")
                 BackToMainWindowButton_Click(this, new RoutedEventArgs());

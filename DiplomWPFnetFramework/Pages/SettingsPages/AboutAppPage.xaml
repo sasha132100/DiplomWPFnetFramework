@@ -1,0 +1,23 @@
+﻿<Page x:Class="DiplomWPFnetFramework.Pages.SettingsPages.AboutAppPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DiplomWPFnetFramework.Pages.SettingsPages"
+      mc:Ignorable="d" 
+      d:DesignHeight="750" d:DesignWidth="450">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="#FCF3DC"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <TextBlock Text="О приложении" FontSize="30" FontWeight="Bold" Margin="10" HorizontalAlignment="Center"/>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" Margin="0,50,0,0" HorizontalContentAlignment="Stretch">
+            <TextBlock x:Name="mainTextBlock" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="10,10,10,5"/>
+        </ScrollViewer>
+    </Grid>
+</Page>
