@@ -81,12 +81,18 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
                 MessageBox.Show("Пользователь с такими данными уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
-            using (var db = new LocalMyDocsAppDBEntities())
+            try
             {
-                db.User.AddOrUpdate(user);
-                db.SaveChanges();
-                MessageBox.Show("Данные успешно изменены", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
+                using (var db = new LocalMyDocsAppDBEntities())
+                {
+                    db.User.AddOrUpdate(user);
+                    db.SaveChanges();
+                    MessageBox.Show("Данные успешно изменены", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Данные не должны превышать 250 символов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             SystemContext.User = user;
             this.Close();

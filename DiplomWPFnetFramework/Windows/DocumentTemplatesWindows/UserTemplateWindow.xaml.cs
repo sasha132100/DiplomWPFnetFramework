@@ -86,21 +86,29 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                         var key = dictionaryItem.Key;
                         var value = dictionaryItem.Value;
 
+                        TemplateDocument templateDocument = db.TemplateDocument.Where(td => td.Id == SystemContext.Item.Id && td.TemplateId == SystemContext.Template.Id).FirstOrDefault();
+
                         switch (value)
                         {
                             case TextBox textBox:
-                                textBox.Text = db.TemplateDocumentData.Where(tdd => tdd.TemplateObjectId == key.Id).FirstOrDefault().Value;
+                                var takeText = db.TemplateDocumentData.Where(tdd => tdd.TemplateObjectId == key.Id && tdd.TemplateDocument.Id == templateDocument.Id).FirstOrDefault();
+                                if (takeText == null || takeText.Value == "" || takeText.Value == null)
+                                    break;
+                                textBox.Text = takeText.Value;
                                 break;
 
                             case CheckBox checkBox:
-                                if (db.TemplateDocumentData.Where(tdd => tdd.TemplateObjectId == key.Id).FirstOrDefault().Value == "true")
+                                var takeCheck = db.TemplateDocumentData.Where(tdd => tdd.TemplateObjectId == key.Id && tdd.TemplateDocument.Id == templateDocument.Id).FirstOrDefault();
+                                if (takeCheck == null || takeCheck.Value == "" || takeCheck.Value == null)
+                                    break;
+                                if (takeCheck.Value == "true")
                                     checkBox.IsChecked = true;
                                 else
                                     checkBox.IsChecked = false;
                                 break;
 
                             case Image image:
-                                var takeImage = db.TemplateDocumentData.Where(tdd => tdd.TemplateObjectId == key.Id).FirstOrDefault();
+                                var takeImage = db.TemplateDocumentData.Where(tdd => tdd.TemplateObjectId == key.Id && tdd.TemplateDocument.Id == templateDocument.Id).FirstOrDefault();
                                 if (takeImage == null || takeImage.Value == "" || takeImage.Value == null)
                                     break;
                                 image.Source = ByteArrayToImage(Convert.FromBase64String(takeImage.Value));
@@ -267,32 +275,38 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 {
                     var dictionaryValue = dictionaryItem.Value;
                     string value = null;
-
-                    switch (dictionaryValue)
+                    try
                     {
-                        case TextBox textBox:
-                            value = textBox.Text;
-                            break;
-
-                        case CheckBox checkBox:
-                            if (checkBox.IsChecked == true)
-                                value = "true";
-                            else
-                                value = "false";
-                            break;
-
-                        case Image image:
-                            if (image.Source == null)
+                        switch (dictionaryValue)
+                        {
+                            case TextBox textBox:
+                                value = textBox.Text;
                                 break;
-                            imageBytes = ConvertBitmapSourceToByteArray(image.Source);
-                            value = Convert.ToBase64String(imageBytes);
-                            break;
 
-                        default:
-                            break;
+                            case CheckBox checkBox:
+                                if (checkBox.IsChecked == true)
+                                    value = "true";
+                                else
+                                    value = "false";
+                                break;
+
+                            case Image image:
+                                if (image.Source == null)
+                                    break;
+                                imageBytes = ConvertBitmapSourceToByteArray(image.Source);
+                                value = Convert.ToBase64String(imageBytes);
+                                break;
+
+                            default:
+                                break;
+                        }
+                        db.TemplateDocumentData.AddOrUpdate(CreatingTemplateDocumntData(dictionaryItem.Key, templateDocumentForId, value));
+                        db.SaveChanges();
                     }
-                    db.TemplateDocumentData.AddOrUpdate(CreatingTemplateDocumntData(dictionaryItem.Key, templateDocumentForId, value));
-                    db.SaveChanges();
+                    catch
+                    {
+                        MessageBox.Show("Данные не должны превышать 250 символов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
             }
         }
@@ -335,7 +349,14 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                         }
                         db.TemplateDocumentData.AddOrUpdate(CreatingTemplateDocumntData(dictionaryItem.Key, templateDocumentForId, value));
                     }
-                    db.SaveChanges();
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Данные не должны превышать 250 символов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                     MessageBox.Show("Данные изменены.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }

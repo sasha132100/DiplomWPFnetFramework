@@ -24,5 +24,13 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
         {
             InitializeComponent();
         }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                MessageBox.Show("По такому запросу публичных шаблнов не найдено!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
     }
 }
