@@ -47,7 +47,7 @@
         <TextBlock Text="Код доступа" Style="{StaticResource TextBlockMainProperties}" FontSize="30" FontWeight="Bold" Margin="10" HorizontalAlignment="Center"/>
         <StackPanel VerticalAlignment="Top" Margin="0,50,0,0">
             <TextBlock Style="{StaticResource TextBlockMainProperties}" Text="Введите код доступа" HorizontalAlignment="Center"/>
-            <TextBox PreviewTextInput="AccessCodeTextBox_PreviewTextInput" x:Name="AccessCodeTextBox" Style="{StaticResource TextBoxProperties}" VerticalContentAlignment="Top" Resources="{StaticResource CornerRadiusSetterForTextBox}" TextWrapping="Wrap" AcceptsReturn="True" Margin="40,10,40,0"/>
+            <TextBox PreviewTextInput="AccessCodeTextBox_PreviewTextInput" x:Name="AccessCodeTextBox" Style="{StaticResource TextBoxProperties}" KeyDown="AccessCodeTextBox_KeyDown" VerticalContentAlignment="Top" Resources="{StaticResource CornerRadiusSetterForTextBox}" TextWrapping="Wrap" AcceptsReturn="True" Margin="40,10,40,0"/>
             <Grid Margin="10">
                 <Image ToolTip="Удалить код доступа" Cursor="Hand" Width="50" Height="50" HorizontalAlignment="Left" Margin="50,0,0,0" Source="pack://application:,,,/Resources/RemoveRedImage.png" Stretch="Uniform" MouseLeftButtonUp="RemoveAccessCodeImageClick_MouseLeftButtonUp"/>
                 <Button ToolTip="Сохранить" x:Name="confirmAccessCodeButton" Width="60" Height="60" HorizontalAlignment="Right" Margin="0,0,50,0" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetterForButton}" Click="confirmAccessCodeButton_Click" BorderThickness="0">

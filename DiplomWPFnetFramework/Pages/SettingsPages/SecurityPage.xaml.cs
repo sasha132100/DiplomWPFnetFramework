@@ -58,6 +58,12 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
             User user = SystemContext.User;
             user.AccessCode = AccessCodeTextBox.Text;
 
+            if (AccessCodeTextBox.Text.Length > 30)
+            {
+                MessageBox.Show("Длина кода доступа не должна превышать 30 сиволов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             ServerConnectPostMethodsClass serverConnectPostMethodsClass = new ServerConnectPostMethodsClass();
             if (serverConnectPostMethodsClass.UpdateUser(user) == null)
             {
@@ -83,6 +89,42 @@ namespace DiplomWPFnetFramework.Pages.SettingsPages
                     e.Handled = true;
                     break;
                 }
+            }
+        }
+
+        private void AccessCodeTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (AccessCodeTextBox.Text == "")
+                {
+                    MessageBox.Show("Введите код доступа!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                User user = SystemContext.User;
+                user.AccessCode = AccessCodeTextBox.Text;
+
+                if (AccessCodeTextBox.Text.Length > 30)
+                {
+                    MessageBox.Show("Длина кода доступа не должна превышать 30 сиволов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                ServerConnectPostMethodsClass serverConnectPostMethodsClass = new ServerConnectPostMethodsClass();
+                if (serverConnectPostMethodsClass.UpdateUser(user) == null)
+                {
+                    MessageBox.Show("Пользователь с такими данными уже существует!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                using (var db = new LocalMyDocsAppDBEntities())
+                {
+                    db.User.AddOrUpdate(user);
+                    db.SaveChanges();
+                    SystemContext.User = user;
+                }
+                MessageBox.Show("Код доступа успешно установлен.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

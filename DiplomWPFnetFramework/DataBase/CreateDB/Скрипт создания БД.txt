@@ -1,16 +1,9 @@
 USE [master]
 GO
-/****** Object:  Database [LocalMyDocsAppDB]    Script Date: 15.06.2023 19:46:22 ******/
+/****** Object:  Database [LocalMyDocsAppDB]    Script Date: 22.06.2023 3:35:45 ******/
 CREATE DATABASE [LocalMyDocsAppDB]
 GO
 USE [LocalMyDocsAppDB]
-GO
-ALTER DATABASE [LocalMyDocsAppDB] SET COMPATIBILITY_LEVEL = 150
-GO
-IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
-begin
-EXEC [LocalMyDocsAppDB].[dbo].[sp_fulltext_database] @action = 'enable'
-end
 GO
 ALTER DATABASE [LocalMyDocsAppDB] SET ANSI_NULL_DEFAULT OFF 
 GO
@@ -76,7 +69,7 @@ ALTER DATABASE [LocalMyDocsAppDB] SET QUERY_STORE = OFF
 GO
 USE [LocalMyDocsAppDB]
 GO
-/****** Object:  Table [dbo].[CreditCard]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[CreditCard]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -95,7 +88,7 @@ CREATE TABLE [dbo].[CreditCard](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[INN]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[INN]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -116,7 +109,7 @@ CREATE TABLE [dbo].[INN](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Item]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[Item]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -130,7 +123,7 @@ CREATE TABLE [dbo].[Item](
 	[IsHidden] [int] NOT NULL,
 	[IsSelected] [int] NOT NULL,
 	[DateCreation] [datetime] NOT NULL,
-	[FolderId] [uniqueidentifier] NOT NULL,
+	[FolderId] [uniqueidentifier] NULL,
 	[UserId] [int] NOT NULL,
 	[UpdateTime] [datetime] NULL,
  CONSTRAINT [PK_Item] PRIMARY KEY CLUSTERED 
@@ -139,7 +132,7 @@ CREATE TABLE [dbo].[Item](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LastLogginedUser]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[LastLogginedUser]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -147,10 +140,14 @@ GO
 CREATE TABLE [dbo].[LastLogginedUser](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Email] [nvarchar](255) NULL,
-	[Login] [nvarchar](255) NULL
+	[Login] [nvarchar](255) NULL,
+ CONSTRAINT [PK_LastLogginedUser] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Passport]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[Passport]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -176,7 +173,7 @@ CREATE TABLE [dbo].[Passport](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Photo]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[Photo]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -192,7 +189,7 @@ CREATE TABLE [dbo].[Photo](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Polis]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[Polis]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -213,7 +210,7 @@ CREATE TABLE [dbo].[Polis](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SNILS]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[SNILS]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -234,7 +231,7 @@ CREATE TABLE [dbo].[SNILS](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Template]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[Template]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -252,7 +249,7 @@ CREATE TABLE [dbo].[Template](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TemplateDocument]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[TemplateDocument]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -267,14 +264,14 @@ CREATE TABLE [dbo].[TemplateDocument](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TemplateDocumentData]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[TemplateDocumentData]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[TemplateDocumentData](
 	[Id] [uniqueidentifier] NOT NULL,
-	[Value] [nvarchar](255) NULL,
+	[Value] [nvarchar](max) NULL,
 	[TemplateObjectId] [uniqueidentifier] NOT NULL,
 	[TemplateDocumentId] [uniqueidentifier] NOT NULL,
 	[UpdateTime] [datetime] NULL,
@@ -282,9 +279,9 @@ CREATE TABLE [dbo].[TemplateDocumentData](
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TemplateObject]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[TemplateObject]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -302,13 +299,13 @@ CREATE TABLE [dbo].[TemplateObject](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[User]    Script Date: 15.06.2023 19:46:23 ******/
+/****** Object:  Table [dbo].[User]    Script Date: 22.06.2023 3:35:45 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[User](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Id] [int] NOT NULL,
 	[Email] [nvarchar](255) NOT NULL,
 	[Password] [nvarchar](255) NOT NULL,
 	[Login] [nvarchar](255) NOT NULL,
@@ -320,12 +317,6 @@ CREATE TABLE [dbo].[User](
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-SET IDENTITY_INSERT [dbo].[User] ON 
-GO
-INSERT [dbo].[User] ([Id], [Email], [Password], [Login], [Photo], [AccessCode], [UpdateTime]) VALUES (1, N'Guest', N'Guest', N'Guest', NULL, NULL, NULL)
-GO
-SET IDENTITY_INSERT [dbo].[User] OFF
 GO
 ALTER TABLE [dbo].[Item] ADD  DEFAULT (newid()) FOR [Id]
 GO
@@ -417,7 +408,7 @@ ON DELETE CASCADE
 GO
 ALTER TABLE [dbo].[TemplateDocumentData] CHECK CONSTRAINT [FK_TemplateDocumentData_TemplateObject]
 GO
-ALTER TABLE [dbo].[TemplateObject]  WITH CHECK ADD  CONSTRAINT [FK_TemplateObject_Template] FOREIGN KEY([Id])
+ALTER TABLE [dbo].[TemplateObject]  WITH CHECK ADD  CONSTRAINT [FK_TemplateObject_Template] FOREIGN KEY([TemplateId])
 REFERENCES [dbo].[Template] ([Id])
 ON UPDATE CASCADE
 ON DELETE CASCADE

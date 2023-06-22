@@ -46,7 +46,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" Style="{StaticResource TextBoxProperties}" Resources="{StaticResource CornerRadiusSetter}" VerticalAlignment="Top" Margin="10"/>
+                <TextBox Grid.Row="0" Style="{StaticResource TextBoxProperties}" KeyDown="TextBox_KeyDown" Resources="{StaticResource CornerRadiusSetter}" VerticalAlignment="Top" Margin="10"/>
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" >
                     <StackPanel>
 

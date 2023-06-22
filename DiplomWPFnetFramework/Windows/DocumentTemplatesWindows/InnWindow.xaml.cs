@@ -149,9 +149,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 return;
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                AddNewItem();
-                db.INN.Add(CreatingInnObject());
-                db.SaveChanges();
+                try
+                {
+                    AddNewItem();
+                    db.INN.Add(CreatingInnObject());
+                    db.SaveChanges();
+                }
+                catch
+                {
+                    MessageBox.Show("Данные не должны превышать 250 символов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
 
@@ -159,9 +166,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
         {
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                db.INN.AddOrUpdate(CreatingInnObject());
-                db.SaveChanges();
-                MessageBox.Show("Данные изменены.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
+                try
+                {
+                    db.INN.AddOrUpdate(CreatingInnObject());
+                    db.SaveChanges();
+                    MessageBox.Show("Данные изменены.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch
+                {
+                    MessageBox.Show("Данные не должны превышать 250 символов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
         }
 

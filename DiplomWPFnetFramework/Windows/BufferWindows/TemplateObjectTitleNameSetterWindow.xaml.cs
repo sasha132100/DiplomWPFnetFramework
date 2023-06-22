@@ -37,6 +37,11 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
         {
             if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
             {
+                if (NewTitleNameTextBox.Text.Length > 20)
+                {
+                    MessageBox.Show("Длина названия не должна превышать 20 сиволов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
                 SystemContext.TemplateObjectTitle = NewTitleNameTextBox.Text;
                 this.Close();
             }
@@ -52,6 +57,11 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
             {
                 if (NewTitleNameTextBox.Text != null && NewTitleNameTextBox.Text != "")
                 {
+                    if (NewTitleNameTextBox.Text.Length > 20)
+                    {
+                        MessageBox.Show("Длина нового названия не должна превышать 20 сиволов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
                     SystemContext.TemplateObjectTitle = NewTitleNameTextBox.Text;
                     this.Close();
                 }

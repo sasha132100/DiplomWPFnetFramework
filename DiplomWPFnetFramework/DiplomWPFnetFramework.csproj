@@ -438,6 +438,13 @@
       <DependentUpon>DbModel.edmx</DependentUpon>
       <LastGenOutput>DbModel.cs</LastGenOutput>
     </Content>
+    <Content Include="DataBase\LocalMyDocsAppDB.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBase\LocalMyDocsAppDB_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>LocalMyDocsAppDB.mdf</DependentUpon>
+    </Content>
     <Content Include="Resources\HelpMyDocsApp.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
