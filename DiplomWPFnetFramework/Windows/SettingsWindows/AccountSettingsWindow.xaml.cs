@@ -1,10 +1,12 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
+using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,11 +22,13 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
     /// <summary>
     /// Логика взаимодействия для AccountSettingsWindow.xaml
     /// </summary>
-    public partial class AccountSettingsWindow : Window
+    public partial class AccountSettingsWindow : System.Windows.Window
     {
         public AccountSettingsWindow()
         {
             InitializeComponent();
+            EmailTextBox.Text = SystemContext.User.Email;
+            LoginTextBox.Text = SystemContext.User.Login;
         }
 
         private void BackWindowButtonImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -36,55 +40,56 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows.SettingsWindows
         {
             if (LoginTextBox.Text == "" && EmailTextBox.Text == "" && NewPasswordTextBox.Password == "" && NewPasswordCheckTextBox.Password == "")
             {
-                MessageBox.Show("Заполните хотя бы 1 поле с новыми данными!");
+                MessageBox.Show("Заполните хотя бы 1 поле с новыми данными!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             if (OldPasswordTextBox.Password == "")
             {
-                MessageBox.Show("Введите старый пароль для изменения данных");
+                MessageBox.Show("Введите старый пароль для изменения данных", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             if (OldPasswordTextBox.Password != SystemContext.User.Password)
             {
-                MessageBox.Show("Неверный старый пароль");
+                MessageBox.Show("Неверный старый пароль", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (!Regex.IsMatch(EmailTextBox.Text, @"^[\w\.-]+@[\w\.-]+\.\w+$"))
+            {
+                MessageBox.Show("Неверный формат почты!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (NewPasswordTextBox.Password.Length < 8 && NewPasswordTextBox.Password != "")
+            {
+                MessageBox.Show("Пароль должен быть от 8 символов!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            User changeUser = SystemContext.User;
-            User checkUser;
+            User user = SystemContext.User;
+
+            if (EmailTextBox.Text != "")
+                user.Email = EmailTextBox.Text;
+            if (LoginTextBox.Text != "" && LoginTextBox.Text.Length > 1)
+                user.Login = LoginTextBox.Text;
+            if (NewPasswordTextBox.Password != "" && NewPasswordCheckTextBox.Password == NewPasswordTextBox.Password)
+                user.Password = NewPasswordTextBox.Password;
+            else if (NewPasswordTextBox.Password != "" && NewPasswordCheckTextBox.Password != NewPasswordTextBox.Password)
+                MessageBox.Show("Пароли не совпадают!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            ServerConnectPostMethodsClass serverConnectPostMethodsClass = new ServerConnectPostMethodsClass();
+            if (serverConnectPostMethodsClass.UpdateUser(user) == null)
+            {
+                MessageBox.Show("Пользователь с такими данными уже существует", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                if (LoginTextBox.Text != "")
-                {
-                    checkUser = (from u in db.User where LoginTextBox.Text == u.Login select u).FirstOrDefault();
-                    if (checkUser != null)
-                    {
-                        MessageBox.Show("Пользователь с таким логином уже существует");
-                        return;
-                    }
-                    changeUser.Login = LoginTextBox.Text;
-                }
-
-                if (EmailTextBox.Text != "")
-                {
-                    checkUser = (from u in db.User where EmailTextBox.Text == u.Email select u).FirstOrDefault();
-                    if (checkUser != null)
-                    {
-                        MessageBox.Show("Пользователь с такой почтой уже существует");
-                        return;
-                    }
-                    changeUser.Email = EmailTextBox.Text;
-                }
-
-                if (NewPasswordTextBox.Password != "" && NewPasswordCheckTextBox.Password == NewPasswordTextBox.Password)
-                {
-                    changeUser.Password = NewPasswordTextBox.Password;
-                }
-
-                db.User.AddOrUpdate(changeUser);
+                db.User.AddOrUpdate(user);
                 db.SaveChanges();
+                MessageBox.Show("Данные успешно изменены", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+            SystemContext.User = user;
+            this.Close();
         }
     }
 }

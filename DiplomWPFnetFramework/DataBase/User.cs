@@ -9,9 +9,11 @@
 
 namespace DiplomWPFnetFramework.DataBase
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,13 +27,18 @@ namespace DiplomWPFnetFramework.DataBase
         public string Email { get; set; }
         public string Password { get; set; }
         public string Login { get; set; }
+        [JsonIgnore]
         public byte[] Photo { get; set; }
+        [NotMapped]
+        public string Photo64 { get; set; }
         public string AccessCode { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<Item> Item { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<Template> Template { get; set; }
     }
 }

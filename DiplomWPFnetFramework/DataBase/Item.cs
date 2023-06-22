@@ -9,9 +9,11 @@
 
 namespace DiplomWPFnetFramework.DataBase
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Item
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,27 +21,39 @@ namespace DiplomWPFnetFramework.DataBase
         {
             this.Photo = new HashSet<Photo>();
         }
-    
+
         public System.Guid Id { get; set; }
         public string Title { get; set; }
         public string Type { get; set; }
+        [JsonIgnore]
         public byte[] Image { get; set; }
+        [NotMapped]
+        public string Image64 { get; set; }
         public int Priority { get; set; }
         public int IsHidden { get; set; }
+        [JsonIgnore]
         public int IsSelected { get; set; }
         public System.DateTime DateCreation { get; set; }
         public Nullable<System.Guid> FolderId { get; set; }
         public int UserId { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-    
+
+        [JsonIgnore]
         public virtual CreditCard CreditCard { get; set; }
+        [JsonIgnore]
         public virtual INN INN { get; set; }
+        [JsonIgnore]
         public virtual User User { get; set; }
+        [JsonIgnore]
         public virtual Passport Passport { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<Photo> Photo { get; set; }
+        [JsonIgnore]
         public virtual Polis Polis { get; set; }
+        [JsonIgnore]
         public virtual SNILS SNILS { get; set; }
+        [JsonIgnore]
         public virtual TemplateDocument TemplateDocument { get; set; }
     }
 }

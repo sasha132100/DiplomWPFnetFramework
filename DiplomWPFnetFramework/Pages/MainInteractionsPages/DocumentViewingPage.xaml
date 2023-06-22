@@ -122,7 +122,7 @@
                     </ResourceDictionary>
                 </WrapPanel.Resources>
             </WrapPanel>
-            <Button x:Name="addNewDocumentButton" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,20" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Click="addNewDocumentButton_Click">
+            <Button ToolTip="Добавить объект" x:Name="addNewDocumentButton" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,20" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Click="addNewDocumentButton_Click">
                 <Image x:Name="addNewImage" Source="pack://application:,,,/Resources/addImage.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill"/>
             </Button>
         </Grid>

@@ -90,8 +90,8 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 else
                     passport.Id = (from p in db.Passport where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Passport>().Id;
 
-                passport.SerialNumber = SerialAndNumberTextBox.Text;
-                passport.DivisionCode = DivisionCodeTextBox.Text;
+                passport.SerialNumber = SerialAndNumberTextBox.Text.Replace("_", " ");
+                passport.DivisionCode = DivisionCodeTextBox.Text.Replace("_", " ");
                 passport.GiveDate = DateOfIssueDatePicker.SelectedDate;
                 passport.ByWhom = IssuedByWhomTextBox.Text;
                 passport.FIO = FIOTextBox.Text;
@@ -105,6 +105,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 passport.FacePhoto = ownersPhotoBytes;
                 passport.PhotoPage1 = passportPhoto1Bytes;
                 passport.PhotoPage2 = passportPhoto2Bytes;
+                passport.UpdateTime = DateTime.Now;
                 return passport;
             }
         }
@@ -147,6 +148,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.DateCreation = DateTime.Now;
                 item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
+                item.UpdateTime = DateTime.Now;
                 db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
@@ -171,7 +173,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 db.Passport.AddOrUpdate(CreatingPassportObject());
                 db.SaveChanges();
-                MessageBox.Show("Данные изменены");
+                MessageBox.Show("Данные изменены.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -221,11 +223,11 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 string fileImage = openFileDialog.FileName;
                 coverImage = File.ReadAllBytes(fileImage);
-                Item item;
-                item = SystemContext.Item;
+                Item item = SystemContext.Item;
                 using (var db = new LocalMyDocsAppDBEntities())
                 {
                     item.Image = coverImage;
+                    item.UpdateTime = DateTime.Now;
                     db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
@@ -321,40 +323,51 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             passportParagraph.Range.Text += $"Серия и номер: {passport.SerialNumber}";
             passportParagraph.Range.Text += $"ФИО: {passport.FIO}";
             passportParagraph.Range.Text += $"Пол: {passport.Gender}";
-            passportParagraph.Range.Text += $"Дата рождения: {passport.BirthDate}";
+            if (passport.BirthDate != null)
+                passportParagraph.Range.Text += $"Дата рождения: {passport.BirthDate.Value.ToString("dd.MM.yyyy")}";
             passportParagraph.Range.Text += $"Место рождения: {passport.BirthPlace}";
             passportParagraph.Range.Text += $"Место жительства: {passport.ResidencePlace}";
             passportParagraph.Range.Text += $"Кем выдан: {passport.ByWhom}";
             passportParagraph.Range.Text += $"Код подразделения: {passport.DivisionCode}";
-            passportParagraph.Range.Text += $"Дата выдачи: {passport.GiveDate}";
+            if (passport.GiveDate != null)
+                passportParagraph.Range.Text += $"Дата выдачи: {passport.GiveDate.Value.ToString("dd.MM.yyyy")}";
 
-            string tempFaceImagePath = Path.GetTempFileName();
-            File.WriteAllBytes(tempFaceImagePath, passport.FacePhoto);
-            InlineShape shape = doc.InlineShapes.AddPicture(tempFaceImagePath);
-            shape.LockAspectRatio = Microsoft.Office.Core.MsoTriState.msoFalse;
-            shape.Width = 180;
-            shape.Height = 220;
-            File.Delete(tempFaceImagePath);
+            if (passport.FacePhoto != null)
+            {
+                string tempFaceImagePath = Path.GetTempFileName();
+                File.WriteAllBytes(tempFaceImagePath, passport.FacePhoto);
+                InlineShape shape = doc.InlineShapes.AddPicture(tempFaceImagePath);
+                shape.LockAspectRatio = Microsoft.Office.Core.MsoTriState.msoFalse;
+                shape.Width = 180;
+                shape.Height = 220;
+                File.Delete(tempFaceImagePath);
+            }
 
-            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+            if (passport.PhotoPage1 != null)
+            {
+                doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
-            imageRange1.InsertParagraphAfter();
+                Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+                imageRange1.InsertParagraphAfter();
 
-            string tempImage1Path = Path.GetTempFileName();
-            File.WriteAllBytes(tempImage1Path, passport.PhotoPage1);
-            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
-            File.Delete(tempImage1Path);
+                string tempImage1Path = Path.GetTempFileName();
+                File.WriteAllBytes(tempImage1Path, passport.PhotoPage1);
+                InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+                File.Delete(tempImage1Path);
+            }
 
-            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+            if (passport.PhotoPage2 != null)
+            {
+                doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Range imageRange2 = doc.Content.Paragraphs.Add().Range;
-            imageRange2.InsertParagraphAfter();
+                Range imageRange2 = doc.Content.Paragraphs.Add().Range;
+                imageRange2.InsertParagraphAfter();
 
-            string tempImage2Path = Path.GetTempFileName();
-            File.WriteAllBytes(tempImage2Path, passport.PhotoPage2);
-            InlineShape shape2 = imageRange2.InlineShapes.AddPicture(tempImage2Path);
-            File.Delete(tempImage2Path);
+                string tempImage2Path = Path.GetTempFileName();
+                File.WriteAllBytes(tempImage2Path, passport.PhotoPage2);
+                InlineShape shape2 = imageRange2.InlineShapes.AddPicture(tempImage2Path);
+                File.Delete(tempImage2Path);
+            }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
@@ -362,9 +375,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string outputPath = saveFileDialog.FileName;
+                try
+                {
+                    string outputPath = saveFileDialog.FileName;
 
-                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                    doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                }
+                catch
+                {
+                    MessageBox.Show("Закойте документ для обновления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
             else
             {

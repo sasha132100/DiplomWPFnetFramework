@@ -47,11 +47,12 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 {
                     photoes = (from p in db.Photo
                                where p.CollectionID == SystemContext.Item.Id
+                               orderby p.UpdateTime
                                select p).ToList<Photo>();
                 }
                 catch
                 {
-                    MessageBox.Show("Ошибка при загрузке документов");
+                    MessageBox.Show("Ошибка при загрузке документов!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 foreach (var photo in photoes)
@@ -114,6 +115,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 photo.Id = Guid.NewGuid();
                 photo.Image = photoBytes;
                 photo.CollectionID = SystemContext.Item.Id;
+                photo.UpdateTime = DateTime.Now;
                 return photo;
             }
         }

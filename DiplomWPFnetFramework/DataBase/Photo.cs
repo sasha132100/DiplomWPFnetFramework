@@ -9,16 +9,22 @@
 
 namespace DiplomWPFnetFramework.DataBase
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Photo
     {
         public System.Guid Id { get; set; }
+        [JsonIgnore]
         public byte[] Image { get; set; }
+        [NotMapped]
+        public string Image64 { get; set; }
         public System.Guid CollectionID { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-    
+
+        [JsonIgnore]
         public virtual Item Item { get; set; }
     }
 }

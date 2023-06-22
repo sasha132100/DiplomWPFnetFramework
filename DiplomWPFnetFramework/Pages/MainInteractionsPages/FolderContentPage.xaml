@@ -89,10 +89,10 @@
                     </ResourceDictionary>
                 </WrapPanel.Resources>
             </WrapPanel>
-            <Button x:Name="addNewElementsInFolderButton" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,60" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Click="addNewElementsInFolderButton_Click">
+            <Button ToolTip="Добавить в папку" x:Name="addNewElementsInFolderButton" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,60" Style="{StaticResource ButtonProperties}" Resources="{StaticResource CornerRadiusSetter}" Click="addNewElementsInFolderButton_Click">
                 <Image Source="pack://application:,,,/Resources/addImage.png" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill"/>
             </Button>
-            <Border x:Name="CloseFolderPage" Height="80" Background="#2D346F" VerticalAlignment="Bottom" CornerRadius="20" Margin="0,0,0,-40" MouseLeftButtonUp="CloseFolderPage_MouseLeftButtonUp" Cursor="Hand">
+            <Border ToolTip="Выйти из папки" x:Name="CloseFolderPage" Height="80" Background="#2D346F" VerticalAlignment="Bottom" CornerRadius="20" Margin="0,0,0,-40" MouseLeftButtonUp="CloseFolderPage_MouseLeftButtonUp" Cursor="Hand">
                 <TextBlock x:Name="FolderNameTextBlock" Style="{StaticResource TextBlockMainProperties}" Margin="0,5,0,0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
             </Border>
         </Grid>

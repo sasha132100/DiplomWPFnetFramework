@@ -45,6 +45,7 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
                 item.DateCreation = DateTime.Now;
                 item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
+                item.UpdateTime = DateTime.Now;
                 db.Item.AddOrUpdate(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;

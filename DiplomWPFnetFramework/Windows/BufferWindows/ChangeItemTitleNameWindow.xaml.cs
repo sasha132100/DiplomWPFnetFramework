@@ -47,12 +47,12 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                     db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
-                MessageBox.Show("Название успешно изменено");
+                MessageBox.Show("Название успешно изменено.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Введите данные!");
+                MessageBox.Show("Введите данные!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -70,12 +70,12 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                         db.Item.AddOrUpdate(item);
                         db.SaveChanges();
                     }
-                    MessageBox.Show("Название успешно изменено");
+                    MessageBox.Show("Название успешно изменено.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Введите новое название!");
+                    MessageBox.Show("Введите данные!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
         }

@@ -40,7 +40,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
             {
                 if (CodeCheckTextBox.Password == null || CodeCheckTextBox.Password == "")
                 {
-                    MessageBox.Show("Введите код доступа");
+                    MessageBox.Show("Введите код доступа!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -53,13 +53,13 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                     hiddenFilesViewerWindow.ShowDialog();
                 }
                 else
-                    MessageBox.Show("Код доступа введен неправильно!");
+                    MessageBox.Show("Код доступа введен неправильно!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else if (SystemContext.FromWhichWindowIsCalled == "LoginWindow")
             {
                 if (CodeCheckTextBox.Password == null || CodeCheckTextBox.Password == "")
                 {
-                    MessageBox.Show("Введите код доступа");
+                    MessageBox.Show("Введите код доступа!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 
@@ -72,13 +72,13 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                     documentViewingWindow.ShowDialog();
                 }
                 else
-                    MessageBox.Show("Код введен неправильно!");
+                    MessageBox.Show("Код введен неправильно!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             else
             {
                 if (CodeCheckTextBox.Password == null || CodeCheckTextBox.Password == "")
                 {
-                    MessageBox.Show("Введите код доступа");
+                    MessageBox.Show("Введите код доступа!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
@@ -94,7 +94,7 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                     this.Close();
                 }
                 else
-                    MessageBox.Show("Код введен неправильно!");
+                    MessageBox.Show("Код введен неправильно!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -107,21 +107,73 @@ namespace DiplomWPFnetFramework.Windows.BufferWindows
                 {
                     if (CodeCheckTextBox.Password == null || CodeCheckTextBox.Password == "")
                     {
-                        MessageBox.Show("Введите код доступа");
+                        MessageBox.Show("Введите код доступа!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
 
                     if (CodeCheckTextBox.Password == SystemContext.User.AccessCode)
                     {
+                        SystemContext.isFromHiddenFiles = true;
                         HiddenFilesViewerWindow hiddenFilesViewerWindow = new HiddenFilesViewerWindow();
                         this.Owner.Close();
                         this.Close();
                         hiddenFilesViewerWindow.ShowDialog();
                     }
                     else
+                        MessageBox.Show("Код доступа введен неправильно!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else if (SystemContext.FromWhichWindowIsCalled == "LoginWindow")
+                {
+                    if (CodeCheckTextBox.Password == null || CodeCheckTextBox.Password == "")
                     {
-                        MessageBox.Show("Код доступа введен неправильно!");
+                        MessageBox.Show("Введите код доступа!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
                     }
+
+                    if (CodeCheckTextBox.Password == SystemContext.User.AccessCode)
+                    {
+                        SystemContext.isFromHiddenFiles = false;
+                        DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
+                        SystemContext.loginWindow.Close();
+                        this.Close();
+                        documentViewingWindow.ShowDialog();
+                    }
+                    else
+                        MessageBox.Show("Код введен неправильно!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    if (CodeCheckTextBox.Password == null || CodeCheckTextBox.Password == "")
+                    {
+                        MessageBox.Show("Введите код доступа!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
+                    if (CodeCheckTextBox.Password == SystemContext.User.AccessCode)
+                    {
+                        SystemContext.isFromHiddenFiles = false;
+                        if (this.Owner is SettingsAndPatternWindow)
+                        {
+                            SettingsAndPatternWindow settingsAndPatternWindow = this.Owner as SettingsAndPatternWindow;
+                            SecurityPage securityPage = new SecurityPage();
+                            settingsAndPatternWindow.RightFrame.Content = securityPage;
+                        }
+                        this.Close();
+                    }
+                    else
+                        MessageBox.Show("Код введен неправильно!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+        }
+
+        private void CodeCheckTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            foreach (char c in e.Text)
+            {
+                if (!char.IsDigit(c))
+                {
+                    e.Handled = true;
+                    break;
                 }
             }
         }

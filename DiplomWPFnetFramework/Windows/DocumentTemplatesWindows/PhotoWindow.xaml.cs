@@ -49,7 +49,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 }
                 catch
                 {
-                    MessageBox.Show("Ошибка");
+                    MessageBox.Show("Ошибка при загрузке фотографии.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
 
@@ -84,7 +84,9 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                     photo.CollectionID = SystemContext.NewItem.Id;
                 else
                     photo = SystemContext.Photo;
+                photo.Id = Guid.NewGuid();
                 photo.Image = photoBytes;
+                photo.UpdateTime = DateTime.Now;
                 return photo;
             }
         }
@@ -103,6 +105,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.DateCreation = DateTime.Now;
                 item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
+                item.UpdateTime = DateTime.Now;
                 db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
@@ -115,7 +118,14 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 AddNewItem();
                 db.Photo.Add(CreatingPhotoObject());
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch
+                {
+
+                }
                 return "Добавлен";
             }
         }
@@ -126,7 +136,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 db.Photo.AddOrUpdate(CreatingPhotoObject());
                 db.SaveChanges();
-                MessageBox.Show("Данные изменены");
+                MessageBox.Show("Данные изменены", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -230,9 +240,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string outputPath = saveFileDialog.FileName;
+                try
+                {
+                    string outputPath = saveFileDialog.FileName;
 
-                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                    doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                }
+                catch
+                {
+                    MessageBox.Show("Закойте документ для обновления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
             else
             {

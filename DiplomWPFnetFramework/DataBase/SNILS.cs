@@ -9,9 +9,11 @@
 
 namespace DiplomWPFnetFramework.DataBase
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class SNILS
     {
         public System.Guid Id { get; set; }
@@ -21,9 +23,13 @@ namespace DiplomWPFnetFramework.DataBase
         public Nullable<System.DateTime> BirthDate { get; set; }
         public string BirthPlace { get; set; }
         public Nullable<System.DateTime> RegistrationDate { get; set; }
+        [JsonIgnore]
         public byte[] PhotoPage1 { get; set; }
+        [NotMapped]
+        public string PhotoPage164 { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-    
+
+        [JsonIgnore]
         public virtual Item Item { get; set; }
     }
 }
