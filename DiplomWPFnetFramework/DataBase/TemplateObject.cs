@@ -9,6 +9,7 @@
 
 namespace DiplomWPFnetFramework.DataBase
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -26,9 +27,11 @@ namespace DiplomWPFnetFramework.DataBase
         public string Title { get; set; }
         public System.Guid TemplateId { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-    
+
+        [JsonIgnore]
         public virtual Template Template { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<TemplateDocumentData> TemplateDocumentData { get; set; }
     }
 }

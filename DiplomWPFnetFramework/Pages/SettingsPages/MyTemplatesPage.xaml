@@ -17,7 +17,9 @@
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="#FCF3DC"/>
-            <Setter Property="Margin" Value="40,15,0,0"/>
+            <Setter Property="Margin" Value="40,0,3,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
         <Style x:Key="TextBoxProperties" TargetType="TextBox">
             <Setter Property="FontFamily" Value="Arial"/>
@@ -38,11 +40,31 @@
             <Setter Property="Height" Value="60"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
+        <Style TargetType="ContextMenu">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
         <ResourceDictionary x:Key="CornerRadiusSetter">
             <Style TargetType="Border">
                 <Setter Property="CornerRadius" Value="10"/>
             </Style>
         </ResourceDictionary>
+        <ContextMenu Background="White" x:Key="MyContextMenu" >
+            <MenuItem x:Name="PublicyTemplate" Header="Опубликовать" Click="MenuItemPublicyTemplate_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/PublicyTemplateImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem x:Name="DeleteTemplate" Header="Удалить" Click="MenuItemDeleteTemplate_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/DeleteImage.png" Width="16" Height="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
     </Page.Resources>
     <DockPanel>
         <TextBlock Text="Мои шаблоны" FontSize="30" FontWeight="Bold" Margin="10" HorizontalAlignment="Center" DockPanel.Dock="Top"/>

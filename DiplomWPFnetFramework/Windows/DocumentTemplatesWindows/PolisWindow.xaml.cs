@@ -83,21 +83,22 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             using (var db = new LocalMyDocsAppDBEntities())
             {
                 Polis polis = new Polis();
-                if (SystemContext.isChange == false)
+                if (!SystemContext.isChange)
                     polis.Id = SystemContext.NewItem.Id;
                 else
                     polis.Id = (from p in db.Polis where p.Id == SystemContext.Item.Id select p).FirstOrDefault<Polis>().Id;
 
-                polis.Number = PolisNumberTextBox.Text;
+                polis.Number = PolisNumberTextBox.Text.Replace("_", " ");
                 polis.FIO = FIOTextBox.Text;
                 polis.BirthDate = DateOfBirthDatePicker.SelectedDate;
-                polis.ValidUntil = ValidUntilTextBox.Text;
+                polis.ValidUntil = ValidUntilTextBox.Text.Replace("_", " ");
                 if (MaleChoiseRadioButton.IsChecked == true)
                     polis.Gender = "M";
                 else
                     polis.Gender = "F";
                 polis.PhotoPage1 = polisPhoto1Bytes;
                 polis.PhotoPage2 = polisPhoto2Bytes;
+                polis.UpdateTime = DateTime.Now;
                 return polis;
             }
         }
@@ -139,6 +140,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.DateCreation = DateTime.Now;
                 item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
+                item.UpdateTime = DateTime.Now;
                 db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
@@ -163,7 +165,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 db.Polis.AddOrUpdate(CreatingPolisObject());
                 db.SaveChanges();
-                MessageBox.Show("Данные изменены");
+                MessageBox.Show("Данные изменены", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -213,6 +215,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 using (var db = new LocalMyDocsAppDBEntities())
                 {
                     item.Image = coverImage;
+                    item.UpdateTime = DateTime.Now;
                     db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
@@ -299,28 +302,35 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             passportParagraph.Range.Text += $"Номер: {polis.Number}";
             passportParagraph.Range.Text += $"ФИО: {polis.FIO}";
             passportParagraph.Range.Text += $"Пол: {polis.Gender}";
-            passportParagraph.Range.Text += $"Дата рождения: {polis.BirthDate}";
+            if (polis.BirthDate != null)
+                passportParagraph.Range.Text += $"Дата рождения: {polis.BirthDate.Value.ToString("dd.MM.yyyy")}";
             passportParagraph.Range.Text += $"Годен до: {polis.ValidUntil}";
 
-            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+            if (polis.PhotoPage1 != null)
+            {
+                doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
-            imageRange1.InsertParagraphAfter();
+                Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+                imageRange1.InsertParagraphAfter();
 
-            string tempImage1Path = Path.GetTempFileName();
-            File.WriteAllBytes(tempImage1Path, polis.PhotoPage1);
-            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
-            File.Delete(tempImage1Path);
+                string tempImage1Path = Path.GetTempFileName();
+                File.WriteAllBytes(tempImage1Path, polis.PhotoPage1);
+                InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+                File.Delete(tempImage1Path);
+            }
 
-            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+            if (polis.PhotoPage1 != null)
+            {
+                doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Range imageRange2 = doc.Content.Paragraphs.Add().Range;
-            imageRange2.InsertParagraphAfter();
+                Range imageRange2 = doc.Content.Paragraphs.Add().Range;
+                imageRange2.InsertParagraphAfter();
 
-            string tempImage2Path = Path.GetTempFileName();
-            File.WriteAllBytes(tempImage2Path, polis.PhotoPage2);
-            InlineShape shape2 = imageRange2.InlineShapes.AddPicture(tempImage2Path);
-            File.Delete(tempImage2Path);
+                string tempImage2Path = Path.GetTempFileName();
+                File.WriteAllBytes(tempImage2Path, polis.PhotoPage2);
+                InlineShape shape2 = imageRange2.InlineShapes.AddPicture(tempImage2Path);
+                File.Delete(tempImage2Path);
+            }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
@@ -328,9 +338,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string outputPath = saveFileDialog.FileName;
+                try
+                {
+                    string outputPath = saveFileDialog.FileName;
 
-                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                    doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                }
+                catch
+                {
+                    MessageBox.Show("Закойте документ для обновления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
             else
             {

@@ -116,18 +116,18 @@
             <ImageBrush ImageSource="pack://application:,,,/Resources/MainWindowBackgroundGradient.png"/>
         </DockPanel.Background>
         <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
-            <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" MouseLeftButtonUp="BackWindowButtonImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid ToolTip="Назад" Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" MouseLeftButtonUp="BackWindowButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Resources\BackArrowButtonImage.png"/>
                 </Grid.Background>
             </Grid>
             <TextBlock x:Name="PassportNameOutTextBlock" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand" TextDecorations="Underline" MouseLeftButtonUp="PassportNameOutTextBlock_MouseLeftButtonUp"/>
-            <Grid x:Name="confirmButtonImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,80,0" MouseLeftButtonUp="confirmButtonImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid ToolTip="Сохранить" x:Name="confirmButtonImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,80,0" MouseLeftButtonUp="confirmButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/CheckMarkImage.png"/>
                 </Grid.Background>
             </Grid>
-            <Grid x:Name="DocumentMoreInteractionsGrid" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid ToolTip="Больше функций" x:Name="DocumentMoreInteractionsGrid" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" MouseLeftButtonUp="DocumentMoreInteractionsButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Resources\DocumentMoreInteractionsImage.png"/>
                 </Grid.Background>
@@ -150,9 +150,9 @@
                 </Grid>
                 <StackPanel Margin="25,0,0,0">
                     <TextBlock Text="Кем выдан" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
-                    <TextBox x:Name="IssuedByWhomTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" Resources="{StaticResource CornerRadiusSetter}"/>
+                    <TextBox x:Name="IssuedByWhomTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" TextWrapping="Wrap" Resources="{StaticResource CornerRadiusSetter}"/>
                     <TextBlock Text="ФИО" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
-                    <TextBox x:Name="FIOTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" Resources="{StaticResource CornerRadiusSetter}"/>
+                    <TextBox x:Name="FIOTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" TextWrapping="Wrap" Resources="{StaticResource CornerRadiusSetter}"/>
                     <Grid>
                         <TextBlock Text="Дата рождения" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
                         <DatePicker x:Name="DateOfBirthDatePicker" Resources="{StaticResource CornerRadiusSetter}" Margin="0,30,0,0" Width="250" HorizontalAlignment="Left"/>
@@ -161,9 +161,9 @@
                         <RadioButton x:Name="FemaleChoiseRadioButton" Content="Ж" Margin="0,0,70,5"/>
                     </Grid>
                     <TextBlock Text="Место рождения" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
-                    <TextBox x:Name="PlaceOfBirthTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" Resources="{StaticResource CornerRadiusSetter}"/>
+                    <TextBox x:Name="PlaceOfBirthTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" TextWrapping="Wrap" Resources="{StaticResource CornerRadiusSetter}"/>
                     <TextBlock Text="Место жительства" Style="{StaticResource ResourceKey=TextBlockMainProperties}"/>
-                    <TextBox x:Name="PlaceOfResidenceTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" Resources="{StaticResource CornerRadiusSetter}"/>
+                    <TextBox x:Name="PlaceOfResidenceTextBox" Style="{StaticResource ResourceKey=TextBoxPropertiesType2}" TextWrapping="Wrap" Resources="{StaticResource CornerRadiusSetter}"/>
                 </StackPanel>
             </StackPanel>
             <Border Style="{StaticResource ResourceKey=BorderProperties}" Margin="0,25,25,0" MouseLeftButtonUp="PassportPhoto1_MouseLeftButtonUp" Cursor="Hand">

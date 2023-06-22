@@ -6,6 +6,10 @@ using DiplomWPFnetFramework.Classes;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using DiplomWPFnetFramework.Windows.BufferWindows;
 using System.Data.Entity.Migrations;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System;
+using System.Globalization;
 
 namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 {
@@ -18,8 +22,8 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         {
             InitializeComponent();
             IsAlreadyAuthorization();
-            EmailTextBox.Text = "Test@gmail.com";
-            PasswordTextBox.Password = "qqqqwwww";
+            /*EmailTextBox.Text = "Test@gmail.com";
+            PasswordTextBox.Password = "qqqqwwww";*/
         }
 
         private void IsAlreadyAuthorization()
@@ -48,18 +52,36 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             }
         }
 
-        private string LoginMethod(string email, string password)
+        private async Task<string> LoginMethod(string email, string password)
         {
             string login = null;
             if (email.Length == 0 || password.Length == 0)
                 return "Не все поля заполнены!";
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                User user = (from u in db.User where u.Email == email select u).FirstOrDefault();
+                if (!Regex.IsMatch(EmailTextBox.Text, @"^[\w\.-]+@[\w\.-]+\.\w+$"))
+                    return "Неверный формат почты!";
+                ServerConnectGetMethodsClass serverConnectMethodsClass = new ServerConnectGetMethodsClass();
+                User user = await serverConnectMethodsClass.GetUserByEmailAndPassword(email, password);
+
+                if (user == null)
+                {
+                    MessageBox.Show("Ошибка при попытке входа, проверьте введенные данные и повторите попытку!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return null;
+                }
+
+                string dateString = "1900-01-01 00:00:00";
+                string format = "yyyy-MM-dd HH:mm:ss";
+                DateTime result;
+                if (DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+                {
+                    user.UpdateTime = result;
+                }
                 if (user == null)
                     return "Пользователя с такой почтой не существует!";
                 if (user.Password != password)
                     return "Неверный пароль!";
+                db.User.AddOrUpdate(user);
                 SystemContext.User = user;
                 login = user.Login;
                 LastLogginedUser lastLogginedUser = (from llu in db.LastLogginedUser select llu).FirstOrDefault();
@@ -71,9 +93,9 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             return $"Добро пожаловать, {login}!";
         }
 
-        private void LogInButton_Click(object sender, RoutedEventArgs e)
+        private async void LogInButton_Click(object sender, RoutedEventArgs e)
         {
-            string result = LoginMethod(EmailTextBox.Text, PasswordTextBox.Password);
+            string result = await LoginMethod(EmailTextBox.Text, PasswordTextBox.Password);
             if (result == $"Добро пожаловать, {SystemContext.User.Login}!")
             {
                 MessageBox.Show(result, "Приветствие", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -85,6 +107,8 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             }
             else
             {
+                if (result == null)
+                    return;
                 MessageBox.Show(result, "Результат", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
@@ -101,11 +125,25 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             SystemContext.isGuest = true;
             using (var db = new LocalMyDocsAppDBEntities())
             {
-                User user = (from u in db.User where u.Email == "Guest" select u).FirstOrDefault();
-                SystemContext.User = user;
-                DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
-                this.Close();
-                documentViewingWindow.ShowDialog();
+                User user = new User();
+                user = (from u in db.User where u.Email == "Guest" select u).FirstOrDefault(); 
+                if (user == null)
+                {
+                    User user1 = new User() { Id = 0, Email = "Guest", Login = "Guest", Password = "Guest"};
+                    db.User.Add(user1);
+                    db.SaveChanges();
+                    SystemContext.User = user1;
+                    DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
+                    this.Close();
+                    documentViewingWindow.ShowDialog();
+                }
+                else
+                {
+                    SystemContext.User = user;
+                    DocumentViewingWindow documentViewingWindow = new DocumentViewingWindow();
+                    this.Close();
+                    documentViewingWindow.ShowDialog();
+                }
             }
         }
     }

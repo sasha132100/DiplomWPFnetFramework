@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e7e248577e5442db92c1f2408f971a05" Name="Diagram1">
+      <Diagram DiagramId="5c66ddccfdec46b38623200499a11be5" Name="Diagram1">
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.CreditCard" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.INN" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="LocalMyDocsAppDBModel.Item" Width="1.5" PointX="3" PointY="11.875" IsExpanded="true" />

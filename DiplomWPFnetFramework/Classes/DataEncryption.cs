@@ -8,8 +8,8 @@ namespace DiplomWPFnetFramework.Classes
 {
     public static class DataEncryption
     {
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes("kebxmuxyghbwgbvukqvwoltwhemzfavlecrgouigyqpozgstpyawynvsdvzwixisruzielqpiodbwwqkukfpmmzrmwcuajlesiwfncshhkeuynxmfpszlacaoxbwxnul");
-        private static readonly byte[] IV = Encoding.UTF8.GetBytes("fphcocmbqgeobtquizvualfmeweatgqsfhpvzjgdqcejltwtsijhuojoyebcepfb");
+        private static readonly byte[] Key = Encoding.UTF8.GetBytes("xhnsienphefgfnafcbpvsozlruzeclck");
+        private static readonly byte[] IV = Encoding.UTF8.GetBytes("nonrqcixaulnquzl");
 
         public static string Encrypt(string plainText)
         {

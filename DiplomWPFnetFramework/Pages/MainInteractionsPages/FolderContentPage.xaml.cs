@@ -62,7 +62,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                     }
                     if (!SystemContext.isDocumentNeedToShow)
                     {
-                        Item.RemoveAll(d => d.Type == "Passport" || d.Type == "INN" || d.Type == "SNILS" || d.Type == "Polis");
+                        Item.RemoveAll(d => d.Type == "Passport" || d.Type == "INN" || d.Type == "SNILS" || d.Type == "Polis" || d.Type == "Template");
                     }
                     if (!SystemContext.isCreditCardNeedToShow)
                         Item.RemoveAll(cc => cc.Type == "CreditCard");
@@ -73,7 +73,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 }
                 catch
                 {
-                    MessageBox.Show("Ошибка при загрузке документов");
+                    MessageBox.Show("Ошибка при загрузке документов!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 foreach (var item in Item)
@@ -181,7 +181,6 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 }
             }
             imageBrush.ImageSource = image.Source;
-            imageBrush.Stretch = Stretch.UniformToFill;
             mainGrid.Background = imageBrush;
 
             bottomDarkeningBorder.VerticalAlignment = VerticalAlignment.Bottom;
@@ -231,43 +230,42 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                         var passportWindow = new PassportWindow();
                         passportWindow.Closed += Window_Closed;
                         passportWindow.ShowDialog();
+                        SystemContext.Item = SystemContext.Folder;
                         break;
 
                     case "INN":
                         var innWindow = new InnWindow();
                         innWindow.Closed += Window_Closed;
                         innWindow.ShowDialog();
+                        SystemContext.Item = SystemContext.Folder;
                         break;
 
                     case "SNILS":
                         var snilsWindow = new SnilsWindow();
                         snilsWindow.Closed += Window_Closed;
                         snilsWindow.ShowDialog();
+                        SystemContext.Item = SystemContext.Folder;
                         break;
 
                     case "Polis":
                         var polisWindow = new PolisWindow();
                         polisWindow.Closed += Window_Closed;
                         polisWindow.ShowDialog();
+                        SystemContext.Item = SystemContext.Folder;
                         break;
 
                     case "Photo":
                         var photoWindow = new PhotoWindow();
                         photoWindow.Closed += Window_Closed;
                         photoWindow.ShowDialog();
+                        SystemContext.Item = SystemContext.Folder;
                         break;
 
                     case "CreditCard":
                         var creditCardWindow = new CreditCardWindow();
                         creditCardWindow.Closed += Window_Closed;
                         creditCardWindow.ShowDialog();
-                        break;
-
-                    case "Folder":
-                        SystemContext.Folder = SystemContext.Item;
-                        Frame openFolderPageFrame = parentWindow.FindName("openPageFrame") as Frame;
-                        FolderContentPage folderContentPage = new FolderContentPage();
-                        openFolderPageFrame.Content = folderContentPage;
+                        SystemContext.Item = SystemContext.Folder;
                         break;
 
                     case "Collection":
@@ -275,10 +273,20 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                         Frame openCollectionPageFrame = parentWindow.FindName("openPageFrame") as Frame;
                         CollectionContentPage collectionContentPage = new CollectionContentPage();
                         openCollectionPageFrame.Content = collectionContentPage;
+                        SystemContext.Item = SystemContext.Folder;
+                        break;
+
+                    case "Template":
+                        TemplateDocument templateDocument = db.TemplateDocument.Where(td => td.Id == SystemContext.Item.Id).FirstOrDefault();
+                        SystemContext.Template = db.Template.Where(t => t.Id == templateDocument.TemplateId).FirstOrDefault();
+                        var UserTemplateWindow = new UserTemplateWindow();
+                        UserTemplateWindow.Closed += Window_Closed;
+                        UserTemplateWindow.ShowDialog();
+                        SystemContext.Item = SystemContext.Folder;
                         break;
 
                     default:
-                        MessageBox.Show("Ошибка при открытии документа");
+                        MessageBox.Show("Ошибка при открытии документа!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         break;
                 }
             }

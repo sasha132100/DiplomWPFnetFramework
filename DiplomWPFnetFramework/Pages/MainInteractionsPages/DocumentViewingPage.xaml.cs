@@ -67,7 +67,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                                 orderby i.Priority descending, i.DateCreation
                                 select i).ToList<Item>();
                         if (!SystemContext.isDocumentNeedToShow)
-                            Item.RemoveAll(d => d.Type == "Passport" || d.Type == "INN" || d.Type == "SNILS" || d.Type == "Polis");
+                            Item.RemoveAll(d => d.Type == "Passport" || d.Type == "INN" || d.Type == "SNILS" || d.Type == "Polis" || d.Type == "Template");
                         if (!SystemContext.isCreditCardNeedToShow)
                             Item.RemoveAll(cc => cc.Type == "CreditCard");
                         if (!SystemContext.isCollectionNeedToShow)
@@ -82,7 +82,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                                  orderby i.Priority descending, i.DateCreation
                                  select i).ToList<Item>();
                         if (!SystemContext.isDocumentNeedToShow)
-                            Item.RemoveAll(d => d.Type == "Passport" || d.Type == "INN" || d.Type == "SNILS" || d.Type == "Polis");
+                            Item.RemoveAll(d => d.Type == "Passport" || d.Type == "INN" || d.Type == "SNILS" || d.Type == "Polis" || d.Type == "Template");
                         if (!SystemContext.isCreditCardNeedToShow)
                             Item.RemoveAll(cc => cc.Type == "CreditCard");
                         if (!SystemContext.isCollectionNeedToShow)
@@ -93,7 +93,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 }
                 catch
                 {
-                    MessageBox.Show("Ошибка при загрузке документов");
+                    MessageBox.Show("Ошибка при загрузке документов!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 foreach (var item in Item)
@@ -458,8 +458,16 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                             openCollectionPageFrame.Content = collectionContentPage;
                             break;
 
+                        case "Template":
+                            TemplateDocument templateDocument = db.TemplateDocument.Where(td => td.Id == SystemContext.Item.Id).FirstOrDefault();
+                            SystemContext.Template = db.Template.Where(t => t.Id == templateDocument.TemplateId).FirstOrDefault();
+                            var UserTemplateWindow = new UserTemplateWindow();
+                            UserTemplateWindow.Closed += Window_Closed;
+                            UserTemplateWindow.ShowDialog();
+                            break;
+
                         default:
-                            MessageBox.Show("Ошибка при открытии документа");
+                            MessageBox.Show("Ошибка при открытии документа!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                             break;
                     }
                 }
@@ -496,7 +504,7 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                     }
                     catch
                     {
-                        MessageBox.Show("Ошибка при иницианлизации выбранных документов");
+                        MessageBox.Show("Ошибка при иницианлизации выбранных документов!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     foreach (var item in Item)
@@ -593,8 +601,8 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                 if (item.Type == "Folder")
                 {
                     List<Item> ItemInFolder = (from i in db.Item
-                                                 where i.UserId == SystemContext.User.Id && i.FolderId == item.Id
-                                                 select i).ToList<Item>();
+                                               where i.UserId == SystemContext.User.Id && i.FolderId == item.Id
+                                               select i).ToList<Item>();
                     foreach(var itemInFodler in ItemInFolder)
                     {
                         db.Entry(itemInFodler).State = System.Data.Entity.EntityState.Deleted;
@@ -609,6 +617,16 @@ namespace DiplomWPFnetFramework.Pages.MainInteractionsPages
                     {
                         db.Entry(photoInCollecion).State = System.Data.Entity.EntityState.Deleted;
                     }
+                }
+                else if (item.Type == "Template")
+                {
+                    TemplateDocument templateDocument = db.TemplateDocument.Where(td => td.Id == item.Id).FirstOrDefault();
+                    List<TemplateDocumentData> templateDocumentDataForDelete = db.TemplateDocumentData.Where(tdd => tdd.TemplateDocumentId == templateDocument.Id).ToList();
+                    foreach (var templateDocumentData in templateDocumentDataForDelete)
+                    {
+                        db.Entry(templateDocumentData).State = System.Data.Entity.EntityState.Deleted;
+                    }
+                    db.Entry(templateDocument).State = System.Data.Entity.EntityState.Deleted;
                 }
                 db.Entry(item).State = System.Data.Entity.EntityState.Deleted;
                 db.SaveChanges();

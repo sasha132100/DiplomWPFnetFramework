@@ -135,7 +135,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Value" Type="nvarchar" MaxLength="255" />
+          <Property Name="Value" Type="nvarchar(max)" />
           <Property Name="TemplateObjectId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="TemplateDocumentId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="UpdateTime" Type="datetime" />
@@ -155,7 +155,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Login" Type="nvarchar" MaxLength="255" Nullable="false" />
@@ -563,7 +563,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Value" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TemplateObjectId" Type="Guid" Nullable="false" />
           <Property Name="TemplateDocumentId" Type="Guid" Nullable="false" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
@@ -587,7 +587,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Login" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />

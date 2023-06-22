@@ -9,9 +9,11 @@
 
 namespace DiplomWPFnetFramework.DataBase
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Polis
     {
         public System.Guid Id { get; set; }
@@ -19,11 +21,18 @@ namespace DiplomWPFnetFramework.DataBase
         public string FIO { get; set; }
         public string Gender { get; set; }
         public Nullable<System.DateTime> BirthDate { get; set; }
+        [JsonIgnore]
         public byte[] PhotoPage1 { get; set; }
+        [NotMapped]
+        public string PhotoPage164 { get; set; }
+        [JsonIgnore]
         public byte[] PhotoPage2 { get; set; }
+        [NotMapped]
+        public string PhotoPage264 { get; set; }
         public string ValidUntil { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-    
+
+        [JsonIgnore]
         public virtual Item Item { get; set; }
     }
 }

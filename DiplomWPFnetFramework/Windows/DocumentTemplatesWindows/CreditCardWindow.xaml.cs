@@ -57,6 +57,8 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 FIOTextBox.Text = creditCard.FIO;
                 MonthAndYearTextBox.Text = creditCard.ExpiryDate;
                 CVVCodeTextBox.Text = creditCard.CVV.ToString();
+                if (creditCard.PhotoPage1 == null)
+                    return;
                 CreditCardPhotoHolder.Source = ByteArrayToImage(creditCard.PhotoPage1);
                 creditCardImageBytes = creditCard.PhotoPage1;
             }
@@ -73,11 +75,19 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 else
                     creditCard.Id = (from p in db.CreditCard where p.Id == SystemContext.Item.Id select p).FirstOrDefault<CreditCard>().Id;
 
-                creditCard.Number = CardNumberTextBox.Text;
+                creditCard.Number = CardNumberTextBox.Text.Replace("_", " ");
                 creditCard.FIO = FIOTextBox.Text;
-                creditCard.ExpiryDate = MonthAndYearTextBox.Text;
-                creditCard.CVV = Convert.ToInt32(CVVCodeTextBox.Text);
+                creditCard.ExpiryDate = MonthAndYearTextBox.Text.Replace("_", " ");
+                try
+                {
+                    creditCard.CVV = Convert.ToInt32(CVVCodeTextBox.Text.Replace("_", " "));
+                }
+                catch
+                {
+                    creditCard.CVV = null;
+                }
                 creditCard.PhotoPage1 = creditCardImageBytes;
+                creditCard.UpdateTime = DateTime.Now;
                 return creditCard;
             }
         }
@@ -111,6 +121,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.DateCreation = DateTime.Now;
                 item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
+                item.UpdateTime = DateTime.Now;
                 db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
@@ -135,7 +146,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 db.CreditCard.AddOrUpdate(CreatingCreditCardObject());
                 db.SaveChanges();
-                MessageBox.Show("Данные изменены");
+                MessageBox.Show("Данные изменены.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -172,6 +183,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 using (var db = new LocalMyDocsAppDBEntities())
                 {
                     item.Image = coverImage;
+                    item.UpdateTime = DateTime.Now;
                     db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
@@ -264,22 +276,25 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             Document doc = wordApp.Documents.Add();
 
-            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
-            passportParagraph.Range.Text = "";
-            passportParagraph.Range.Text += $"Номер: {creditCard.Number}";
-            passportParagraph.Range.Text += $"ФИО: {creditCard.FIO}";
-            passportParagraph.Range.Text += $"Месяц и год: {creditCard.ExpiryDate}";
-            passportParagraph.Range.Text += $"CVV код: {creditCard.CVV}";
+            Paragraph creditCardParagraph = doc.Content.Paragraphs.Add();
+            creditCardParagraph.Range.Text = "";
+            creditCardParagraph.Range.Text += $"Номер: {creditCard.Number}";
+            creditCardParagraph.Range.Text += $"ФИО: {creditCard.FIO}";
+            creditCardParagraph.Range.Text += $"Месяц и год: {creditCard.ExpiryDate}";
+            creditCardParagraph.Range.Text += $"CVV код: {creditCard.CVV}";
 
-            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+            if (creditCard.PhotoPage1 != null)
+            {
+                doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
-            imageRange1.InsertParagraphAfter();
+                Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+                imageRange1.InsertParagraphAfter();
 
-            string tempImage1Path = Path.GetTempFileName();
-            File.WriteAllBytes(tempImage1Path, creditCard.PhotoPage1);
-            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
-            File.Delete(tempImage1Path);
+                string tempImage1Path = Path.GetTempFileName();
+                File.WriteAllBytes(tempImage1Path, creditCard.PhotoPage1);
+                InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+                File.Delete(tempImage1Path);
+            }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
@@ -287,9 +302,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string outputPath = saveFileDialog.FileName;
+                try
+                {
+                    string outputPath = saveFileDialog.FileName;
 
-                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                    doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                }
+                catch
+                {
+                    MessageBox.Show("Закойте документ для обновления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
             else
             {

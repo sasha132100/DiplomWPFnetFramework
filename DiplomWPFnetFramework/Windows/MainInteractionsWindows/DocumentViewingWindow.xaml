@@ -109,13 +109,13 @@
             </Grid>
         </Border>
         <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
-            <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" MouseLeftButtonUp="OpenSettingPageButtonImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid ToolTip="Профиль" Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" MouseLeftButtonUp="OpenSettingPageButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/OpenSettingsPageButtonImage.png"/>
                 </Grid.Background>
             </Grid>
             <TextBlock x:Name="LoginOutTextBlock" Style="{StaticResource ResourceKey=TextBlockMainProperties}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Grid x:Name="sortImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" MouseLeftButtonUp="sortImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid ToolTip="Сортировка" x:Name="sortImage" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0" MouseLeftButtonUp="sortImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/SortButtonImage.png"/>
                 </Grid.Background>

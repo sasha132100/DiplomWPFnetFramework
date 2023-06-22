@@ -1,5 +1,7 @@
 ﻿using DiplomWPFnetFramework.Classes;
 using DiplomWPFnetFramework.DataBase;
+using DiplomWPFnetFramework.Pages.MainInteractionsPages;
+using DiplomWPFnetFramework.Pages.SettingsPages;
 using DiplomWPFnetFramework.Windows.BufferWindows;
 using System;
 using System.Collections.Generic;
@@ -66,9 +68,10 @@ namespace DiplomWPFnetFramework.Windows.SettingsWindows
 
             templateObject.Id = Guid.NewGuid();
             templateObject.Position = templateObjectPosition;
-            templateObject.Type = "Image";
+            templateObject.Type = "Photo";
             templateObject.Title = SystemContext.TemplateObjectTitle;
             templateObject.TemplateId = template.Id;
+            templateObject.UpdateTime = DateTime.Now;
             allTemplateObjects.Add(templateObject);
 
             image.Tag = stackPanel;
@@ -100,13 +103,14 @@ namespace DiplomWPFnetFramework.Windows.SettingsWindows
             templateObject.Type = "CheckBox";
             templateObject.Title = SystemContext.TemplateObjectTitle;
             templateObject.TemplateId = template.Id;
+            templateObject.UpdateTime = DateTime.Now;
             allTemplateObjects.Add(templateObject);
 
             image.Tag = stackPanel;
             stackPanel.Tag = templateObject;
         }
 
-        private void AddNewTextBox()
+        private void AddNewTextBox(string type)
         {
             templateObjectPosition++;
             TemplateObject templateObject = new TemplateObject();
@@ -130,9 +134,13 @@ namespace DiplomWPFnetFramework.Windows.SettingsWindows
 
             templateObject.Id = Guid.NewGuid();
             templateObject.Position = templateObjectPosition;
-            templateObject.Type = "TextBox";
+            if (type == "Number")
+                templateObject.Type = "NumberText";
+            else
+                templateObject.Type = "EditText";
             templateObject.Title = SystemContext.TemplateObjectTitle;
             templateObject.TemplateId = template.Id;
+            templateObject.UpdateTime = DateTime.Now;
             allTemplateObjects.Add(templateObject);
 
             image.Tag = stackPanel;
@@ -148,6 +156,7 @@ namespace DiplomWPFnetFramework.Windows.SettingsWindows
                 template.Status = "New";
                 template.Date = DateTime.Now;
                 template.UserId = SystemContext.User.Id;
+                template.UpdateTime = DateTime.Now;
             }
         }
 
@@ -160,11 +169,11 @@ namespace DiplomWPFnetFramework.Windows.SettingsWindows
             switch (SystemContext.ObjectType) 
             {
                 case "TextBox":
-                    AddNewTextBox();
+                    AddNewTextBox("Text");
                     break;
 
                 case "NumberBox":
-                    AddNewTextBox();
+                    AddNewTextBox("Number");
                     break;
 
                 case "CheckBox":
@@ -187,6 +196,8 @@ namespace DiplomWPFnetFramework.Windows.SettingsWindows
                             db.SaveChanges();
                         }
                     }
+                    MyTemplatesPage myTemplatesPage = (MyTemplatesPage)SystemContext.PageForLoadContent;
+                    myTemplatesPage.LoadContent();
                     this.Close();
                     break;
 

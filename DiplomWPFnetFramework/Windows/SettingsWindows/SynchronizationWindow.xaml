@@ -32,7 +32,7 @@
             <ImageBrush ImageSource="pack://application:,,,/Resources/MainWindowBackgroundGradient.png"/>
         </DockPanel.Background>
         <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
-            <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" MouseLeftButtonUp="BackWindowButtonImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid ToolTip="Назад" Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0" MouseLeftButtonUp="BackWindowButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/BackArrowButtonImage.png"/>
                 </Grid.Background>
@@ -50,6 +50,11 @@
                     <TextBlock x:Name="UploadOnServerTextBlock" Text="Загрузить на сервер" Style="{StaticResource TextBlockMainProperties}" Cursor="Hand" VerticalAlignment="Bottom" Margin="65,0,0,0" MouseLeftButtonUp="UploadOnServerButtonClick_MouseLeftButtonUp"/>
                 </Grid>
             </StackPanel>
+            <Grid x:Name="LoadingGrid" VerticalAlignment="Center" Width="300" Visibility="Hidden">
+                <Border x:Name="WhiteLoadBorder" Background="White" Margin="0,0,0,30" Width="300" HorizontalAlignment="Right"/>
+                <Border x:Name="PurpleLoadBorder" Background="#442C6E" Margin="0,0,0,30" Width="0" HorizontalAlignment="Left"/>
+                <TextBlock x:Name="LoadingTextBlock" Text="Загрузка: " Style="{StaticResource TextBlockMainProperties}" HorizontalAlignment="Center" Margin="0,30,30,0"/>
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>

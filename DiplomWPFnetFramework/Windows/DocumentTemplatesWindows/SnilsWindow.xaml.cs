@@ -84,7 +84,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 else
                     snils.Id = (from p in db.SNILS where p.Id == SystemContext.Item.Id select p).FirstOrDefault<SNILS>().Id;
 
-                snils.Number = SNILSNumberTextBox.Text;
+                snils.Number = SNILSNumberTextBox.Text.Replace("_"," ");
                 snils.FIO = FIOTextBox.Text;
                 snils.BirthDate = DateOfBirthDatePicker.SelectedDate;
                 snils.RegistrationDate = RegistrationDateDatePicker.SelectedDate;
@@ -94,6 +94,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 else
                     snils.Gender = "F";
                 snils.PhotoPage1 = snilsPhotoBytes;
+                snils.UpdateTime = DateTime.Now;
                 return snils;
             }
         }
@@ -135,6 +136,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.DateCreation = DateTime.Now;
                 item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
+                item.UpdateTime = DateTime.Now;
                 db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
@@ -159,7 +161,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 db.SNILS.AddOrUpdate(CreatingSnilsObject());
                 db.SaveChanges();
-                MessageBox.Show("Данные изменены");
+                MessageBox.Show("Данные изменены.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -196,6 +198,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 using (var db = new LocalMyDocsAppDBEntities())
                 {
                     item.Image = coverImage;
+                    item.UpdateTime = DateTime.Now;
                     db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
@@ -276,19 +279,24 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             passportParagraph.Range.Text += $"Номер: {snils.Number}";
             passportParagraph.Range.Text += $"ФИО: {snils.FIO}";
             passportParagraph.Range.Text += $"Пол: {snils.Gender}";
-            passportParagraph.Range.Text += $"Дата рождения: {snils.BirthDate}";
+            if (snils.BirthDate != null)
+                passportParagraph.Range.Text += $"Дата рождения: {snils.BirthDate.Value.ToString("dd.MM.yyyy")}";
             passportParagraph.Range.Text += $"Место рождения: {snils.BirthPlace}";
-            passportParagraph.Range.Text += $"Дата регистрации: {snils.RegistrationDate}";
+            if (snils.RegistrationDate != null)
+                passportParagraph.Range.Text += $"Дата регистрации: {snils.RegistrationDate.Value.ToString("dd.MM.yyyy")}";
 
-            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+            if (snils.PhotoPage1 != null)
+            {
+                doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
-            imageRange1.InsertParagraphAfter();
+                Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+                imageRange1.InsertParagraphAfter();
 
-            string tempImage1Path = Path.GetTempFileName();
-            File.WriteAllBytes(tempImage1Path, snils.PhotoPage1);
-            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
-            File.Delete(tempImage1Path);
+                string tempImage1Path = Path.GetTempFileName();
+                File.WriteAllBytes(tempImage1Path, snils.PhotoPage1);
+                InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+                File.Delete(tempImage1Path);
+            }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
@@ -296,10 +304,17 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string outputPath = saveFileDialog.FileName;
+                try
+                {
+                    string outputPath = saveFileDialog.FileName;
 
-                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
-            }
+                    doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                }
+                catch
+                {
+                    MessageBox.Show("Закойте документ для обновления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+        }
             else
             {
                 return;

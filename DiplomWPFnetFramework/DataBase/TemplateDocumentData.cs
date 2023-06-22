@@ -9,6 +9,7 @@
 
 namespace DiplomWPFnetFramework.DataBase
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -19,8 +20,10 @@ namespace DiplomWPFnetFramework.DataBase
         public System.Guid TemplateObjectId { get; set; }
         public System.Guid TemplateDocumentId { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-    
+
+        [JsonIgnore]
         public virtual TemplateDocument TemplateDocument { get; set; }
+        [JsonIgnore]
         public virtual TemplateObject TemplateObject { get; set; }
     }
 }

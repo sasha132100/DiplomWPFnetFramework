@@ -84,7 +84,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 else
                     inn.Id = (from p in db.INN where p.Id == SystemContext.Item.Id select p).FirstOrDefault<INN>().Id;
 
-                inn.Number = INNNumberTextBox.Text;
+                inn.Number = INNNumberTextBox.Text.Replace("_", " ");
                 inn.FIO = FIOTextBox.Text;
                 inn.BirthDate = DateOfBirthDatePicker.SelectedDate;
                 inn.RegistrationDate = INNRegistrationDateDatePicker.SelectedDate;
@@ -94,6 +94,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 else
                     inn.Gender = "F";
                 inn.PhotoPage1 = innPhotoBytes;
+                inn.UpdateTime = DateTime.Now;
                 return inn;
             }
         }
@@ -135,6 +136,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 item.DateCreation = DateTime.Now;
                 item.FolderId = Guid.Empty;
                 item.UserId = SystemContext.User.Id;
+                item.UpdateTime = DateTime.Now;
                 db.Item.Add(item);
                 db.SaveChanges();
                 SystemContext.NewItem = item;
@@ -159,7 +161,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
             {
                 db.INN.AddOrUpdate(CreatingInnObject());
                 db.SaveChanges();
-                MessageBox.Show("Данные изменены");
+                MessageBox.Show("Данные изменены.", "Оповещение", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -196,6 +198,7 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
                 using (var db = new LocalMyDocsAppDBEntities())
                 {
                     item.Image = coverImage;
+                    item.UpdateTime = DateTime.Now;
                     db.Item.AddOrUpdate(item);
                     db.SaveChanges();
                 }
@@ -271,24 +274,29 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             Document doc = wordApp.Documents.Add();
 
-            Paragraph passportParagraph = doc.Content.Paragraphs.Add();
-            passportParagraph.Range.Text = "";
-            passportParagraph.Range.Text += $"Номер: {inn.Number}";
-            passportParagraph.Range.Text += $"ФИО: {inn.FIO}";
-            passportParagraph.Range.Text += $"Пол: {inn.Gender}";
-            passportParagraph.Range.Text += $"Дата рождения: {inn.BirthDate}";
-            passportParagraph.Range.Text += $"Место рождения: {inn.BirthPlace}";
-            passportParagraph.Range.Text += $"Дата регистрации: {inn.RegistrationDate}";
+            Paragraph innParagraph = doc.Content.Paragraphs.Add();
+            innParagraph.Range.Text = "";
+            innParagraph.Range.Text += $"Номер: {inn.Number}";
+            innParagraph.Range.Text += $"ФИО: {inn.FIO}";
+            innParagraph.Range.Text += $"Пол: {inn.Gender}";
+            if (inn.BirthDate != null)
+                innParagraph.Range.Text += $"Дата рождения: {inn.BirthDate.Value.ToString("dd.MM.yyyy")}";
+            innParagraph.Range.Text += $"Место рождения: {inn.BirthPlace}";
+            if (inn.RegistrationDate != null)
+                innParagraph.Range.Text += $"Дата регистрации: {inn.RegistrationDate.Value.ToString("dd.MM.yyyy")}";
+            
+            if (inn.PhotoPage1 != null)
+            {
+                doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
 
-            doc.Words.Last.InsertBreak(WdBreakType.wdPageBreak);
+                Range imageRange1 = doc.Content.Paragraphs.Add().Range;
+                imageRange1.InsertParagraphAfter();
 
-            Range imageRange1 = doc.Content.Paragraphs.Add().Range;
-            imageRange1.InsertParagraphAfter();
-
-            string tempImage1Path = Path.GetTempFileName();
-            File.WriteAllBytes(tempImage1Path, inn.PhotoPage1);
-            InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
-            File.Delete(tempImage1Path);
+                string tempImage1Path = Path.GetTempFileName();
+                File.WriteAllBytes(tempImage1Path, inn.PhotoPage1);
+                InlineShape shape1 = imageRange1.InlineShapes.AddPicture(tempImage1Path);
+                File.Delete(tempImage1Path);
+            }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
@@ -296,9 +304,16 @@ namespace DiplomWPFnetFramework.Windows.DocumentTemplatesWindows
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string outputPath = saveFileDialog.FileName;
+                try
+                {
+                    string outputPath = saveFileDialog.FileName;
 
-                doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                    doc.ExportAsFixedFormat(outputPath, WdExportFormat.wdExportFormatPDF);
+                }
+                catch
+                {
+                    MessageBox.Show("Закойте документ для обновления!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
             }
             else
             {

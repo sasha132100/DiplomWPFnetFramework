@@ -34,7 +34,7 @@
             <ImageBrush ImageSource="pack://application:,,,/Resources/MainWindowBackgroundGradient.png"/>
         </DockPanel.Background>
         <Grid Width="Auto" Height="70" Background="#2D346F" DockPanel.Dock="Top">
-            <Grid Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" MouseLeftButtonUp="BackWindowButtonImage_MouseLeftButtonUp" Cursor="Hand">
+            <Grid ToolTip="Назад" Width="60" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" MouseLeftButtonUp="BackWindowButtonImage_MouseLeftButtonUp" Cursor="Hand">
                 <Grid.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/BackArrowButtonImage.png"/>
                 </Grid.Background>

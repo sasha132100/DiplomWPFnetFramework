@@ -134,8 +134,15 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
                 SettingsGrid.Width = 0;
         }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            CheckIsGuest();
+        }
+
         private void sortImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (SystemContext.isFromFolder)
+                return;
             Grid grid = (Grid)sender;
             var contextMenu = (ContextMenu)this.FindResource("SortContextMenu");
             SetterSortName(contextMenu);
@@ -166,7 +173,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         {
             if (SystemContext.isGuest)
             {
-                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!");
+                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             ImageSetter(AvatarPhotoImage);
@@ -177,7 +184,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
             SystemContext.FromWhichWindowIsCalled = "DocumentViewingWindow";
             if (SystemContext.User.AccessCode == null)
             {
-                MessageBox.Show("Назначте код доступа в меню настроек -> Безопасность");
+                MessageBox.Show("Назначте код доступа в меню настроек -> Безопасность", "Подсказка", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
             {
@@ -191,7 +198,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         {
             if (SystemContext.isGuest)
             {
-                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!");
+                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             SystemContext.WindowType = "MyTemplates";
@@ -204,10 +211,11 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         {
             if (SystemContext.isGuest)
             {
-                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!");
+                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             SynchronizationWindow synchronizationWindow = new SynchronizationWindow();
+            synchronizationWindow.Closed += Window_Closed;
             synchronizationWindow.ShowDialog();
         }
 
@@ -215,10 +223,11 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
         {
             if (SystemContext.isGuest)
             {
-                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!");
+                MessageBox.Show("Для доступа к данной функции необходимо зарегистрироваться!", "Предупреждение", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             AccountSettingsWindow accountSettingsWindow = new AccountSettingsWindow();
+            accountSettingsWindow.Closed += Window_Closed;
             accountSettingsWindow.ShowDialog();
         }
 
@@ -292,7 +301,7 @@ namespace DiplomWPFnetFramework.Windows.MainInteractionsWindows
 
         private void MenuItemhowAll_Click(object sender, RoutedEventArgs e)
         {
-            SystemContextService.MakeAllElementsShowable(); 
+            SystemContextService.MakeAllElementsShowable();
             if (SystemContext.PageForLoadContent is DocumentViewingPage)
             {
                 DocumentViewingPage documentViewingPage = (DocumentViewingPage)SystemContext.PageForLoadContent;

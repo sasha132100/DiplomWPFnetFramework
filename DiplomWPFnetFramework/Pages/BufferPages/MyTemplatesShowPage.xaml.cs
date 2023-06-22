@@ -38,9 +38,9 @@ namespace DiplomWPFnetFramework.Pages.BufferPages
             using (var db = new LocalMyDocsAppDBEntities())
             {
                 templates = (from t in db.Template
-                         where t.UserId == SystemContext.User.Id
-                         orderby t.Date
-                         select t).ToList<Template>();
+                             where t.UserId == SystemContext.User.Id && (t.Status == "New" || t.Status == "Published")
+                             orderby t.Date
+                             select t).ToList<Template>();
             }
             foreach (var template in templates)
             {
